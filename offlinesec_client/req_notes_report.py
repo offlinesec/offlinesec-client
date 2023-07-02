@@ -1,10 +1,9 @@
 import requests
 import argparse
 import os
-import func
-from const import ERR_MESSAGE
 import json
-from const import FILE, SYSTEM_NAME
+from . import func
+from .const import ERR_MESSAGE, FILE, SYSTEM_NAME
 
 ALLOWED_EXTENSIONS = ['txt']
 ALLOWED_WITHOUT_EXTENSION = False

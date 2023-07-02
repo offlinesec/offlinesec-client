@@ -1,6 +1,6 @@
-from config import config
 import socket
-from const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR
+from .config import config
+from .const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR
 
 
 def check_server():

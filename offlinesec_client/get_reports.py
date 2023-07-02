@@ -1,9 +1,9 @@
 import os.path
-from pathlib import Path
-from const import ACTION, FILENAME, ERR_MESSAGE
 import json
-import func
 import requests
+from pathlib import Path
+from .const import ACTION, FILENAME, ERR_MESSAGE
+from . import func
 
 UPLOAD_URL = "/get-status"
 ACTION_GET_FILE_NAMES = "GET_REPORTS"
@@ -46,7 +46,7 @@ def get_statuses():
     try:
         response = json.loads(r.content)
     except:
-        print("Couldn't parse server response. Please update offlinesec-client software")
+        print("Couldn't parse server response. Please update offlinesec_client software")
         return
 
     if ERR_MESSAGE in response.keys():
@@ -54,7 +54,7 @@ def get_statuses():
         return
 
     if "files" not in response.keys() or "files_num" not in response.keys():
-        print("Couldn't parse server response. Please update offlinesec-client software")
+        print("Couldn't parse server response. Please update offlinesec_client software")
         return
 
     print("%s report(s) are available to download from server" % (response["files_num"],))

@@ -1,6 +1,6 @@
-from pathlib import Path
-from const import CLIENT_ID, INST_DATE, CONNECTION_STR, APIKEY
 import json
+from pathlib import Path
+from .const import CLIENT_ID, INST_DATE, CONNECTION_STR, APIKEY
 
 CONFIG_FILE = "config.json"
 SERVER_NAME = "localhost"
