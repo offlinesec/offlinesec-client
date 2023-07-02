@@ -29,7 +29,7 @@ python3 -m pip install dist\offlinesec_client-1.0.1-py3-none-any.whl
 ```
 The Version could be different. Please verify generated wheel name. 
 
-##Quick Start
+## Quick Start
 
 To check your SAP system against SAP Security Notes:
 1. Prepare text file with installed software component versions ([details](./docs/how_to_prepare_sap_softs.md))
@@ -44,14 +44,14 @@ offlinesec_get_reports
 ```
 5. Find your report in Downloads folder. Enjoy.
 
-##Use Cases
+## Use Cases
 
 1.SAP Security Notes Analysis (Vulnerabilities Check)
 * [How to prepare data and request report](./docs/how_to_prepare_sap_softs.md)
 * [Reports examples](./docs/sap_security_notes_report.md)
 * Our knowledge base is constantly updated. You can find the date of last loaded SAP Security Note in your report.
 
-##Important Notes:
+## Important Notes:
 1. We don't collect any client identity like email address, SAP SIDs, ip addresses. All Checks are performed fully anonymously.
 2. The reports aren't stored on server side. Once you have downloaded the report it's deleted.
 3. The report could download only the person who has token (Random String generated on first start).
