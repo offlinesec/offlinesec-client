@@ -133,3 +133,4 @@ dmypy.json
 
 # Project
 offlinesec/config.json
+.config.json
