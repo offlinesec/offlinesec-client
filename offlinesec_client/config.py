@@ -1,10 +1,10 @@
-import json
 from pathlib import Path
 from .const import CLIENT_ID, INST_DATE, CONNECTION_STR, APIKEY
+import json
 
 CONFIG_FILE = "config.json"
-SERVER_NAME = "localhost"
-PORT = "5000"
+SERVER_NAME = "offlinesec.com"
+PORT = "443"
 ID_LENGTH = 30
 API_KEY = "k6zxdehCG23gGXLkgjcW"
 

@@ -1,9 +1,10 @@
 import os.path
-import json
-import requests
 from pathlib import Path
 from .const import ACTION, FILENAME, ERR_MESSAGE
+import json
+import time
 from . import func
+import requests
 
 UPLOAD_URL = "/get-status"
 ACTION_GET_FILE_NAMES = "GET_REPORTS"
@@ -46,7 +47,7 @@ def get_statuses():
     try:
         response = json.loads(r.content)
     except:
-        print("Couldn't parse server response. Please update offlinesec_client software")
+        print("Couldn't parse server response. Please update offlinesec-client software")
         return
 
     if ERR_MESSAGE in response.keys():
@@ -54,32 +55,42 @@ def get_statuses():
         return
 
     if "files" not in response.keys() or "files_num" not in response.keys():
-        print("Couldn't parse server response. Please update offlinesec_client software")
+        print("Couldn't parse server response. Please update offlinesec-client software")
         return
 
+    if "errors" in response.keys() and response["errors"]:
+        print("Some Reports not generated due to errors:")
+        for error in response["errors"]:
+            print(" * " + error)
+
     print("%s report(s) are available to download from server" % (response["files_num"],))
-    data[ACTION] = ACTION_GET_FILE
 
     i = 0
     for file in response["files"]:
-        data[FILENAME] = file
+        new_data = func.get_base_json(action=ACTION_GET_FILE)
+        new_data[FILENAME] = file
         print("Downloading the report '%s'" % (file,))
-        files = {'json': ('Get file', json.dumps(data), 'application/json')}
+        files = {'json': ('Get file', json.dumps(new_data), 'application/json')}
         r = requests.post(url, files=files)
         full_path = get_file_name(file)
 
-        if r.raw:
+        if len(r.content) < 1000:
+            print(" * File not loaded due to error. Please try later")
+            continue
+
+        if r.content:
             open(full_path, 'wb').write(r.content)
 
         if os.path.isfile(full_path):
             i += 1
-            print(" * The report '%s' successfully downloaded" % (file,))
+            print(" * The report '%s' successfully downloaded (%s bytes)" % (file, len(r.content),))
+            new_data = func.get_base_json(action=ACTION_CONF)
+            new_data[FILENAME] = file
+            files = {'json': ('Confirmation', json.dumps(new_data), 'application/json')}
+            r = requests.post(url, files=files)
+            time.sleep(1)
 
-            data[ACTION] = ACTION_CONF
-            files = {'json': ('Confirmation', json.dumps(data), 'application/json')}
-            requests.post(url, files=files)
-
-    print("%s report(s) were downloaded. Please check your 'Downloads' folder" % (i,))
+    print("%s report(s) were downloaded. Please check 'Downloads' folder" % (i,))
 
 
 def main():

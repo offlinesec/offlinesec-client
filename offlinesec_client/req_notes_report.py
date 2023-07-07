@@ -1,9 +1,10 @@
 import requests
 import argparse
 import os
-import json
 from . import func
-from .const import ERR_MESSAGE, FILE, SYSTEM_NAME
+from .const import ERR_MESSAGE
+import json
+from .const import FILE, SYSTEM_NAME
 
 ALLOWED_EXTENSIONS = ['txt']
 ALLOWED_WITHOUT_EXTENSION = False
@@ -45,21 +46,20 @@ def init_args():
 
 def send_file(file, system_name=""):
     url = func.get_connection_str(UPLOAD_URL)
-
     data = func.get_base_json(system_name=system_name)
 
     files = {
         'json': ('description', json.dumps(data), 'application/json'),
         'file': (os.path.basename(file), open(file, 'rb'), 'application/octet-stream')
     }
-
+    print("Uploading file %s" % (os.path.basename(file)))
     r = requests.post(url, files=files)
 
     if r.content:
         try:
             response = json.loads(r.content)
             if ERR_MESSAGE in response:
-                print(response[ERR_MESSAGE])
+                print(" * " + response[ERR_MESSAGE])
                 return
         except:
             pass
