@@ -46,9 +46,9 @@ offlinesec_get_reports
 
 ## Use Cases
 
-1.SAP Security Notes Analysis (Vulnerabilities Check)
+1. SAP Security Notes Analysis (Vulnerabilities Check)
 * [How to prepare data and request report](./docs/how_to_prepare_sap_softs.md)
-* [Reports examples](./docs/sap_security_notes_report.md)
+* [Report example](./docs/sap_security_notes_report.md)
 * Our knowledge base is constantly updated. You can find the date of last loaded SAP Security Note in your report.
 
 ## Important Notes:

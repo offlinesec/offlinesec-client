@@ -1,5 +1,5 @@
-import socket
 from .config import config
+import socket
 from .const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR
 
 
@@ -21,7 +21,7 @@ def check_server():
 
 
 def get_connection_str(url):
-    return "http://" + config.data[CONNECTION_STR] + url
+    return "https://" + config.data[CONNECTION_STR] + url
 
 
 def get_base_json(action="", system_name=""):
