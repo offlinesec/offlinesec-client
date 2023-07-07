@@ -1,18 +1,21 @@
+import os.path
 from pathlib import Path
 from .const import CLIENT_ID, INST_DATE, CONNECTION_STR, APIKEY
 import json
+import sysconfig
 
 CONFIG_FILE = "config.json"
 SERVER_NAME = "offlinesec.com"
 PORT = "443"
-ID_LENGTH = 30
-API_KEY = "k6zxdehCG23gGXLkgjcW"
+ID_LENGTH = 128
+API_KEY = "K3p6Ulx1CZU1x5KPY8edAbLgC2743QztWIbKfPsncQMxo8dyYEt6ug07X2gRS3RgK0AuNEQh0k9ZvpOc5HsR7v39R1XH2EEf1c23tyw5234r91qqFqooFJhfHtbw8K34"
 
 
 class ConfigFile:
     def __init__(self):
-        if not Path(CONFIG_FILE).is_file():
-            self.create_file()
+        full_path = os.path.join(sysconfig.get_path('purelib'), 'offlinesec_client', CONFIG_FILE)
+        if not Path(full_path).is_file():
+            self.create_file(full_path)
 
         self.data = dict()
         self.read_file()
@@ -40,7 +43,7 @@ class ConfigFile:
         return SERVER_NAME + ":" + PORT
 
     @staticmethod
-    def create_file():
+    def create_file(path):
         config_data = {
             CONNECTION_STR: ConfigFile.generate_conn_str(),
             CLIENT_ID: ConfigFile.generate_client_id(),
@@ -48,18 +51,20 @@ class ConfigFile:
         }
         json_data = json.dumps(config_data)
 
-        with open(CONFIG_FILE, "w") as json_file:
+        with open(path, "w") as json_file:
             json_file.write(json_data)
             print("The config file successfully created")
             json_file.close()
 
     def write_file(self):
-        with open(CONFIG_FILE, "w") as json_file:
+        full_path = os.path.join(sysconfig.get_path('purelib'), 'offlinesec_client', CONFIG_FILE)
+        with open(full_path, "w") as json_file:
             json.dump(self.data, json_file)
             json_file.close()
 
     def read_file(self):
-        with open(CONFIG_FILE, "r") as json_file:
+        full_path = os.path.join(sysconfig.get_path('purelib'), 'offlinesec_client', CONFIG_FILE)
+        with open(full_path, "r") as json_file:
             try:
                 data = json.load(json_file)
             except:
