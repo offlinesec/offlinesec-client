@@ -6,8 +6,8 @@ To collect information about installed software components in SAP System do the 
 ![Screenshot](./img/softs_button.png)
 4. You can see the window with installed software components and their versions.<br />
 ![Screenshot](./img/installed_softs.png)
-5. Now you need to copy all inforantion to text file. Please highlight first line then press Ctrl+A (select all) and Ctrl+C (copy information to buffer).
-Create new text file and insert information from the buffer. The file should look like this:<br />
+5. Now you need to copy all inforantion to text file. Please highlight first line then press Ctrl+A (select all) and Ctrl+C (copy to buffer).
+Create new text file (.txt extension) and insert all data from the buffer. The file should look like this:<br />
 ![Screenshot](./img/text_softs.png)
 
 * Important Note: if you encounter the following error message
@@ -17,10 +17,8 @@ You should do the following:
 * Slowly scroll down the table until the end
 * Press Ctrl+A, Ctrl+C. Now All information from the table was copied to buffer.
 
-6. Insert information to text file. Save changes in the file. 
-
-To send prepared file to server run the following command:
+To send prepared text file to server run the following script:
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System"
 ```
-where "software_components.txt" - prepared text file (step 6), for your convenience, you can specify system name - string max 20 characters.
+where "software_components.txt" - prepared text file (step 5), for your convenience, you can specify system name - string max 20 characters (Don't add to this field sensitive information!).
