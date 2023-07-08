@@ -15,13 +15,24 @@ All sensitive information like SAPSIDs, ip addresses, server names, role names, 
 ## Installation
 
 ### Python installation
-Install last version of Python [from here](https://www.python.org/downloads/)
+Install last version of Python 3.x [from here](https://www.python.org/downloads/)<br />
+We support only Python 3.x!
 
 ### Published version installation (recommended)
 ```sh
 pip install offlinesec_client
+```
 or
+```sh
 python -m pip install offlinesec_client
+```
+or
+```sh
+pip3 install offlinesec_client
+```
+or
+```sh
+python3 -m pip install offlinesec_client
 ```
 
 ### Installation last version from repository on [github.com](https://github.com/offlinesec/offlinesec-client)
