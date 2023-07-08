@@ -10,7 +10,7 @@ To collect information about installed software components in SAP System do the 
 Create new text file (.txt extension) and insert all data from the buffer. The file should look like this:<br />
 ![Screenshot](./img/text_softs.png)
 
-* Important Note: if you encounter the following error message
+* Important Note: if you encounter the following error message<br />
 ![Screenshot](./img/error1.jpg)
 
 You should do the following:
