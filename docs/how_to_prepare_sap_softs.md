@@ -11,6 +11,7 @@ Create new text file (.txt extension) and insert all data from the buffer. The f
 ![Screenshot](./img/text_softs.png)
 
 * Important Note: if you encounter the following error message
+![Screenshot](./img/error1.jpg)
 
 You should do the following:
 * Highlight first line in the table
