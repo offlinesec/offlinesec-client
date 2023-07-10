@@ -20,14 +20,6 @@ We support only Python 3.x!
 
 ### Published version installation (recommended)
 ```sh
-pip install offlinesec_client
-```
-or
-```sh
-python -m pip install offlinesec_client
-```
-or
-```sh
 pip3 install offlinesec_client
 ```
 or
@@ -37,17 +29,17 @@ python3 -m pip install offlinesec_client
 
 ### Installation last version from repository on [github.com](https://github.com/offlinesec/offlinesec-client)
 ```sh
-git clone git@github.com:offlinesec/offlinesec-client.git
-python -m pip install --upgrade pip
-pip install setuptools wheel
-python setup.py bdist_wheel
+git clone https://github.com/offlinesec/offlinesec-client.git
+python3 -m pip install --upgrade pip
+pip3 install setuptools wheel
+python3 setup.py bdist_wheel
 python3 -m pip install dist\offlinesec_client-1.0.8-py3-none-any.whl
 ```
 The Version could be different! Please verify generated wheel name. 
 
 ### Upgrade to last published version
 ```sh
-pip install --upgrade offlinesec_client
+pip3 install --upgrade offlinesec_client
 ```
 
 ## Quick Start

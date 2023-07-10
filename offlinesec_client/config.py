@@ -60,7 +60,6 @@ class ConfigFile:
         full_path = os.path.join(sysconfig.get_path('purelib'), 'offlinesec_client', CONFIG_FILE)
         with open(full_path, "w") as json_file:
             json.dump(self.data, json_file)
-            json_file.close()
 
     def read_file(self):
         full_path = os.path.join(sysconfig.get_path('purelib'), 'offlinesec_client', CONFIG_FILE)
