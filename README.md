@@ -65,8 +65,8 @@ offlinesec_get_reports
 
 2. Profile Parameters/Compliance Analysis (SAP Security Baseline Checks)
    (Available since version 1.0.12)
-* [How to generate report](./how_to_prepare_sap_params.md)
-* [Report Example](./sap_params_report.md)
+* [How to generate report](./docs/how_to_prepare_sap_params.md)
+* [Report Example](./docs/sap_params_report.md)
 * All sensitive information is excluded from the upload file (SAPSIDs, server names, ...)
 * Please remember you can create your own check variants
 
