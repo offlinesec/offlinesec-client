@@ -68,7 +68,7 @@ offlinesec_get_reports
 * [How to generate report](./docs/how_to_prepare_sap_params.md)
 * [Report Example](./docs/sap_params_report.md)
 * All sensitive information is excluded from the upload file (SAPSIDs, server names, ...)
-* Please remember you can create your own check variants
+* Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
 
 3. Role/Privilege Analysis
 * Will be available in next releases
