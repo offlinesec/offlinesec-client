@@ -79,5 +79,6 @@ offlinesec_get_reports
 3. All data transferred to server are encrypted with HTTPS protocol. 
 4. The report could download only the person who has token (Random String generated on first start).
 5. You can download reports within 10 days after it was requested.
+6. Review the source code. You can be 100% confident what happening on client side with your data and how it is processed.
 
 Additional documentation is available [here](./docs/README.md)
