@@ -1,10 +1,9 @@
 import requests
 import argparse
 import os
-from . import func
-from .const import ERR_MESSAGE
+import offlinesec_client.func
+from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME
 import json
-from .const import FILE, SYSTEM_NAME
 
 ALLOWED_EXTENSIONS = ['txt']
 ALLOWED_WITHOUT_EXTENSION = False
@@ -45,8 +44,8 @@ def init_args():
 
 
 def send_file(file, system_name=""):
-    url = func.get_connection_str(UPLOAD_URL)
-    data = func.get_base_json(system_name=system_name)
+    url = offlinesec_client.func.get_connection_str(UPLOAD_URL)
+    data = offlinesec_client.func.get_base_json(system_name=system_name)
 
     files = {
         'json': ('description', json.dumps(data), 'application/json'),
@@ -68,7 +67,7 @@ def send_file(file, system_name=""):
 
 
 def send_it(file, system_name=""):
-    if not func.check_server():
+    if not offlinesec_client.func.check_server():
         return
 
     send_file(file, system_name)

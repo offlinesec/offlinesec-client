@@ -1,6 +1,6 @@
 import os.path
 from pathlib import Path
-from .const import CLIENT_ID, INST_DATE, CONNECTION_STR, APIKEY
+from offlinesec_client.const import CLIENT_ID, INST_DATE, CONNECTION_STR, API_KEY_VALUE, APIKEY
 import json
 import sysconfig
 
@@ -8,7 +8,6 @@ CONFIG_FILE = "config.json"
 SERVER_NAME = "offlinesec.com"
 PORT = "443"
 ID_LENGTH = 128
-API_KEY = "K3p6Ulx1CZU1x5KPY8edAbLgC2743QztWIbKfPsncQMxo8dyYEt6ug07X2gRS3RgK0AuNEQh0k9ZvpOc5HsR7v39R1XH2EEf1c23tyw5234r91qqFqooFJhfHtbw8K34"
 
 
 class ConfigFile:
@@ -33,7 +32,7 @@ class ConfigFile:
             self.data[CONNECTION_STR] = ConfigFile.generate_conn_str()
             flag = True
         if APIKEY not in self.data.keys():
-            self.data[APIKEY] = API_KEY
+            self.data[APIKEY] = API_KEY_VALUE
             flag = True
         if flag:
             self.write_file()

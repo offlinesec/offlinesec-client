@@ -1,6 +1,8 @@
 from .config import config
 import socket
-from .const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR
+import os
+from pathlib import Path
+from offlinesec_client.const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR
 
 
 def check_server():
@@ -24,7 +26,7 @@ def get_connection_str(url):
     return "https://" + config.data[CONNECTION_STR] + url
 
 
-def get_base_json(action="", system_name=""):
+def get_base_json(action="", system_name="", variant=""):
     data = dict()
 
     data[APIKEY] = config.data[APIKEY]
@@ -35,4 +37,21 @@ def get_base_json(action="", system_name=""):
         data[ACTION] = action
     if system_name:
         data[SYSTEM_NAME] = system_name
+    if variant:
+        data["variant"] = variant
     return data
+
+
+def get_file_name(filename):
+    full_path = filename
+
+    if not os.path.isfile(full_path):
+        return full_path
+    else:
+        base = ".".join(filename.split('.')[:-1])
+        ext = "." + filename.split('.')[-1]
+
+        for i in range(1, 100):
+            full_path = base + "_" + '%03d' % i + ext
+            if not os.path.isfile(full_path):
+                return full_path

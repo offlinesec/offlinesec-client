@@ -18,7 +18,8 @@ setup(
     long_description_content_type="text/markdown",
     long_description=long_description,
     entry_points={'console_scripts': ['offlinesec_sap_notes = offlinesec_client.req_notes_report:main',
-                                      'offlinesec_get_reports = offlinesec_client.get_reports:main'], },
+                                      'offlinesec_get_reports = offlinesec_client.get_reports:main',
+                                      'offlinesec_sap_params = offlinesec_client.req_param_report:main'], },
     install_requires=required,
     include_package_data=True
 )

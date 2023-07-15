@@ -1,9 +1,9 @@
 import os.path
 from pathlib import Path
-from .const import ACTION, FILENAME, ERR_MESSAGE
+from offlinesec_client.const import ACTION, FILENAME, ERR_MESSAGE
 import json
 import time
-from . import func
+import offlinesec_client.func
 import requests
 
 UPLOAD_URL = "/get-status"
@@ -13,7 +13,7 @@ ACTION_CONF = "CONFIRMATION"
 
 
 def get_status():
-    if not func.check_server():
+    if not offlinesec_client.func.check_server():
         return
     get_statuses()
 
@@ -35,8 +35,8 @@ def get_file_name(filename):
 
 
 def get_statuses():
-    url = func.get_connection_str(UPLOAD_URL)
-    data = func.get_base_json(action=ACTION_GET_FILE_NAMES)
+    url = offlinesec_client.func.get_connection_str(UPLOAD_URL)
+    data = offlinesec_client.func.get_base_json(action=ACTION_GET_FILE_NAMES)
     files = {'json': ('Check available reports to download', json.dumps(data), 'application/json')}
     r = requests.post(url, files=files)
 
@@ -67,7 +67,7 @@ def get_statuses():
 
     i = 0
     for file in response["files"]:
-        new_data = func.get_base_json(action=ACTION_GET_FILE)
+        new_data = offlinesec_client.func.get_base_json(action=ACTION_GET_FILE)
         new_data[FILENAME] = file
         print("Downloading the report '%s'" % (file,))
         files = {'json': ('Get file', json.dumps(new_data), 'application/json')}
@@ -84,7 +84,7 @@ def get_statuses():
         if os.path.isfile(full_path):
             i += 1
             print(" * The report '%s' successfully downloaded (%s bytes)" % (file, len(r.content),))
-            new_data = func.get_base_json(action=ACTION_CONF)
+            new_data = offlinesec_client.func.get_base_json(action=ACTION_CONF)
             new_data[FILENAME] = file
             files = {'json': ('Confirmation', json.dumps(new_data), 'application/json')}
             r = requests.post(url, files=files)
