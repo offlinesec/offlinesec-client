@@ -82,7 +82,7 @@ def init_args():
 def process_it(args):
     zip_file = None
 
-    if FILE in args:
+    if FILE in args.keys() and args[FILE]:
         file = args[FILE]
         rep = RsparamReport(file)
         zip_file = rep.save_to_file()
@@ -90,7 +90,7 @@ def process_it(args):
     if not zip_file and "zip_file" in args:
         zip_file = args["zip_file"]
 
-    if "do-not-send" in args:
+    if "do_not_send" in args.keys() and args["do_not_send"]:
         return
 
     if zip_file:

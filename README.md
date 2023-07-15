@@ -63,8 +63,12 @@ offlinesec_get_reports
 * [Report example](./docs/sap_security_notes_report.md)
 * Our knowledge base is constantly updated and contain all SAP security notes released in 2015-2023. You can find the date of last loaded SAP Security Note in your report.
 
-2. Profile Parameters/Compliance Analysis
-* Will be available in next releases
+2. Profile Parameters/Compliance Analysis (SAP Security Baseline Checks)
+   (Available since version 1.0.12)
+* [How to generate report](./how_to_prepare_sap_params.md)
+* [Report Example](./sap_params_report.md)
+* All sensitive information is excluded from the upload file (SAPSIDs, server names, ...)
+* Please remember you can create your own check variants
 
 3. Role/Privilege Analysis
 * Will be available in next releases
