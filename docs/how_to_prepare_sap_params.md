@@ -4,7 +4,7 @@ To collect information about current values of profile parameters in SAP System 
 2. Call SA38 or SE38 transaction
 3. Perform RSPARAM report
 4. Press F8 to proceed
-5. Save table content to file (Excel)<br />
+5. Save table content to file (Excel). Format - Excel Open XML Format(XLSX)<br />
 ![Screenshot](./img/rsparam_save.png)
 
 To send prepared file to server run the following script:
