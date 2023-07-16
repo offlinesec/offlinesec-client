@@ -15,9 +15,9 @@ where "rsparam.xlsx" - prepared text file (step 5), for your convenience, you ca
 
 if you would like to check if the file contains any sort of sensitive information you can split process:
 ```sh
-offlinesec_sap_notes -f "rsparam.xlsx" -s "Demo System" --do-not-send
+offlinesec_sap_notes -f "rsparam.xlsx" --do-not-send
 ```
 Then open archive and review file content. If everything is ok you can proceed with the following command:
 ```sh
-offlinesec_sap_notes -z "rsparam.zip"
+offlinesec_sap_notes -z "rsparam.zip" -s "Demo System"
 ```

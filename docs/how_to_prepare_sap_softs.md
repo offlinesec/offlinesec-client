@@ -6,7 +6,7 @@ To collect information about installed software components in SAP System do the 
 ![Screenshot](./img/softs_button.png)
 4. You can see the window with installed software components and their versions.<br />
 ![Screenshot](./img/installed_softs.png)
-5. Now you need to copy all inforantion to text file. Please highlight first line then press Ctrl+A (select all) and Ctrl+C (copy to clipboard).
+5. Now you need to copy all information to text file(utf-8 coding). Please highlight first line then press Ctrl+A (select all) and Ctrl+C (copy to clipboard).
 Create new text file (.txt extension) and insert all data from the buffer. The file should look like this:<br />
 ![Screenshot](./img/text_softs.png)
 

@@ -42,6 +42,11 @@ The Version could be different! Please verify generated wheel name.
 pip3 install --upgrade offlinesec_client
 ```
 
+### Check what version is installed
+```sh
+pip3 show offlinesec_client
+```
+
 ## Quick Start
 
 How to discovery missed SAP Security Notes:
@@ -72,6 +77,14 @@ offlinesec_get_reports
 
 3. Role/Privilege Analysis
 * Will be available in next releases
+
+4. Transport Request Analysis
+* Will be available in next releases
+
+5. SAP Security Audit Log Analysis
+* Will be available in next releases
+
+If you need more  - email me info@offlinesec.com.
 
 ## Important Notes:
 1. We don't collect any client identity like email address, SAP SIDs, company, ip addresses. All Checks are performed fully anonymously.
