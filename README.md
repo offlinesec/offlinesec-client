@@ -1,9 +1,17 @@
 # Offline Security Client
+You definitely haven't seen such approach before! Suitable for those who would like to protect his SAP systems and don’t want to pay a lot. Or maybe you are only interested in Compliance topic.
+So, Offline Security is cloud based application which is intended to assess security aspects of SAP systems. All needed information for our security reports/analytics you gather yourself (or you can easily automate it using any RPA solution). Then you send us all gathered information (using cli tool). Important: All sensitive information (SAPSIDs, IP addresses, server names, and so on) is masked. And we don’t request any identity data of our clients.  It means that NOBODY – our administrators, developers or external hacker can’t link this information with particular client, particular system or particular company.
+Finally, we produce analysis on server side and issue for you report which can download only you (client application that sent all data).   
 
-Offline Security is new IT Security Project like no other. It based on client-server model. You collect yourself all the necessary data for analysis, send it to server and get the report.
-Analysis is performed on the server side.<br />
-We don't require any client-specific information (email, company, ip address). That's why we can't link the analysis results with particular company or particular SAP system. The Analysis performed fully anonymously! <br />
-All sensitive information like SAPSIDs, ip addresses, server names, role names, and so on will be masked. That's why we need client software.
+# Advantages
+
+* Quick start: Only you need install client tool using one cli command
+* Full Transparency. All configurations files are open. The source code of client application is available to read as well
+* You don't need to invest money to SAP Solution Manager consultants or buy expensive products like Onapsis or SecurityBridge
+* Don't need to create user account in target SAP systems. Don't need to install any ABAP code
+* Possibility of customisation. Based on predefined check list you can create your own check (probably even not related to Information Security)
+* Our database is regularly updated. Always base checks are available out-of-box. Even you can see what configuration are used by other clients
+* Cool reports easy to use with predefined filter options
 
 ## Table of contents
 
