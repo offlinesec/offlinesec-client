@@ -9,15 +9,15 @@ To collect information about current values of profile parameters in SAP System 
 
 To send prepared file to server run the following script:
 ```sh
-offlinesec_sap_notes -f "rsparam.xlsx" -s "Demo System"
+offlinesec_sap_params -f "rsparam.xlsx" -s "Demo System"
 ```
 where "rsparam.xlsx" - prepared text file (step 5), for your convenience, you can specify system name - string max 20 characters (Don't add to this field sensitive information!).
 
 if you would like to check if the file contains any sort of sensitive information you can split process:
 ```sh
-offlinesec_sap_notes -f "rsparam.xlsx" --do-not-send
+offlinesec_sap_params -f "rsparam.xlsx" --do-not-send
 ```
 Then open archive and review file content. If everything is ok you can proceed with the following command:
 ```sh
-offlinesec_sap_notes -z "rsparam.zip" -s "Demo System"
+offlinesec_sap_params -z "rsparam.zip" -s "Demo System"
 ```
