@@ -5,13 +5,13 @@ Finally, we produce analysis on server side and issue for you report which can d
 
 # Advantages
 
-* Quick start: Only you need install client tool using one cli command
+* Quick start: Only you need to install client tool using one cli command
 * Full Transparency. All configurations files are open. The source code of client application is available to read as well
 * You don't need to invest money to SAP Solution Manager consultants or buy expensive products like Onapsis or SecurityBridge
 * Don't need to create user account in target SAP systems. Don't need to install any ABAP code
-* Possibility of customisation. Based on predefined check list you can create your own check (probably even not related to Information Security)
-* Our database is regularly updated. Always base checks are available out-of-box. Even you can see what configuration are used by other clients
-* Cool reports easy to use with predefined filter options
+* Possibility of customisation. Based on predefined check list you can create your own checks (probably even not related to Information Security)
+* Our database is regularly updated. Always base checks are available out-of-box. Even you can see what configurations are used by other clients
+* Cool reports, easy to use with predefined filter options
 
 ## Table of contents
 
