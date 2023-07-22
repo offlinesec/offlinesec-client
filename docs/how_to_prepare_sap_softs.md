@@ -23,3 +23,35 @@ To send prepared text file to server run the following script:
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System"
 ```
 where "software_components.txt" - prepared text file (step 5), for your convenience, you can specify system name - string max 20 characters (Don't add to this field sensitive information!).
+
+## For those who need more
+### Add Kernel version and kernel patch
+(Available since client version 1.0.14)
+1. Log in SAP System using SAP GUI software
+2. Go to System -> Status (Menu)
+3. Open Kernel Information Window<br />
+![Screenshot](./img/kernel_button.png)
+4. Save Kernel Version and Kernel Patch<br />
+![Screenshot](./img/kernel.png)
+5. Append this information to server request:
+```sh
+offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
+```
+
+### Add information regarding implemented sap notes (without package)
+(Available since client version 1.0.14)
+1. Log in SAP System using SAP GUI software
+2. Go to transaction SE16
+3. Type CWBNTCUST table to browse
+4. !!! Increase number of showed rows on next screen<br />
+![Screenshot](./img/increase_number.png)
+5. Save Table Content to xlsx file <br />
+![Screenshot](./img/rsparam_save.png)
+6. Add table file to server request:
+```sh
+offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx"
+```
+Important Note: The table CWBNTCUST contains usernames. We do not send this sensitive information to server !!!
+Please examine client source code.<br />
+cwbntcust.py: <br />
+![Screenshot](./img/cwbntcust_code.png)

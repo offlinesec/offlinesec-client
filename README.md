@@ -11,7 +11,7 @@ Finally, we produce analysis on server side and issue for you report which can d
 * Don't need to create user account in target SAP systems. Don't need to install any ABAP code
 * Possibility of customisation. Based on predefined check list you can create your own checks (probably even not related to Information Security)
 * Our database is regularly updated. Always base checks are available out-of-box. Even you can see what configurations are used by other clients
-* Cool reports, easy to use with predefined filter options
+* Cool reports, easy to use with predefined filter options 
 
 ## Table of contents
 

@@ -2,35 +2,30 @@ import requests
 import argparse
 import os
 import offlinesec_client.func
-from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME
+from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST
 import json
-
-ALLOWED_EXTENSIONS = ['txt']
-ALLOWED_WITHOUT_EXTENSION = False
-MAX_FILE_SIZE = 200000
 
 UPLOAD_URL = "/file-upload"
 
 
+def check_version(s):
+    return offlinesec_client.func.check_num_param("".join(s.split('.')), "Kernel Version")
+
+
+def check_patch_level(s):
+    return offlinesec_client.func.check_num_param(s, "Kernel Patch Level")
+
+
 def check_system_name(s):
-    if len(s) <= 20:
-        return s
-    raise argparse.ArgumentTypeError("The System Name must have length less than 20")
+    return offlinesec_client.func.check_system_name(s)
 
 
 def check_file_arg(s):
-    if not os.path.isfile(s):
-        raise argparse.ArgumentTypeError("File not found")
+    return offlinesec_client.func.check_file_arg(s, ['txt'], 200000)
 
-    ext = s.split('.')[-1].lower()
-    if ext not in ALLOWED_EXTENSIONS:
-        raise argparse.ArgumentTypeError("File extension not supported. Only permitted: %s" %
-                                         (", ".join(ALLOWED_EXTENSIONS)))
 
-    if os.path.getsize(s) > MAX_FILE_SIZE:
-        raise argparse.ArgumentTypeError("File too big. Please upload text files")
-
-    return s
+def check_cwbntcust(s):
+    return offlinesec_client.func.check_file_arg(s, ["xlsx"], 2000000)
 
 
 def init_args():
@@ -39,13 +34,22 @@ def init_args():
                         help="File Name (Software Components)", required=True)
     parser.add_argument("-s", "--%s" % (SYSTEM_NAME,), action="store", type=check_system_name,
                         help="SAP System Name (max 20 characters)", required=False)
+    parser.add_argument("-k", "--%s" % (KRNL_VER,), action="store", type=check_version,
+                        help="Kernel Version (for instance 7.53)", required=False)
+    parser.add_argument("-p", "--%s" % (KRNL_PL,), action="store", type=check_patch_level,
+                        help="Kernel Patch Level (for instance 1200)", required=False)
+    parser.add_argument("-c", "--%s" % (CWBNTCUST,), action="store", type=check_cwbntcust,
+                        help="SAP System Name (max 20 characters)", required=False)
     parser.parse_args()
     return vars(parser.parse_args())
 
 
-def send_file(file, system_name=""):
+def send_file(file, system_name="", kernel_version="", kernel_patch="", cwbntcust=""):
     url = offlinesec_client.func.get_connection_str(UPLOAD_URL)
-    data = offlinesec_client.func.get_base_json(system_name=system_name)
+    data = offlinesec_client.func.get_base_json(system_name=system_name,
+                                                kernel_version=kernel_version,
+                                                kernel_patch=kernel_patch,
+                                                cwbntcust=cwbntcust)
 
     files = {
         'json': ('description', json.dumps(data), 'application/json'),
@@ -66,17 +70,17 @@ def send_file(file, system_name=""):
     print("No response from server. Please try later")
 
 
-def send_it(file, system_name=""):
+def process_it(file, system_name="", kernel_version="", kernel_patch="", cwbntcust=""):
     if not offlinesec_client.func.check_server():
         return
 
-    send_file(file, system_name)
+    send_file(file, system_name, kernel_version, kernel_patch, cwbntcust)
 
 
 def main():
     args = init_args()
     if FILE in args:
-        send_it(args[FILE], args[SYSTEM_NAME])
+        process_it(args[FILE], args[SYSTEM_NAME], args[KRNL_VER], args[KRNL_PL], args[CWBNTCUST])
 
 
 if __name__ == '__main__':
