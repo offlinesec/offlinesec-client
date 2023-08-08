@@ -5,3 +5,5 @@ The SAP Security Notes Report is Excel file with two pages. General information 
 
 You can find all needed details on the second page of report:
 ![Screenshot](./img/page2.png)
+
+You can find your input (installed software components) on third tab

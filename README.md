@@ -83,8 +83,7 @@ offlinesec_get_reports
 * All sensitive information is excluded from the upload file (SAPSIDs, server names, ...)
 * Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
 
-3. Role/Privilege Analysis
-* Will be available in next releases
+3. Roles/Critical Privileges Analysis (Available since version 1.0.15)
 
 4. Transport Request Analysis
 * Will be available in next releases
