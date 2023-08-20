@@ -4,7 +4,7 @@ import json
 import requests
 from offlinesec_client.const import FILE, SYSTEM_NAME, ERR_MESSAGE
 import offlinesec_client.func
-from agr_1251 import Agr1251
+from offlinesec_client.agr_1251 import Agr1251
 FILE_ALLOWED_EXTENSIONS = ["xlsx"]
 ZIP_ALLOWED_EXTENSIONS = ["zip"]
 MAX_FILE_SIZE = 200000
