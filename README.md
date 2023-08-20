@@ -84,6 +84,10 @@ offlinesec_get_reports
 * Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
 
 3. Roles/Critical Privileges Analysis (Available since version 1.0.15)
+* [How to generate report](./docs/how_to_prepare_sap_roles.md)
+* [Report Example](./docs/sap_roles_report.md)
+* All sensitive information is excluded from the upload file (Role names)
+* Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
 
 4. Transport Request Analysis
 * Will be available in next releases
