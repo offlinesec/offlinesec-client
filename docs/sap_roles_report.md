@@ -1,4 +1,4 @@
-# SAP Critical Authorizations in Roles
+# Critical Authorizations in SAP Roles
 
 Tab "Summary"
 ![Screenshot](./img/roles_page1.png)

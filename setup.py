@@ -20,7 +20,8 @@ setup(
     entry_points={'console_scripts': ['offlinesec_sap_notes = offlinesec_client.req_notes_report:main',
                                       'offlinesec_get_reports = offlinesec_client.get_reports:main',
                                       'offlinesec_sap_params = offlinesec_client.req_param_report:main',
-                                      'offlinesec_sap_roles = offlinesec_client.req_roles_report:main'], },
+                                      'offlinesec_sap_roles = offlinesec_client.req_roles_report:main',
+                                      'offlinesec_inverse_transform = offlinesec_client.resolve_report:main'], },
     install_requires=required,
     include_package_data=True
 )

@@ -13,3 +13,8 @@ To prepare input data for the report do the following:
 offlinesec_sap_roles -f "agr_1251.xlsx" -s "Demo System"
 ```
 where "agr_1251.xlsx" - prepared spreadsheet (step 7), for your convenience, you can specify system name - string max 20 characters (Don't add to this field sensitive information!).
+
+8. You can manually perform inverse transformation (to replace rolenames) when you'll get the report:
+```sh
+offlinesec_inverse_transform -f "roles_20230820_073901.xlsx"
+```

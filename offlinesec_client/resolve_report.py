@@ -1,0 +1,89 @@
+import openpyxl
+import os
+import argparse
+from pathlib import Path
+from offlinesec_client.const import SUBDIR,FILE
+import offlinesec_client.func
+import json
+
+ROLE_MASK_TEMPLATE = "Z_ROLE_%s"
+FILENAME = "role_masking.json"
+
+
+def main():
+    args = init_args()
+    if FILE in args:
+        file = args[FILE]
+        read_file(file)
+
+
+def check_file_arg(s):
+    return offlinesec_client.func.check_file_arg(s, ["xlsx"], 0)
+
+
+def init_args():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-f", "--%s" % (FILE,), action="store", type=check_file_arg,
+                        help="File XLSX (Table AGR_1251)", required=True)
+
+    parser.parse_args()
+    return vars(parser.parse_args())
+
+
+def read_file(file):
+    flag = False
+    if os.path.basename(file).startswith("roles_"):
+        flag = True
+    if not flag:
+        return
+    wb = openpyxl.load_workbook(file)
+    ws = wb.worksheets[0]
+    title = ws['B1'].value
+    if title.startswith("Critical Authorizations"):
+        roles = read_dict_file()
+        resolve_roles_page1(ws, roles)
+        ws = wb.worksheets[1]
+        resolve_roles_page2(ws, roles)
+        wb.save(file)
+        print(" * Roles in file %s have been converted" % (os.path.basename(file),))
+
+
+def resolve_roles_page1(ws, roles):
+    max_row = ws.max_row
+    for i in range(2, max_row + 1):
+        cell = ws.cell(row=i, column=1).value
+        if cell and cell.startswith(ROLE_MASK_TEMPLATE[:6]):
+            try:
+                ind = int(cell[7:])
+                if ind <= len(roles):
+                    ws.cell(row=i, column=1).value = roles[ind]
+            except:
+                continue
+
+
+def resolve_roles_page2(ws,roles):
+    max_row = ws.max_row
+    for i in range(2, max_row + 1):
+        cell = ws.cell(row=i, column=2).value
+        if cell and cell.startswith(ROLE_MASK_TEMPLATE[:6]):
+            try:
+                ind = int(cell[7:])
+                if ind <= len(roles):
+                    ws.cell(row=i, column=2).value = roles[ind]
+            except:
+                continue
+
+
+def read_dict_file():
+    filename = os.path.join(Path.home(), SUBDIR, FILENAME)
+
+    if not os.path.isfile(filename):
+        return list()
+
+    with open(filename, "r") as f:
+        return json.load(f)
+
+
+if __name__ == '__main__':
+    main()

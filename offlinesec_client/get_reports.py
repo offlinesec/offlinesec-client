@@ -5,6 +5,7 @@ import json
 import time
 import offlinesec_client.func
 import requests
+from offlinesec_client.resolve_report import read_file
 
 UPLOAD_URL = "/get-status"
 ACTION_GET_FILE_NAMES = "GET_REPORTS"
@@ -89,6 +90,8 @@ def get_statuses():
             files = {'json': ('Confirmation', json.dumps(new_data), 'application/json')}
             r = requests.post(url, files=files)
             time.sleep(1)
+            # inverse transformation
+            read_file(full_path)
 
     print("%s report(s) were downloaded. Please check 'Downloads' folder" % (i,))
 
