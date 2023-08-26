@@ -14,7 +14,8 @@ offlinesec_sap_roles -f "agr_1251.xlsx" -s "Demo System"
 ```
 where "agr_1251.xlsx" - prepared spreadsheet (step 7), for your convenience, you can specify system name - string max 20 characters (Don't add to this field sensitive information!).
 
-8. You can manually perform inverse transformation (to replace rolenames) when you'll get the report:
+Note: When you download the report from server, the rolenames in report are transformed back into your real values on client side.
+You can manually perform inverse transformation (to replace rolenames) when you'll get the report :
 ```sh
 offlinesec_inverse_transform -f "roles_20230820_073901.xlsx"
 ```
