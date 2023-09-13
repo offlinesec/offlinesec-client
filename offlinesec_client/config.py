@@ -49,7 +49,7 @@ class ConfigFile:
             INST_DATE: ConfigFile.generate_date()
         }
         json_data = json.dumps(config_data)
-
+        os.makedirs(os.path.dirname(os.path.join(Path.home(), SUBDIR)), exist_ok=True)
         with open(path, "w") as json_file:
             json_file.write(json_data)
             print("The config file successfully created")
