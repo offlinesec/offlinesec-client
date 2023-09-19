@@ -1,6 +1,7 @@
 import requests
 import argparse
 import os
+import sys
 import offlinesec_client.func
 from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST
 import json
@@ -85,7 +86,11 @@ def process_it(file, system_name="", kernel_version="", kernel_patch="", cwbntcu
     send_file(file, system_name, kernel_version, kernel_patch, cwbntcust)
 
     if wait:
-        time.sleep(320)
+        for remaining in range(310, 0, -1):
+            sys.stdout.write("\r")
+            sys.stdout.write("{:2d} seconds remaining.".format(remaining))
+            sys.stdout.flush()
+            time.sleep(1)
         os.system("offlinesec_get_reports")
 
 

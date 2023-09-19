@@ -25,6 +25,20 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System"
 where "software_components.txt" - prepared text file (step 5), for your convenience, you can specify system name - string max 20 characters (Don't add to this field sensitive information!).
 
 ## For those who need more
+### GUI Scripting
+For those who installed offlinesec_client on Windows platform it's available gui scripting option.
+```sh
+offlinesec_sap_notes --guiscript -s "Important System"
+```
+Do not forget to login SAP using SAP Logon and enable sap gui scripting (Transaction RZ11 and the sapgui/user_scripting parameter).
+
+### Wait 5 minutes
+Not to forget download your Offline Security report You can add -w option. 
+```sh
+offlinesec_sap_notes --guiscript -s "Production System" -w
+offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -w
+```
+
 ### Add Kernel version and kernel patch
 (Available since client version 1.0.14)
 1. Log in SAP System using SAP GUI software
