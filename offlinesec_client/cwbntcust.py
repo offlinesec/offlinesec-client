@@ -7,6 +7,12 @@ class Cwbntcust:
         self.data = list()
 
     def read_file(self):
+        if self.filename.split(".")[-1].lower() == "xlsx":
+            return self.read_xlsx_file()
+        elif self.filename.split(".")[-1].lower() == "txt":
+            return self.read_txt_file()
+
+    def read_xlsx_file(self):
         self.data = list()
         outlist = list()
         wb_obj = openpyxl.load_workbook(self.filename)
@@ -20,4 +26,23 @@ class Cwbntcust:
             prstatus = str(sheet_obj.cell(row=i, column=3).value)
             if prstatus == "E":             # Completely implemented
                 outlist.append(note)
+        return outlist
+
+    def read_txt_file(self):
+        outlist = list()
+        f = open(self.filename, "r")
+
+        header_flag = True
+        for line in f:
+            if line.startswith("|"):
+                if header_flag:
+                    header_flag = False
+                else:
+                    splited_line = line.split("|")
+                    note = splited_line[1].strip()
+                    prstatus = splited_line[3].strip()
+                    if prstatus == "E":  # Completely implemented
+                        outlist.append(note)
+
+        f.close()
         return outlist

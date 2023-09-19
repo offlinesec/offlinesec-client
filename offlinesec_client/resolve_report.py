@@ -2,7 +2,7 @@ import openpyxl
 import os
 import argparse
 from pathlib import Path
-from offlinesec_client.const import SUBDIR,FILE
+from offlinesec_client.const import SUBDIR, FILE
 import offlinesec_client.func
 import json
 
@@ -12,7 +12,7 @@ FILENAME = "role_masking.json"
 
 def main():
     args = init_args()
-    if FILE in args:
+    if FILE in args and args[FILE]:
         file = args[FILE]
         read_file(file)
 
@@ -25,7 +25,7 @@ def init_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-f", "--%s" % (FILE,), action="store", type=check_file_arg,
-                        help="File XLSX (Table AGR_1251)", required=True)
+                        help="Report file", required=True)
 
     parser.parse_args()
     return vars(parser.parse_args())
@@ -40,18 +40,25 @@ def read_file(file):
     wb = openpyxl.load_workbook(file)
     ws = wb.worksheets[0]
     title = ws['B1'].value
+
     if title.startswith("Critical Authorizations"):
         roles = read_dict_file()
         resolve_roles_page1(ws, roles)
         ws = wb.worksheets[1]
         resolve_roles_page2(ws, roles)
+
+        img = openpyxl.drawing.image.Image('logo.jpg')
+        img.anchor = 'A1'
+        ws.add_image(img)
+
         wb.save(file)
         print(" * Roles in file %s have been converted" % (os.path.basename(file),))
 
 
+
 def resolve_roles_page1(ws, roles):
     max_row = ws.max_row
-    for i in range(2, max_row + 1):
+    for i in range(5, max_row + 1):
         cell = ws.cell(row=i, column=1).value
         if cell and cell.startswith(ROLE_MASK_TEMPLATE[:6]):
             try:
