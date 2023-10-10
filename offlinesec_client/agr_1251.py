@@ -15,7 +15,7 @@ class Agr1251:
         self.filename = filename
         self.data = list()
 
-    def read_file(self):
+    def read_xlsx_file(self):
         self.data = list()
         wb_obj = openpyxl.load_workbook(self.filename)
         sheet_obj = wb_obj.active
@@ -37,6 +37,39 @@ class Agr1251:
             new_item["high"] = sheet_obj.cell(row=i, column=9).value
 
             self.data.append(new_item)
+
+    def read_txt_file(self):
+        self.data = list()
+        f = open(self.filename, "r")
+
+        header_flag = True
+        for line in f:
+            if line.startswith("|"):
+                if header_flag:
+                    header_flag = False
+                else:
+                    splited_line = line.split("|")
+                    deleted = splited_line[12].strip()
+                    if deleted.strip() == "X":
+                        continue
+                    new_item = dict()
+                    new_item["mandt"] = splited_line[2].strip()
+                    new_item["agr_name"] = splited_line[3].strip()
+                    new_item["object"] = splited_line[5].strip()
+                    new_item["auth"] = splited_line[6].strip()
+                    new_item["field"] = splited_line[8].strip()
+                    new_item["low"] = splited_line[9].strip()
+                    new_item["high"] = splited_line[10].strip()
+
+                    self.data.append(new_item)
+
+        f.close()
+
+    def read_file(self):
+        if self.filename.split(".")[-1].lower() == "xlsx":
+            self.read_xlsx_file()
+        elif self.filename.split(".")[-1].lower() == "txt":
+            self.read_txt_file()
 
     def masking(self):
         ROLE_MASK_TEMPLATE = "Z_ROLE_%s"

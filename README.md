@@ -106,3 +106,23 @@ If you need more  - email me info@offlinesec.com.
 6. Review the source code. You can be 100% confident what happening on client side with your data and how it is processed.
 
 Additional documentation is available [here](./docs/README.md)
+
+## Known Issues
+1. SSL issue when communicate with the server
+NotOpenSSLWarning: urllib3 v2.0 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'.
+
+```sh
+pip3 install urllib3==1.26.15
+```
+
+2. During installation
+WARNING: The scripts offlinesec_get_reports, offlinesec_inverse_transform, offlinesec_sap_notes, offlinesec_sap_params and offlinesec_sap_roles are installed in '/Users/<username>/Library/Python/3.8/bin' which is not on PATH.
+
+```sh
+export PATH="$PATH:/Users/<username>/Library/Python/3.8/bin"
+```
+
+## Uninstall
+```sh
+python3 -m pip uninstall offlinesec_client
+```

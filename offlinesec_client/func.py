@@ -28,7 +28,7 @@ def get_connection_str(url):
     return "https://" + config.data[CONNECTION_STR] + url
 
 
-def get_base_json(action="", system_name="", variant="", kernel_version="", kernel_patch="", cwbntcust=""):
+def get_base_json(action="", system_name="", variant="", kernel_version="", kernel_patch="", cwbntcust="", exclude=""):
     data = dict()
 
     data[APIKEY] = config.data[APIKEY]
@@ -48,6 +48,11 @@ def get_base_json(action="", system_name="", variant="", kernel_version="", kern
     if cwbntcust:
         tbl = Cwbntcust(cwbntcust)
         notes = tbl.read_file()
+        if exclude:
+            excludes = [note_id.strip() for note_id in exclude.split(",")]
+            for note_id in excludes:
+                if note_id != "":
+                    notes.append(note_id)
         if notes:
             data[CWBNTCUST] = notes
     return data

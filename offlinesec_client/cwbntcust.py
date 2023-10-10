@@ -39,8 +39,8 @@ class Cwbntcust:
                     header_flag = False
                 else:
                     splited_line = line.split("|")
-                    note = splited_line[1].strip()
-                    prstatus = splited_line[3].strip()
+                    note = splited_line[2].strip()
+                    prstatus = splited_line[4].strip()
                     if prstatus == "E":  # Completely implemented
                         outlist.append(note)
 

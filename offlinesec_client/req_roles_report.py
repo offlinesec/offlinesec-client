@@ -5,9 +5,9 @@ import requests
 from offlinesec_client.const import FILE, SYSTEM_NAME, ERR_MESSAGE
 import offlinesec_client.func
 from offlinesec_client.agr_1251 import Agr1251
-FILE_ALLOWED_EXTENSIONS = ["xlsx"]
+FILE_ALLOWED_EXTENSIONS = ["xlsx", "txt"]
 ZIP_ALLOWED_EXTENSIONS = ["zip"]
-MAX_FILE_SIZE = 200000
+MAX_FILE_SIZE = 200000000
 
 UPLOAD_URL = "/roles-upload"
 
@@ -79,29 +79,32 @@ def upload_it(zip_file, args):
 
     data = offlinesec_client.func.get_base_json(system_name=system_name, variant=variant)
 
-    file_body = open(zip_file, 'rb')
+    #file_body = open(zip_file, 'rb')
 
-    files = {
-        'json': ('description', json.dumps(data), 'application/json'),
-        'file': (os.path.basename(zip_file), file_body, 'application/zip')
-    }
-
-    print("Uploading file %s" % (os.path.basename(zip_file)))
-    r = requests.post(url, files=files)
-
-    if r.content:
+    with open(zip_file, 'rb') as file_body:
+        files = {
+            'json': ('description', json.dumps(data), 'application/json'),
+            'file': (os.path.basename(zip_file), file_body, 'application/zip')
+        }
+        print("Uploading file %s" % (os.path.basename(zip_file)))
         try:
-            response = json.loads(r.content)
+            r = requests.post(url, files=files)
+        except TimeoutError:
+            print("Connection timed out")
+        else:
+            if r.content:
+                try:
+                    response = json.loads(r.content)
+                    if ERR_MESSAGE in response:
+                        print(" * " + response[ERR_MESSAGE])
+                        if file_body:
+                            file_body.close()
+                        if os.path.isfile(zip_file):
+                            os.remove(zip_file)
+                        return
+                except Exception as err:
+                    print(r.content)
 
-            if ERR_MESSAGE in response:
-                print(" * " + response[ERR_MESSAGE])
-                if file_body:
-                    file_body.close()
-                if os.path.isfile(zip_file):
-                    os.remove(zip_file)
-                return
-        except :
-            pass
 
     print("No response from server. Please try later")
 
