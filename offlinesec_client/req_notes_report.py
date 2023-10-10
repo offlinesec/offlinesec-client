@@ -57,7 +57,7 @@ def send_file(file, system_name="", kernel_version="", kernel_patch="", cwbntcus
                                                 kernel_patch=kernel_patch,
                                                 cwbntcust=cwbntcust,
                                                 exclude=exclude)
-    print(data)
+
     files = {
         'json': ('description', json.dumps(data), 'application/json'),
         'file': (os.path.basename(file), open(file, 'rb'), 'application/octet-stream')
