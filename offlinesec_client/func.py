@@ -28,7 +28,8 @@ def get_connection_str(url):
     return "https://" + config.data[CONNECTION_STR] + url
 
 
-def get_base_json(action="", system_name="", variant="", kernel_version="", kernel_patch="", cwbntcust="", exclude=""):
+def get_base_json(action="", system_name="", variant="",
+                  kernel_version="", kernel_patch="", cwbntcust="", exclude=""):
     data = dict()
 
     data[APIKEY] = config.data[APIKEY]
