@@ -75,6 +75,7 @@ offlinesec_get_reports
 * [How to prepare data and request report](./docs/how_to_prepare_sap_softs.md)
 * [Report example](./docs/sap_security_notes_report.md)
 * Our knowledge base is constantly updated and contain all SAP security notes released in 2015-2023. You can find the date of last loaded SAP Security Note in your report.
+* since version 1.0.29 SAP Business Object systems are supported as well
 
 2. Profile Parameters/Compliance Analysis (SAP Security Baseline Checks)
    (Available since version 1.0.12)

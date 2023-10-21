@@ -1,4 +1,7 @@
 # How to generate SAP Security Note Report
+
+* [SAP Businees Object](./docs/how_to_prepare_bo_version.md)
+
 To collect information about installed software components in SAP System do the following:
 1. Log in SAP System using SAP GUI software
 2. Go to System -> Status (Menu)
