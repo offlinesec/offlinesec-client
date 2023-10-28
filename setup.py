@@ -22,6 +22,7 @@ setup(
                                       'offlinesec_sap_params = offlinesec_client.req_param_report:main',
                                       'offlinesec_sap_roles = offlinesec_client.req_roles_report:main',
                                       'offlinesec_bo_notes = offlinesec_client.req_bo_notes:main',
+                                      'offlinesec_java_notes = offlinesec_client.req_java_notes:main',
                                       'offlinesec_inverse_transform = offlinesec_client.resolve_report:main'], },
     install_requires=required,
     include_package_data=True
