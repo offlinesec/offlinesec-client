@@ -8,7 +8,7 @@ from offlinesec_client.const import PARAM_NAME, PARAM_DESC, PARAM_VALUE
 
 HIDE_PARAMS = ["FN_BDCALTLOG", "FN_BDCLOG", "FN_EXTRACT", "SAPARGV", "SAPGLOBALHOST", "SAPLOCALHOST",
                "SAPLOCALHOSTFULL", "SAPPROFILE", "SAPPROFILE_IN_EFFECT", "SAPSYSTEMNAME", "SETENV_.*", "Execute_.*",
-               "Start_Program_.*", "_\S{2}", "dbs/hdb/schema", "dbs/mss/dbname", "dbs/ora/tnsname", "dbs/syb/dbname",
+               "Start_Program_.*", r"_\S{2}", "dbs/hdb/schema", "dbs/mss/dbname", "dbs/ora/tnsname", "dbs/syb/dbname",
                "enq/server/schema_0", "enque/encni/hostname", "enque/serverhost", "igs/listener/rfc", "igs/mux/ip",
                "ms/comment", "rdisp/j2ee_profile", "rdisp/j2ee_profile", "rdisp/mshost", "rdisp/msserv", "rdisp/myname",
                "rlfw/bri/msserv", "rlfw/upg/msserv", "snc/gssapi_lib", "snc/identity/as", "vmcj/debug_proxy/cfg/msHost",
@@ -55,7 +55,8 @@ class RsparamReport:
     def mask(param_name, param_value):
         DEFAULT_VALUE = "XXX"
         for hide_param in HIDE_PARAMS:
-            res = re.match("^(?i)" + hide_param + "$", param_name)
+            re_str = "(?i)^" + hide_param.lower() + "$"
+            res = re.match(re_str, param_name)
             if res:
                 return DEFAULT_VALUE if param_value != "" else ""
 

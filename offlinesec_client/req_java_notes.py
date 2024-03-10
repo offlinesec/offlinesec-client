@@ -32,7 +32,7 @@ def prepare_exclusions(excl_list, excl_file):
     outdict = list()
 
     if excl_file:
-        with open(excl_file,'r') as f:
+        with open(excl_file, 'r') as f:
             for line in f:
                 line = line.strip("\r\n")
                 line = line.split(",")

@@ -1,7 +1,10 @@
 from .config import config
 import socket
 import argparse
+import json
 import os
+import requests
+from offlinesec_client.const import ERR_MESSAGE
 from offlinesec_client.cwbntcust import Cwbntcust
 from offlinesec_client.const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR, CWBNTCUST,\
     KRNL_PL, KRNL_VER, VAR
@@ -110,3 +113,29 @@ def check_num_param(s, title="Argument"):
     except:
         raise argparse.ArgumentTypeError("%s must be numeric" % (title,))
     return num
+
+
+def send_to_server(data, url, extras={}):
+    url = get_connection_str(url)
+
+    send_data = get_base_json()
+    send_data["systems"] = [item.to_dict() for item in data]
+    if len(extras):
+        send_data.update(extras)
+
+    files = {'json': ('description', json.dumps(send_data), 'application/json')}
+
+    r = requests.post(url, files=files)
+    if r.content:
+        try:
+            response = json.loads(r.content)
+            if ERR_MESSAGE in response:
+                if response[ERR_MESSAGE].startswith("The data successfully"):
+                    print(" * " + response[ERR_MESSAGE])
+                else:
+                    print("[ERROR] " + response[ERR_MESSAGE])
+                return
+        except:
+            pass
+
+    print("[ERROR] No response from the Offline Security server. Please try later")
