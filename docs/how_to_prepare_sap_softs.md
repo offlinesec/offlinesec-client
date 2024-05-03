@@ -2,6 +2,8 @@
 
 * [SAP Businees Objects](./docs/how_to_prepare_bo_version.md)
 * [SAP NetWeaver JAVA](./docs/how_to_prepare_java_softs.md)
+* [Multi-system Scan](./how_to_request_multi_system_scan.md)
+* [Patch Day Scan](./how_to_request_patch_day_scan.md)
 
 To collect information about installed software components in SAP System do the following:
 1. Log in SAP System using SAP GUI software

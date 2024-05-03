@@ -1,0 +1,26 @@
+root_dir: "D:\\offlinesec\\Test\\1\\"
+
+sap_systems:
+  - name: "ECC"
+    type: "ABAP"
+    krnl_version: "7.53"
+    krnl_patch: 1101
+    softs: "softs.txt"
+    cwbntcust: "cwbntcust.txt"
+    exclude: "exclude.yaml"
+
+  - name: "S/4 HANA"
+    type: "ABAP"
+    krnl_version: 7.53
+    krnl_patch: 1782
+    softs: "softs.txt"
+    cwbntcust: "cwbntcust.txt"
+
+  - type: "JAVA"
+    name: "JAVA System"
+    softs: "java_softs.csv"
+
+  - type: "BO"
+    version: 14.1.4.1655
+    name: "System BO"
+

@@ -77,6 +77,9 @@ offlinesec_get_reports
 * Our knowledge base is constantly updated and contain all SAP security notes released in 2015-2023. You can find the date of last loaded SAP Security Note in your report.
 * since version 1.0.29 SAP Business Object systems are supported
 * since version 1.0.30 SAP JAVA systems are supported
+* since version 1.1.0 Offlinsec tool supports multi-system scan
+* since version 1.1.0 Offlinesec tool supports last patch day scan
+* since version 1.1.2 the API to integrate with SIEM or VM is available in Offlinesec tool
 
 2. Profile Parameters/Compliance Analysis (SAP Security Baseline Checks)
    (Available since version 1.0.12)
