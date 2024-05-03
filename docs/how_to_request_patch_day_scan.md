@@ -7,5 +7,5 @@ offlinesec_patch_day -f "sapsystems.yaml"
 ```
 or (if you'd like to wait 5 minutes and download the report)
 ```sh
-offlinesec_patch_day -f "sapsystems.yaml" -w
+offlinesec_patch_day -f "sapsystems.yaml" --wait
 ```

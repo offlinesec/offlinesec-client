@@ -8,5 +8,5 @@ offlinesec_sec_notes -f "sapsystems.yaml"
 ```
 or (if you'd like to wait 5 minutes and download the report)
 ```sh
-offlinesec_sec_notes -f "sapsystems.yaml" -w
+offlinesec_sec_notes -f "sapsystems.yaml" --wait
 ```
