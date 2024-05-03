@@ -1,0 +1,56 @@
+from offlinesec_client.sap_system import SAPSystem
+import os
+
+JAVA = "JAVA"
+CSV_COLUMNS = ["Version", "Vendor", "Name", "Location"]
+
+
+class JAVASystem (SAPSystem):
+    def __init__(self, **args):
+        super().__init__(args["name"])
+        self.type = JAVA
+        root_dir = args["root_dir"] if "root_dir" in args else None
+
+        self.softs = JAVASystem.parse_softs_file(args["softs"], root_dir) if "softs" in args.keys() else list()
+        if len(self.softs) == 0:
+            raise ValueError("[ERROR] System '{}' you must specify 'soft' key"
+                             .format(self.system_name))
+        self.exclude = JAVASystem.parse_exclude_file(args["exclude"], root_dir, self.system_name) \
+            if "exclude" in args.keys() else list()
+
+    @staticmethod
+    def parse_softs_file(softs_file, root_dir):
+        if root_dir:
+            path = os.path.join(root_dir, softs_file)
+        else:
+            path = softs_file
+        if not os.path.exists(path):
+            raise FileNotFoundError("File %s not found" % (path,))
+        if not (softs_file.upper().endswith(".TXT") or softs_file.upper().endswith(".CSV")):
+            raise ValueError("File {} has wrong extension. Only TXT or CSV files supported".format(softs_file))
+
+        out_softs = list()
+
+        with open(path, 'r') as f:
+            columns = dict()
+            first_line = True
+            for line in f:
+                line = line.strip('\r\n')
+                if len(line) == 0:
+                    continue
+                line = line.split(',')
+                if first_line:
+                    first_line = False
+                    for column1 in CSV_COLUMNS:
+                        for pos, column2 in enumerate(line):
+                            if column1.lower() == column2.lower().strip():
+                                columns[column1] = pos
+                else:
+                    name = line[columns[CSV_COLUMNS[2]]]
+                    ver = line[columns[CSV_COLUMNS[0]]]
+                    out_softs.append((name, ver))
+
+        if not len(out_softs):
+            raise ValueError("File {} has wrong format".format(softs_file))
+        return out_softs
+
