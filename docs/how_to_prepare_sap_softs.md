@@ -1,7 +1,7 @@
 # How to generate SAP Security Note Report
 
-* [SAP Businees Objects](./docs/how_to_prepare_bo_version.md)
-* [SAP NetWeaver JAVA](./docs/how_to_prepare_java_softs.md)
+* [SAP Businees Objects](./how_to_prepare_bo_version.md)
+* [SAP NetWeaver JAVA](./how_to_prepare_java_softs.md)
 * [Multi-system Scan](./how_to_request_multi_system_scan.md)
 * [Patch Day Scan](./how_to_request_patch_day_scan.md)
 
