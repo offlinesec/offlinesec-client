@@ -47,9 +47,9 @@ def read_file(file):
         ws = wb.worksheets[1]
         resolve_roles_page2(ws, roles)
 
-        img = openpyxl.drawing.image.Image('logo.jpg')
-        img.anchor = 'A1'
-        ws.add_image(img)
+        #img = openpyxl.drawing.image.Image('logo.jpg')
+        #img.anchor = 'A1'
+        #ws.add_image(img)
 
         wb.save(file)
         print(" * Roles in file %s have been converted" % (os.path.basename(file),))
