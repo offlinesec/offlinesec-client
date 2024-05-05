@@ -11,3 +11,7 @@
 ## SAP Critical Authorizations in Roles
 * [How to generate report](./how_to_prepare_sap_roles.md)
 * [Report Example](./sap_roles_report.md)
+
+## API
+* [How to use Offlinesec API SAP Security Notes](./how_to_api_secnotes.md)
+* [JSON Report Example](./json_report_example.json)
