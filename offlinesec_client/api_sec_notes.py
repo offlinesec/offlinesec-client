@@ -26,7 +26,7 @@ def init_args():
     parser.add_argument("-f", "--file", action="store", type=check_file_arg,
                         help="File Name (SAP systems (ABAP, JAVA, BO, ...) and their software components in YAML format)", required=True)
     parser.add_argument('-p', '--patch_day', action='store_true', help="Last Patch Day Variant")
-    parser.add_argument('-', '--id', action='store', help="The Scan ID (any unique identifier)")
+    parser.add_argument('-i', '--id', action='store', help="The Scan ID (any unique identifier)")
     parser.parse_args()
     return vars(parser.parse_args())
 
