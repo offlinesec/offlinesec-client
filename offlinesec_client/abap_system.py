@@ -87,8 +87,8 @@ class ABAPSystem (SAPSystem):
         if not os.path.exists(path):
             raise FileNotFoundError("File %s not found" % (cwbntcust_file,))
 
-        if not (cwbntcust_file.upper().endswith(".TXT") or cwbntcust_file.upper().endswith(".CSV")):
-            raise ValueError("File {} has wrong extension. Only TXT or CSV files supported".format(cwbntcust_file))
+        if not (cwbntcust_file.upper().endswith(".TXT") or cwbntcust_file.upper().endswith(".XLSX")):
+            raise ValueError("File {} has wrong extension. Only TXT or XLSX files supported".format(cwbntcust_file))
 
         tbl = Cwbntcust(path)
         notes = tbl.read_file()
