@@ -4,7 +4,7 @@ import os
 import sys
 import offlinesec_client.func
 from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST
-import abap_system
+from offlinesec_client.abap_system import ABAPSystem
 import json
 import time
 
@@ -53,7 +53,7 @@ def init_args():
 
 def convert_to_dict(**args):
     system_list = list()
-    new_abap_system = abap_system.ABAPSystem(args)
+    new_abap_system = ABAPSystem(args)
     if new_abap_system is not None:
         system_list.append(system_list)
 
@@ -65,7 +65,7 @@ def send_file(file, system_name="", kernel_version="", kernel_patch="", cwbntcus
     if system_name is None or system_name == "":
         system_name = "ABAP System"
 
-    new_abap_system = abap_system.ABAPSystem(krnl_version=kernel_version,
+    new_abap_system = ABAPSystem(krnl_version=kernel_version,
                                              krnl_patch=kernel_patch,
                                              cwbntcust=cwbntcust,
                                              exclude=exclude,
