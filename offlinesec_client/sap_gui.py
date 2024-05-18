@@ -10,7 +10,7 @@ from pathlib import Path
 
 class SAPConnection:
     @staticmethod
-    def sap_notes_report(system_name=None, wait=False):
+    def sap_notes_report(system_name=None, wait=False, exclude=None):
         try:
             sap_sessions = SAPExistedSession.get_multi_sap_session_with_info()
         except RuntimeError as error:
@@ -61,7 +61,7 @@ class SAPConnection:
                         print(" * The CWBNTCUST table +")
 
                 if len(out_dict):
-                    SAPConnection.send_it_to_server(out_dict,system_name,wait)
+                    SAPConnection.send_it_to_server(out_dict, system_name, wait)
 
     @staticmethod
     def load_software_components(sap_session):

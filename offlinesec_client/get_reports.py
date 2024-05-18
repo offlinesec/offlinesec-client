@@ -64,7 +64,7 @@ def get_statuses():
         for error in response["errors"]:
             print(" * " + error)
 
-    print("%s report(s) are available to download from server" % (response["files_num"],))
+    print("%s report(s) are available to download from the server" % (response["files_num"],))
 
     i = 0
     for file in response["files"]:

@@ -16,11 +16,11 @@ def check_server():
     try:
         result = sock.connect_ex((conn.split(":")[0], int(conn.split(":")[1])))
     except:
-        print("The Server %s not available now. Please try later" % (conn,))
+        print("The Offline Security Server %s not available now. Please try later" % (conn,))
         return False
 
     if result != 0:
-        print("The Server %s not available now. Please try later" % (conn,))
+        print("The Offline Security Server %s not available now. Please try later" % (conn,))
         return False
 
     sock.close()

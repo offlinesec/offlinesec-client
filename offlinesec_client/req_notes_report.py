@@ -4,10 +4,11 @@ import os
 import sys
 import offlinesec_client.func
 from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST
+import abap_system
 import json
 import time
 
-UPLOAD_URL = "/file-upload"
+UPLOAD_URL = "/sec-notes"
 
 
 def check_version(s):
@@ -41,40 +42,39 @@ def init_args():
     parser.add_argument("-p", "--%s" % (KRNL_PL,), action="store", type=check_patch_level,
                         help="Kernel Patch Level (for instance 1200)", required=False)
     parser.add_argument("-c", "--%s" % (CWBNTCUST,), action="store", type=check_cwbntcust,
-                        help="SAP System Name (max 20 characters)", required=False)
+                        help="CWBNTCUST table (txt or xlsx)", required=False)
     parser.add_argument("-e", "--exclude", action="store",
                         help='Exclude SAP security notes ("1111111, 2222222, 3333333")', required=False)
-    parser.add_argument('--wait', action='store_true', help="Wait 5 minutes and download the report")
+    parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
     parser.add_argument('--guiscript', action='store_true', help="Run GUI script to prepare the input data")
     parser.parse_args()
     return vars(parser.parse_args())
 
 
+def convert_to_dict(**args):
+    system_list = list()
+    new_abap_system = abap_system.ABAPSystem(args)
+    if new_abap_system is not None:
+        system_list.append(system_list)
+
+
 def send_file(file, system_name="", kernel_version="", kernel_patch="", cwbntcust="", exclude=""):
-    url = offlinesec_client.func.get_connection_str(UPLOAD_URL)
-    data = offlinesec_client.func.get_base_json(system_name=system_name,
-                                                kernel_version=kernel_version,
-                                                kernel_patch=kernel_patch,
-                                                cwbntcust=cwbntcust,
-                                                exclude=exclude)
+    additional_keys = dict()
+    system_list = list()
 
-    files = {
-        'json': ('description', json.dumps(data), 'application/json'),
-        'file': (os.path.basename(file), open(file, 'rb'), 'application/octet-stream')
-    }
-    print("Uploading file %s" % (os.path.basename(file)))
-    r = requests.post(url, files=files)
+    if system_name is None or system_name == "":
+        system_name = "ABAP System"
 
-    if r.content:
-        try:
-            response = json.loads(r.content)
-            if ERR_MESSAGE in response:
-                print(" * " + response[ERR_MESSAGE])
-                return
-        except:
-            pass
+    new_abap_system = abap_system.ABAPSystem(krnl_version=kernel_version,
+                                             krnl_patch=kernel_patch,
+                                             cwbntcust=cwbntcust,
+                                             exclude=exclude,
+                                             name=system_name,
+                                             softs=file)
+    if new_abap_system is not None:
+        system_list.append(new_abap_system)
 
-    print("No response from server. Please try later")
+    offlinesec_client.func.send_to_server(system_list, UPLOAD_URL, additional_keys)
 
 
 def process_it(file, system_name="", kernel_version="", kernel_patch="", cwbntcust="", guiscript=False, wait=False, exclude=""):
@@ -87,7 +87,7 @@ def process_it(file, system_name="", kernel_version="", kernel_patch="", cwbntcu
             from offlinesec_client.sap_gui import SAPConnection
             conn = SAPConnection.sap_notes_report(system_name=system_name, wait=wait)
         else:
-            print("SAP GUI Scripting not supported on this platform")
+            print("SAP GUI Scripting not supported on this platform. Run SAP Gui Scripting only on Windows platform")
         return
 
     send_file(file, system_name, kernel_version, kernel_patch, cwbntcust, exclude)
@@ -98,6 +98,7 @@ def process_it(file, system_name="", kernel_version="", kernel_patch="", cwbntcu
             sys.stdout.write("{:2d} seconds remaining.".format(remaining))
             sys.stdout.flush()
             time.sleep(1)
+        print("")
         os.system("offlinesec_get_reports")
 
 
