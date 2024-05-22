@@ -41,6 +41,7 @@ def process_it(args):
     additional_keys = dict()
     if args["id"]:
         additional_keys["id"] = args["id"]
+    additional_keys["version"] = offlinesec_client .__version__
     offlinesec_client.func.send_to_server(systems, UPLOAD_URL, additional_keys)
 
     wait = args["wait"]

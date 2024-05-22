@@ -131,7 +131,12 @@ dmypy.json
 # PyCharm
 .idea/
 
+# Keys
+*.pypirc
+
 # Project
 offlinesec/config.json
 .config.json
 config.json
+systems.yaml
+sapsystems.txt
