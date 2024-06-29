@@ -35,6 +35,14 @@ or
 python3 -m pip install offlinesec_client
 ```
 
+Check the installation script output. if you see the following warning:
+WARNING: The scripts offlinesec_get_reports, offlinesec_inverse_transform, offlinesec_sap_notes, offlinesec_sap_params and offlinesec_sap_roles are installed in '/Users/<username>/Library/Python/3.8/bin' which is not on PATH.
+
+Then add Python folder to the PATH variable:
+```sh
+export PATH="$PATH:/Users/<username>/Library/Python/3.8/bin"
+```
+
 ### Installation last version from repository on [github.com](https://github.com/offlinesec/offlinesec-client)
 ```sh
 git clone https://github.com/offlinesec/offlinesec-client.git
@@ -59,9 +67,11 @@ pip3 show offlinesec_client
 
 How to discovery missed SAP Security Notes:
 1. Prepare text file with installed SAP software component versions ([details](./docs/how_to_prepare_sap_softs.md))
-2. Send prepared file to server (optional you can set SAP system name):
+2. Download CWBNTCUST table ([details](./docs/how_to_prepare_sap_softs.md))
+3. Check kernel version and kernel patch
+4. Send files to the server (optional you can set SAP system name):
 ```sh
-offlinesec_sap_notes -f "software_components.txt" -s "Demo System"
+offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx"
 ```
 3. Wait aprox 5 minutes (Depends on server load)
 4. Download your report:
@@ -94,8 +104,8 @@ offlinesec_get_reports
 * All sensitive information is excluded from the upload file (Role names)
 * Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
 
-4. Transport Request Analysis
-* Will be available in next releases
+4. Transport Request Analysis (Available since version 1.1.8)
+* [How to generate report](./docs/how_to_prepare_abap_report.md)
 
 5. SAP Security Audit Log Analysis
 * Will be available in next releases

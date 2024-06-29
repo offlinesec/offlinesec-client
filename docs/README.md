@@ -15,3 +15,6 @@
 ## API
 * [How to use Offlinesec API SAP Security Notes](./how_to_api_secnotes.md)
 * [JSON Report Example](./json_report_example.json)
+
+## ABAP Report
+* [How to request the report](./how_to_prepare_abap_report.md)

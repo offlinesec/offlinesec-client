@@ -22,11 +22,17 @@ class Cwbntcust:
         max_row = sheet_obj.max_row
         for i in range(2, max_row + 1):
             note = str(sheet_obj.cell(row=i, column=1).value)
-            #ntstatus = sheet_obj.cell(row=i, column=2).value
+            ntstatus = str(sheet_obj.cell(row=i, column=2).value)
             prstatus = str(sheet_obj.cell(row=i, column=3).value)
-            if prstatus == "E":             # Completely implemented
+            if Cwbntcust.check_note_status(ntstatus=ntstatus, prstatus=prstatus):
                 outlist.append(note)
         return outlist
+
+    @staticmethod
+    def check_note_status(ntstatus, prstatus):
+        if prstatus == "E" or prstatus == "O":              # Completely implemented or obsolete
+            return True
+        return False
 
     def read_txt_file(self):
         outlist = list()
@@ -39,9 +45,10 @@ class Cwbntcust:
                     header_flag = False
                 else:
                     splited_line = line.split("|")
-                    note = splited_line[2].strip()
-                    prstatus = splited_line[4].strip()
-                    if prstatus == "E":  # Completely implemented
+                    note = str(splited_line[2].strip())
+                    ntstatus = str(splited_line[3].strip())
+                    prstatus = str(splited_line[4].strip())
+                    if Cwbntcust.check_note_status(ntstatus=ntstatus, prstatus=prstatus):
                         outlist.append(note)
 
         f.close()
