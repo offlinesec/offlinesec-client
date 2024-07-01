@@ -1,4 +1,5 @@
 import openpyxl
+import re
 
 
 class Cwbntcust:
@@ -37,19 +38,26 @@ class Cwbntcust:
     def read_txt_file(self):
         outlist = list()
         f = open(self.filename, "r")
-
         header_flag = True
+        note_column = 0
         for line in f:
             if line.startswith("|"):
                 if header_flag:
                     header_flag = False
                 else:
                     splited_line = line.split("|")
-                    note = str(splited_line[2].strip())
-                    ntstatus = str(splited_line[3].strip())
-                    prstatus = str(splited_line[4].strip())
-                    if Cwbntcust.check_note_status(ntstatus=ntstatus, prstatus=prstatus):
-                        outlist.append(note)
+                    if note_column == 0:
+                        for i in range(0, 2):
+                            result = re.match(r"\d{10}", str(splited_line[i]).strip())
+                            if result:
+                                note_column = i
+                                break
+                    if note_column:
+                        note = str(splited_line[note_column].strip())
+                        ntstatus = str(splited_line[note_column + 1].strip())
+                        prstatus = str(splited_line[note_column + 2].strip())
+                        if Cwbntcust.check_note_status(ntstatus=ntstatus, prstatus=prstatus):
+                            outlist.append(note)
 
         f.close()
         return outlist

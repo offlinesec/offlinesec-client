@@ -106,7 +106,7 @@ class ABAPSystem (SAPSystem):
         tbl = Cwbntcust(path)
         notes = tbl.read_file()
 
-        if not len(notes):
+        if notes is None or not len(notes):
             print("[WARNING] System '{}' File {} has wrong format or doesn't contain completely implemented notes"
                   .format(system_name, cwbntcust_file,))
 
