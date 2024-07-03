@@ -47,7 +47,7 @@ class Cwbntcust:
                 else:
                     splited_line = line.split("|")
                     if note_column == 0:
-                        for i in range(0, 2):
+                        for i in range(0, 3):
                             result = re.match(r"\d{10}", str(splited_line[i]).strip())
                             if result:
                                 note_column = i
