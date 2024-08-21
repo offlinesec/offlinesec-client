@@ -4,7 +4,7 @@ import os
 import sys
 import offlinesec_client.func
 from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST, EXCLUDE
-from bo_system import BOSystem
+from offlinesec_client.bo_system import BOSystem
 import json
 import time
 
