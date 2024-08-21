@@ -12,6 +12,8 @@ class SAPSystem:
 
     @staticmethod
     def parse_exclude_file(exclude_yaml_file, root_dir, system_name):
+        if exclude_yaml_file is None or exclude_yaml_file == "":
+            return list()
         if root_dir:
             path = os.path.join(root_dir, exclude_yaml_file)
         else:

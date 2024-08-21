@@ -6,7 +6,7 @@ from offlinesec_client.bo_system import BOSystem
 
 
 def process_yaml_file(args):
-    file_name =args[FILE]
+    file_name = args[FILE]
     error_list = list()
     system_list = list()
 

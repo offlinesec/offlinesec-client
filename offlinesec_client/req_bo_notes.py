@@ -3,12 +3,12 @@ import argparse
 import os
 import sys
 import offlinesec_client.func
-from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST
+from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST, EXCLUDE
+from bo_system import BOSystem
 import json
 import time
 
-UPLOAD_URL = "/bonotes-upload"
-EXCLUDE_KEYS = ["wait", "exclude", "exclusion file"]
+UPLOAD_URL = "/sec-notes"
 
 
 def check_system_name(s):
@@ -34,32 +34,6 @@ def check_bo_version(v):
     return v
 
 
-def check_exclude_file(s):
-    return offlinesec_client.func.check_file_arg(s, ['txt'], 200000)
-
-
-def prepare_exclusions(excl_list, excl_file):
-    outdict = list()
-
-    if excl_file:
-        with open(excl_file,'r') as f:
-            for line in f:
-                line = line.strip("\r\n")
-                line = line.split(",")
-                if len(line) < 3:
-                    line.append(None)
-                if len(line) < 3:
-                    line.append(None)
-                outdict.append(line[:3])
-
-    if excl_list:
-        line = excl_list.split(",")
-        for item in line:
-            outdict.append([item.strip(), None, None])
-
-    return outdict
-
-
 def init_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-ver", "--version", action="store", type=check_bo_version,
@@ -69,9 +43,7 @@ def init_args():
     parser.add_argument("-var", "--variant", action="store", type=check_variant,
                         help="Check Variant (numeric)", required=False)
     parser.add_argument("-e", "--exclude", action="store",
-                        help='Exclude SAP BO security notes ("1111111, 2222222, 3333333")', required=False)
-    parser.add_argument("-ef", "--exclusion file", action="store", type=check_exclude_file,
-                        help='Exclude SAP BO security notes (from text file)', required=False)
+                        help='Exclude SAP BO security notes (YAML file)', required=False)
     parser.add_argument('--wait', action='store_true', help="Wait 5 minutes and download the report")
 
     parser.parse_args()
@@ -79,37 +51,30 @@ def init_args():
 
 
 def send_file(args):
-    url = offlinesec_client.func.get_connection_str(UPLOAD_URL)
+    additional_keys = dict()
+    system_list = list()
+    system_name = None
 
-    data = offlinesec_client.func.get_base_json()
-    data["bo"] = True
+    if SYSTEM_NAME in args:
+        system_name = args[SYSTEM_NAME]
 
-    for key, value in args.items():
-        if value and key not in EXCLUDE_KEYS:
-            data[key] = value
+    if system_name is None or system_name == "":
+        system_name = "BO System"
 
-    data["exclusions"] = prepare_exclusions(args["exclude"], args["exclusion file"])
+    exclude = args[EXCLUDE] if EXCLUDE in args else ""
+    version = args["version"] if "version" in args else ""
 
-    files = {'json': ('description', json.dumps(data), 'application/json')}
+    additional_keys["version"] = offlinesec_client.__version__
+    new_bo_system = BOSystem(exclude=exclude,
+                                 name=system_name,
+                                 version=version)
+    if new_bo_system is not None:
+        system_list.append(new_bo_system)
 
-    r = requests.post(url, files=files)
-
-    if r.content:
-        try:
-            response = json.loads(r.content)
-            if ERR_MESSAGE in response:
-                print(" * " + response[ERR_MESSAGE])
-                return
-        except:
-            pass
-
-    print("No response from server. Please try later")
+    offlinesec_client.func.send_to_server(system_list, UPLOAD_URL, additional_keys)
 
 
 def process_it(args):
-    if not offlinesec_client.func.check_server():
-        return
-
     if "version" in args and args["version"]:
         send_file(args)
 

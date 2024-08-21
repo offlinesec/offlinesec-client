@@ -122,6 +122,9 @@ def send_to_server(data, url, extras={}):
     send_data["systems"] = [item.to_dict() for item in data]
     if len(extras):
         send_data.update(extras)
+    if not len(send_data["systems"]):
+        print("[ERROR] The system list is empty")
+        return
 
     files = {'json': ('description', json.dumps(send_data), 'application/json')}
 

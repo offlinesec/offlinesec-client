@@ -2,7 +2,7 @@ from offlinesec_client.sap_system import SAPSystem
 import os
 
 JAVA = "JAVA"
-CSV_COLUMNS = ["Version", "Vendor", "Name", "Location"]
+CSV_COLUMNS = ["Version", "Name"]
 
 
 class JAVASystem (SAPSystem):
@@ -38,15 +38,19 @@ class JAVASystem (SAPSystem):
                 line = line.strip('\r\n')
                 if len(line) == 0:
                     continue
+                line = line.replace(';', ',')
                 line = line.split(',')
                 if first_line:
                     first_line = False
+
                     for column1 in CSV_COLUMNS:
                         for pos, column2 in enumerate(line):
-                            if column1.lower() == column2.lower().strip():
+                            if column1.lower() in column2.lower().strip():
                                 columns[column1] = pos
+                        if column1 not in columns:
+                            raise ValueError("The column '{}' not found in the file {}".format(column1, softs_file))
                 else:
-                    name = line[columns[CSV_COLUMNS[2]]]
+                    name = line[columns[CSV_COLUMNS[1]]]
                     ver = line[columns[CSV_COLUMNS[0]]]
                     out_softs.append((name, ver))
 

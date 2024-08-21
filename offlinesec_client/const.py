@@ -1,6 +1,8 @@
 FILE = "file"
 SYSTEM_NAME = "system"
 APIKEY = "api_key"
+WAIT = "wait"
+EXCLUDE = "exclude"
 CLIENT_ID = "client_id"
 ACTION = "action"
 INST_DATE = "installation_date"
