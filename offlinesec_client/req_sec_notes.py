@@ -1,11 +1,10 @@
 import argparse
 import yaml
 import offlinesec_client.func
-from offlinesec_client.const import FILE, VERSION, WAIT, DO_NOT_WAIT, SCAN_ID
+from offlinesec_client.const import FILE, VERSION, WAIT, DO_NOT_WAIT, SCAN_ID, SAP_SYSTEMS_KEY
 from offlinesec_client.multi_systems import process_yaml_file
 
 UPLOAD_URL = "/sec-notes"
-SAP_SYSTEMS_KEY = "sap_systems"
 
 
 def check_file_arg(s):
