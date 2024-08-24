@@ -56,7 +56,17 @@ class ABAPSystem (SAPSystem):
             raise ValueError("Kernel Patch Level must be numeric. For example: 1100.")
 
     @staticmethod
+    def check_soft_line(soft, version, pkg_num, package):
+        res2 = re.match(r"^[\d_]+$", pkg_num)
+        if not res2:
+            return False
+
+        return True
+
+    @staticmethod
     def parse_softs_file(softs_file, root_dir):
+        # SAP_BASIS	750	0006	SAPK-75006INSAPBASIS	SAP Basis Component
+
         if root_dir:
             path = os.path.join(root_dir, softs_file)
         else:
@@ -82,9 +92,8 @@ class ABAPSystem (SAPSystem):
                     if pkg_num == "":
                         pkg_num = "0"
                     package = line[3]
-                    softs.append((soft, version, pkg_num, package))
-                else:
-                    print("[ERROR] File %s Line %s: %s" % (softs_file, str(num), " ".join(line)))
+                    if ABAPSystem.check_soft_line(soft, version, pkg_num, package):
+                        softs.append((soft, version, pkg_num, package))
 
         if not len(softs):
             raise ValueError("File {} has wrong format".format(softs_file))

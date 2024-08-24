@@ -65,7 +65,7 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 3. Type CWBNTCUST table to browse
 4. !!! Increase number of showed rows on next screen<br />
 ![Screenshot](./img/increase_number.png)
-5. Save Table Content to xlsx file <br />
+5. Save Table Content to xlsx file (also you can save as text in 'Unconverted' format) <br />. 
 ![Screenshot](./img/rsparam_save.png)
 6. Add table file to server request:
 ```sh

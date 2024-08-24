@@ -50,9 +50,14 @@ def send_file(file_name, system_name, exclude):
     if system_name is None or system_name == "":
         system_name = "JAVA System"
     additional_keys["version"] = offlinesec_client.__version__
-    new_java_system = JAVASystem(exclude=exclude,
+    try:
+        new_java_system = JAVASystem(exclude=exclude,
                                  name=system_name,
                                  softs=file_name)
+    except Exception as err:
+        print("[ERROR] " + str(err))
+        new_java_system = None
+
     if new_java_system is not None:
         system_list.append(new_java_system)
 

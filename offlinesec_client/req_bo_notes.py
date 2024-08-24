@@ -65,9 +65,14 @@ def send_file(args):
     version = args["version"] if "version" in args else ""
 
     additional_keys["version"] = offlinesec_client.__version__
-    new_bo_system = BOSystem(exclude=exclude,
+    try:
+        new_bo_system = BOSystem(exclude=exclude,
                                  name=system_name,
                                  version=version)
+    except Exception as err:
+        print("[ERROR] " + str(err))
+        new_bo_system = None
+
     if new_bo_system is not None:
         system_list.append(new_bo_system)
 

@@ -65,12 +65,18 @@ def send_file(file, system_name="", kernel_version="", kernel_patch="", cwbntcus
     if system_name is None or system_name == "":
         system_name = "ABAP System"
     additional_keys["version"] = offlinesec_client.__version__
-    new_abap_system = ABAPSystem(krnl_version=kernel_version,
-                                             krnl_patch=kernel_patch,
-                                             cwbntcust=cwbntcust,
-                                             exclude=exclude,
-                                             name=system_name,
-                                             softs=file)
+
+    try:
+        new_abap_system = ABAPSystem(krnl_version=kernel_version,
+                                     krnl_patch=kernel_patch,
+                                     cwbntcust=cwbntcust,
+                                     exclude=exclude,
+                                     name=system_name,
+                                     softs=file)
+    except Exception as err:
+        print("[ERROR] " + str(err))
+        new_abap_system = None
+
     if new_abap_system is not None:
         system_list.append(new_abap_system)
 

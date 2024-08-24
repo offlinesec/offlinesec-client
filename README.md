@@ -43,7 +43,7 @@ Then add Python folder to the PATH variable:
 export PATH="$PATH:/Users/<username>/Library/Python/3.8/bin"
 ```
 
-### Installation last version from repository on [github.com](https://github.com/offlinesec/offlinesec-client)
+### Installation last version from the repository on [github.com](https://github.com/offlinesec/offlinesec-client)
 ```sh
 git clone https://github.com/offlinesec/offlinesec-client.git
 python3 -m pip install --upgrade pip

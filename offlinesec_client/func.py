@@ -3,7 +3,9 @@ import socket
 import argparse
 import json
 import os
+import sys
 import requests
+import time
 from offlinesec_client.const import ERR_MESSAGE
 from offlinesec_client.cwbntcust import Cwbntcust
 from offlinesec_client.const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR, CWBNTCUST,\
@@ -115,7 +117,28 @@ def check_num_param(s, title="Argument"):
     return num
 
 
-def send_to_server(data, url, extras={}):
+def wait_5_minutes(seconds=310):
+    for remaining in range(seconds, 0, -1):
+        sys.stdout.write("\r")
+        sys.stdout.write("{:2d} seconds remaining".format(remaining))
+        sys.stdout.flush()
+        time.sleep(1)
+    print("")
+    os.system("offlinesec_get_reports")
+
+
+def ask_and_wait_5_minutes(wait, seconds=310):
+    if wait:
+        wait_5_minutes(seconds)
+    else:
+        resp = input("Do you want to wait 5 minutes and get report automatically" + " (y/N):").strip().lower()
+        if resp is None or resp == "" or resp[0].lower() == "n":
+            return
+        elif resp[0].lower() == "y":
+            wait_5_minutes(seconds)
+
+
+def send_to_server(data, url, extras={}, wait=False):
     url = get_connection_str(url)
 
     send_data = get_base_json()
@@ -123,7 +146,7 @@ def send_to_server(data, url, extras={}):
     if len(extras):
         send_data.update(extras)
     if not len(send_data["systems"]):
-        print("[ERROR] The system list is empty")
+        print("[ERROR] No data to send to the server. Check input data")
         return
 
     files = {'json': ('description', json.dumps(send_data), 'application/json')}
@@ -135,10 +158,12 @@ def send_to_server(data, url, extras={}):
             if ERR_MESSAGE in response:
                 if response[ERR_MESSAGE].startswith("The data successfully"):
                     print(" * " + response[ERR_MESSAGE])
+                    print(" * Your report will be available in 5 minutes (Please run offlinesec_get_reports in 5 minutes)")
+                    ask_and_wait_5_minutes(wait)
                 else:
                     print("[ERROR] " + response[ERR_MESSAGE])
                 return
-        except:
-            pass
+        except Exception as err:
+            print("[ERROR] " + str(err))
+            print("[ERROR] No response from the Offline Security server. Please try later")
 
-    print("[ERROR] No response from the Offline Security server. Please try later")
