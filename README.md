@@ -35,7 +35,7 @@ or
 python3 -m pip install offlinesec_client
 ```
 
-Check the installation script output. if you see the following warning:
+Check the installation script output. if you see the following message:
 WARNING: The scripts offlinesec_get_reports, offlinesec_inverse_transform, offlinesec_sap_notes, offlinesec_sap_params and offlinesec_sap_roles are installed in '/Users/<username>/Library/Python/3.8/bin' which is not on PATH.
 
 Then add Python folder to the PATH variable:
