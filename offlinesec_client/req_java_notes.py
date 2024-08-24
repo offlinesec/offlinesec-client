@@ -1,14 +1,11 @@
-import requests
 import argparse
-import os
-import sys
 import offlinesec_client.func
-from offlinesec_client.const import ERR_MESSAGE, FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST, WAIT, EXCLUDE
+from offlinesec_client.const import FILE, SYSTEM_NAME, WAIT, EXCLUDE, DO_NOT_WAIT, ERROR_MSG_PREFIX, VERSION
 from offlinesec_client.java_system import JAVASystem
-import json
-import time
+
 
 UPLOAD_URL = "/sec-notes"
+DEFAULT_SYSTEM_NAME = "JAVA System"
 
 
 def check_system_name(s):
@@ -38,56 +35,57 @@ def init_args():
     parser.add_argument("-e", "--exclude", action="store",
                         help='Exclude SAP JAVA security notes (YAML file)', required=False)
     parser.add_argument('--wait', action='store_true', help="Wait 5 minutes and download the report")
+    parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
 
     parser.parse_args()
     return vars(parser.parse_args())
 
 
-def send_file(file_name, system_name, exclude):
+def send_file(file_name, system_name, exclude, wait=False, do_no_wait=False):
     additional_keys = dict()
     system_list = list()
 
     if system_name is None or system_name == "":
-        system_name = "JAVA System"
-    additional_keys["version"] = offlinesec_client.__version__
+        system_name = DEFAULT_SYSTEM_NAME
+    additional_keys[VERSION] = offlinesec_client.__version__
     try:
         new_java_system = JAVASystem(exclude=exclude,
-                                 name=system_name,
-                                 softs=file_name)
+                                     name=system_name,
+                                     softs=file_name)
     except Exception as err:
-        print("[ERROR] " + str(err))
+        print(ERROR_MSG_PREFIX + str(err))
         new_java_system = None
 
     if new_java_system is not None:
         system_list.append(new_java_system)
 
-    offlinesec_client.func.send_to_server(system_list, UPLOAD_URL, additional_keys)
+    offlinesec_client.func.send_to_server(data=system_list,
+                                          url=UPLOAD_URL,
+                                          extras=additional_keys,
+                                          wait=wait,
+                                          do_not_wait=do_no_wait)
 
 
-def process_it(file_name, system_name="", wait=False, exclude=""):
+def process_it(file_name, system_name="", wait=False, exclude="", do_not_wait=False):
     if not offlinesec_client.func.check_server():
         return
 
     if file_name:
-        send_file(file_name, system_name, exclude)
-
-        if wait:
-            for remaining in range(310, 0, -1):
-                sys.stdout.write("\r")
-                sys.stdout.write("{:2d} seconds remaining.".format(remaining))
-                sys.stdout.flush()
-                time.sleep(1)
-            print("")
-            os.system("offlinesec_get_reports")
+        send_file(file_name=file_name,
+                  system_name=system_name,
+                  exclude=exclude,
+                  wait=wait,
+                  do_no_wait=do_not_wait)
 
 
 def main():
     args = init_args()
-    if (FILE in args and args[FILE]):
+    if FILE in args and args[FILE]:
         process_it(file_name=args[FILE],
                    system_name=args[SYSTEM_NAME],
                    wait=args[WAIT],
-                   exclude=args[EXCLUDE])
+                   exclude=args[EXCLUDE],
+                   do_not_wait=args[DO_NOT_WAIT])
     else:
         print("You need to specify input file(s) (-f option)")
 

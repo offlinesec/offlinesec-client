@@ -127,8 +127,10 @@ def wait_5_minutes(seconds=310):
     os.system("offlinesec_get_reports")
 
 
-def ask_and_wait_5_minutes(wait, seconds=310):
-    if wait:
+def ask_and_wait_5_minutes(wait, do_not_wait=False, seconds=310):
+    if do_not_wait:
+        return
+    elif wait:
         wait_5_minutes(seconds)
     else:
         resp = input("Do you want to wait 5 minutes and get report automatically" + " (y/N):").strip().lower()
@@ -138,7 +140,7 @@ def ask_and_wait_5_minutes(wait, seconds=310):
             wait_5_minutes(seconds)
 
 
-def send_to_server(data, url, extras={}, wait=False):
+def send_to_server(data, url, extras={}, wait=False, do_not_wait=False):
     url = get_connection_str(url)
 
     send_data = get_base_json()
@@ -159,7 +161,8 @@ def send_to_server(data, url, extras={}, wait=False):
                 if response[ERR_MESSAGE].startswith("The data successfully"):
                     print(" * " + response[ERR_MESSAGE])
                     print(" * Your report will be available in 5 minutes (Please run offlinesec_get_reports in 5 minutes)")
-                    ask_and_wait_5_minutes(wait)
+                    ask_and_wait_5_minutes(wait=wait,
+                                           do_not_wait=do_not_wait)
                 else:
                     print("[ERROR] " + response[ERR_MESSAGE])
                 return
