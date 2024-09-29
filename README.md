@@ -107,7 +107,7 @@ offlinesec_get_reports
 4. Transport Request Analysis (Available since version 1.1.8)
 * [How to generate report](./docs/how_to_prepare_abap_report.md)
 
-5. SAP Security Audit Log Analysis
+5. SAP Security Audit Log Analysis, ICF services, RFC connections, Users with critical authorizations
 * Will be available in next releases
 
 If you need more  - email me info@offlinesec.com.
