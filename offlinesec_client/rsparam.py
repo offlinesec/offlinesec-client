@@ -124,11 +124,11 @@ class RsparamReport:
 
     @staticmethod
     def param_value(user_defined_value, system_defined="", third_value=""):
-        if user_defined_value.strip() != "":
+        if user_defined_value is not None and user_defined_value.strip() != "":
             return user_defined_value.strip()
-        elif system_defined.strip() != "":
+        elif system_defined is not None and system_defined.strip() != "":
             return system_defined.strip()
-        elif third_value.strip() != "":
+        elif third_value is not None and third_value.strip() != "":
             return third_value.strip()
         else:
             return ""
