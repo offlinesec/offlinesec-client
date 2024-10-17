@@ -102,6 +102,13 @@ class RsparamReport:
             col3 = sheet_obj.cell(row=i, column=3).value
             col4 = sheet_obj.cell(row=i, column=4).value
             col5 = sheet_obj.cell(row=i, column=5).value
+
+            col1 = col1 if col1 is not None else ""
+            col2 = col2 if col2 is not None else ""
+            col3 = col3 if col3 is not None else ""
+            col4 = col4 if col4 is not None else ""
+            col5 = col5 if col5 is not None else ""
+
             self.add_param(col1, col2, col3, col4, col5)
 
     def add_param(self, param_name, user_value, system_value, third_value, descr=""):
