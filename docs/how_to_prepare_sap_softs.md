@@ -62,16 +62,10 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 (Available since client version 1.0.14)
 1. Log in SAP System using SAP GUI software
 2. Go to transaction SE16
-3. Type CWBNTCUST table to browse
-4. !!! Increase number of showed rows on next screen<br />
-![Screenshot](./img/increase_number.png)
-5. Save Table Content to xlsx file (also you can save as text in 'Unconverted' format) <br />. 
-![Screenshot](./img/rsparam_save.png)
-6. Add table file to server request:
+3. Download the CWBNTCUST table according to [this manual]((./get_table.md))
+4. Add the CWBNTCUST table file (.txt or .xlsx) via -c option:
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx"
 ```
-Important Note: The table CWBNTCUST contains usernames. We do not send this sensitive information to server !!!
-Please examine client source code.<br />
-cwbntcust.py: <br />
-![Screenshot](./img/cwbntcust_code.png)
+Important Note: The table CWBNTCUST contains usernames. We do not send this sensitive information to the server !!! 
+Information about SID or system name (option -s) is anonymized.

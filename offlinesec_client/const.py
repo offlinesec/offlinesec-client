@@ -1,5 +1,6 @@
 FILE = "file"
 SYSTEM_NAME = "system"
+VARIANT = "variant"
 APIKEY = "api_key"
 WAIT = "wait"
 DO_NOT_WAIT = "do_not_wait"

@@ -1,8 +1,9 @@
 import argparse
 import offlinesec_client.func
 from offlinesec_client.const import (FILE, SYSTEM_NAME, KRNL_PL, KRNL_VER, CWBNTCUST, VERSION,
-                                     ERROR_MSG_PREFIX, EXCLUDE, DO_NOT_WAIT, WAIT, GUISCRIPT)
+                                     ERROR_MSG_PREFIX, EXCLUDE, DO_NOT_WAIT, WAIT, GUISCRIPT, VARIANT)
 from offlinesec_client.abap_system import ABAPSystem
+from offlinesec_client.masking import Masking, SAPSID_MASK
 
 UPLOAD_URL = "/sec-notes"
 DEFAULT_SYSTEM_NAME = "ABAP System"
@@ -18,6 +19,10 @@ def check_patch_level(s):
 
 def check_system_name(s):
     return offlinesec_client.func.check_system_name(s)
+
+
+def check_variant(s):
+    return offlinesec_client.func.check_variant(s)
 
 
 def check_file_arg(s):
@@ -42,6 +47,8 @@ def init_args():
                         help="CWBNTCUST table (txt or xlsx)", required=False)
     parser.add_argument("-e", "--exclude", action="store",
                         help='Exclude SAP security notes', required=False)
+    parser.add_argument("-v", "--variant", action="store", type=check_variant,
+                        help="Check Variant (numeric)", required=False)
     parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
     parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
 
@@ -51,13 +58,20 @@ def init_args():
 
 
 def send_file(file, system_name="", kernel_version="", kernel_patch="",
-              cwbntcust="", exclude="", wait=False, do_not_wait=False):
+              cwbntcust="", exclude="", variant="", wait=False, do_not_wait=False):
     additional_keys = dict()
     system_list = list()
 
     if system_name is None or system_name == "":
         system_name = DEFAULT_SYSTEM_NAME
+    else:
+        sapsid_masking = Masking(SAPSID_MASK)
+        system_name = sapsid_masking.do_mask(system_name)
+        sapsid_masking.save_masking()
+
     additional_keys[VERSION] = offlinesec_client.__version__
+    if variant:
+        additional_keys[VARIANT] = variant
 
     try:
         new_abap_system = ABAPSystem(krnl_version=kernel_version,
@@ -81,7 +95,7 @@ def send_file(file, system_name="", kernel_version="", kernel_patch="",
 
 
 def process_it(file, system_name="", kernel_version="", kernel_patch="", cwbntcust="",
-               guiscript=False, wait=False, exclude="", do_not_wait=False):
+               guiscript=False, variant="", wait=False, exclude="", do_not_wait=False):
     if not offlinesec_client.func.check_server():
         return
 
@@ -115,6 +129,7 @@ def main():
                    kernel_patch=args[KRNL_PL],
                    cwbntcust=args[CWBNTCUST],
                    guiscript=args[GUISCRIPT],
+                   variant=args[VARIANT],
                    wait=args[WAIT],
                    exclude=args[EXCLUDE],
                    do_not_wait=args[DO_NOT_WAIT])

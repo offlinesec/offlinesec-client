@@ -1,13 +1,17 @@
+import editpyxl
 import openpyxl
 import os
 import argparse
 from pathlib import Path
+
 from offlinesec_client.const import SUBDIR, FILE
+from offlinesec_client.masking import Masking, SAPSID_MASK
 import offlinesec_client.func
 import json
 
 ROLE_MASK_TEMPLATE = "Z_ROLE_%s"
 FILENAME = "role_masking.json"
+
 
 
 def main():
@@ -31,10 +35,39 @@ def init_args():
     return vars(parser.parse_args())
 
 
+def do_secnotes_transform(file_name):
+    wb = editpyxl.Workbook()
+    source_filename = file_name
+    #destination_filename = 'Output.xlsx'
+
+    wb.open(source_filename)
+
+    if not "Parameters" in wb.sheetnames:
+        wb.close()
+        return
+
+    ws = wb["Parameters"]
+    sapsid_masking = Masking(SAPSID_MASK)
+
+    for i in range(2, 5 + 1):
+        try:
+            cell = ws.cell(row=i, column=1).value
+        except IndexError as err:
+            break
+        new_value = sapsid_masking.do_unmask(cell)
+        ws.cell(row=i, column=1).value = new_value
+
+    wb.save(fullFilename=file_name)
+    wb.close()
+
+
 def read_file(file):
     flag = False
     if os.path.basename(file).startswith("roles_"):
         flag = True
+    elif os.path.basename(file).startswith("secnotes_"):
+        do_secnotes_transform(file)
+
     if not flag:
         return
     wb = openpyxl.load_workbook(file)

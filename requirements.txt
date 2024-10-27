@@ -4,3 +4,4 @@ pysapgui>=1.0.7; sys_platform == 'win32'
 PySapGUI~=1.0.7; sys_platform == 'win32'
 setuptools~=57.0.0
 PyYAML~=6.0.1
+editpyxl>=0.1.10

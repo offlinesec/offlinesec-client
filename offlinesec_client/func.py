@@ -170,3 +170,38 @@ def send_to_server(data, url, extras={}, wait=False, do_not_wait=False):
             print("[ERROR] " + str(err))
             print("[ERROR] No response from the Offline Security server. Please try later")
 
+
+def send_to_server_gen(data, url, extras={}, wait=False, do_not_wait=False):
+    url = get_connection_str(url)
+
+    send_data = get_base_json()
+    send_data["data"] = data
+    if len(extras):
+        send_data.update(extras)
+    if data is None or data == "" or not len(send_data["data"]):
+        print("[ERROR] No data to send to the server. Check the input")
+        return
+
+    files = {'json': ('description', json.dumps(send_data), 'application/json')}
+
+    r = requests.post(url, files=files)
+    if r.content:
+        try:
+            if r.status_code == 404:
+                print(" * [ERROR] Bad request - %s (%s)" % (r.reason, url))
+                return
+
+            response = json.loads(r.content)
+            if ERR_MESSAGE in response:
+                if response[ERR_MESSAGE].startswith("The data successfully"):
+                    print(" * " + response[ERR_MESSAGE])
+                    print(" * Your report will be available in 5 minutes (Please run offlinesec_get_reports in 5 minutes)")
+                    ask_and_wait_5_minutes(wait=wait,
+                                           do_not_wait=do_not_wait)
+                else:
+                    print("[ERROR] " + response[ERR_MESSAGE])
+                return
+        except Exception as err:
+            print("[ERROR] " + str(err))
+            print("[ERROR] No response from the Offline Security server. Please try later")
+

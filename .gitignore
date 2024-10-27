@@ -133,6 +133,7 @@ dmypy.json
 
 # Keys
 *.pypirc
+.pypirc
 
 # Project
 offlinesec/config.json

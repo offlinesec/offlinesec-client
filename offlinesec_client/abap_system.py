@@ -1,5 +1,6 @@
 from offlinesec_client.sap_system import SAPSystem
 from offlinesec_client.cwbntcust import Cwbntcust
+from offlinesec_client.sap_table import SAPTable
 import os
 import re
 
@@ -112,12 +113,31 @@ class ABAPSystem (SAPSystem):
         if not (cwbntcust_file.upper().endswith(".TXT") or cwbntcust_file.upper().endswith(".XLSX")):
             raise ValueError("File {} has wrong extension. Only TXT or XLSX files supported".format(cwbntcust_file))
 
-        tbl = Cwbntcust(path)
-        notes = tbl.read_file()
+
+        tbl = SAPTable(table_name="CWBNTCUST", file_name=path)
+        notes = ABAPSystem.parse_cwbntcust_data(tbl)
 
         if notes is None or not len(notes):
-            print("[WARNING] System '{}' File {} has wrong format or doesn't contain completely implemented notes"
+            print("* [WARNING] File {} has wrong format or doesn't contain completely implemented notes"
                   .format(system_name, cwbntcust_file,))
+
+        return notes
+
+    @staticmethod
+    def parse_cwbntcust_data(cwbntcust_table):
+        notes = list()
+        PRSTATUS_COLUMN = "PRSTATUS"
+        NOTE_COLUMN = "NUMM"
+        if not cwbntcust_table:
+            raise ValueError("Bad CWBNTCUST table")
+
+        if PRSTATUS_COLUMN in cwbntcust_table.columns and NOTE_COLUMN in cwbntcust_table.columns:
+            idx_prstatus = cwbntcust_table.columns.index(PRSTATUS_COLUMN)
+            idx_note = cwbntcust_table.columns.index(NOTE_COLUMN)
+            for line in cwbntcust_table.data:
+                prstatus = line[idx_prstatus]
+                if prstatus == "E" or prstatus == "O":
+                    notes.append(line[idx_note])
 
         return notes
 
