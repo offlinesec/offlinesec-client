@@ -62,7 +62,7 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 (Available since client version 1.0.14)
 1. Log in SAP System using SAP GUI software
 2. Go to transaction SE16
-3. Download the CWBNTCUST table according to [this manual]((./get_table.md))
+3. Download the CWBNTCUST table according to [this manual](./get_table.md)
 4. Add the CWBNTCUST table file (.txt or .xlsx) via -c option:
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx"
