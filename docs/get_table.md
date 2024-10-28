@@ -12,5 +12,5 @@
 ![Screenshot](./img/se16_unconverted_choose.png)
 ![Screenshot](./img/se16_unconverted.png)
 
-Also you can extract table content via HANA DB (HANA STUDIO).
-![Screenshot](./img/hana_table.png)
+Also, you can extract table content via HANA DB (HANA STUDIO).
+<br/> ![Screenshot](./img/hana_table.png)
