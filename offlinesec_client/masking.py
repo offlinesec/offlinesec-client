@@ -62,6 +62,8 @@ class Masking:
         tmpl_len = len(tmpl) - 2
         if not in_value.startswith(tmpl[:-2]):
             return in_value
+        if not len(self.data):
+            return in_value
         try:
             num = int(in_value[tmpl_len:])
         except ValueError:
