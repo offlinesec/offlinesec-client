@@ -67,6 +67,7 @@ def get_statuses():
     print("%s report(s) are available to download from the server" % (response["files_num"],))
 
     i = 0
+    files_list = list()
     for file in response["files"]:
         new_data = offlinesec_client.func.get_base_json(action=ACTION_GET_FILE)
         new_data[FILENAME] = file
@@ -91,7 +92,10 @@ def get_statuses():
             r = requests.post(url, files=files)
             time.sleep(1)
             # inverse transformation
-            read_file(full_path)
+            files_list.append(full_path)
+            # read_file(full_path)
+    for file_name in files_list:
+        read_file(file_name)
 
     print("%s report(s) were downloaded. Please check 'Downloads' folder" % (i,))
 

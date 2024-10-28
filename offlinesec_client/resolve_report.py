@@ -38,7 +38,6 @@ def init_args():
 def do_secnotes_transform(file_name):
     wb = editpyxl.Workbook()
     source_filename = file_name
-    #destination_filename = 'Output.xlsx'
 
     wb.open(source_filename)
 
@@ -65,7 +64,7 @@ def read_file(file):
     flag = False
     if os.path.basename(file).startswith("roles_"):
         flag = True
-    elif os.path.basename(file).startswith("secnotes_"):
+    elif os.path.basename(file).startswith("secnotes_") and os.path.basename(file).endswith(".xlsx"):
         do_secnotes_transform(file)
 
     if not flag:
