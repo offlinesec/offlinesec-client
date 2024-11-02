@@ -103,19 +103,30 @@ class SAP_Table_SE16:
         f = open(self.file_name, "r", errors="ignore")
         header_flag = True
         column_num = 0
+        column_lens = list()
 
         for line in f:
             if line.startswith("|"):
                 if header_flag:
                     header_flag = False
                     self.columns = [item.strip() for item in line.split("|")]
+                    column_lens = [len(item) for item in line.split("|")]
                     if not len(self.columns):
                         raise ValueError("Wrong file structure. Columns not found in the file")
                     column_num = len(self.columns)
                 else:
                     row = [item.strip() for item in line.split("|")]
                     if len(row) != column_num:
-                        raise ValueError("Wrong file structure. Bad line: %s in the file" % (line,))
+                        row = list()
+                        pos = 0
+                        for i in range(0, len(self.columns)):
+                            column_len = column_lens[i]
+                            row.append(line[pos:pos+column_len].strip())
+                            pos += column_len + 1
+
+                        if len(row) != column_num:
+                            raise ValueError("Wrong file structure. Bad line: %s in the file" % (line,))
+
                     self.data.append(row)
 
         f.close()
@@ -227,6 +238,7 @@ class SAPTable:
             self.columns = self.tbl.columns
             self.data = self.tbl.data
         else:
+            print(err_list)
             raise ValueError("* [WARNING] Unsupported file format: %s. Supported files: HANA STUDIO, SE16-Unconverted, SE16-Spreadsheet" %
                              (file_name,))
 

@@ -6,7 +6,7 @@ from offlinesec_client.const import FILE, SYSTEM_NAME, ERR_MESSAGE,SCAN_ID, VERS
 from offlinesec_client.masking import *
 from offlinesec_client.yaml_cfg_rfc import YamlCfgRfc
 
-UPLOAD_URL = "/rfc"
+UPLOAD_URL = "/sec-notes"
 FILE_ALLOWED_EXTENSIONS = ["yaml"]
 FILE_ALLOWED_EXT_JSON = ["json"]
 MAX_FILE_SIZE = 10000
@@ -138,6 +138,7 @@ def process_it(args):
         additional_keys[SCAN_ID] = args[SCAN_ID]
 
     additional_keys[VERSION] = offlinesec_client .__version__
+    additional_keys["request_type"] = "rfc"
 
     if "variant" in args.keys() and args["variant"]:
         additional_keys["variant"] = args["variant"]

@@ -5,7 +5,7 @@ from offlinesec_client.rfcdes import *
 from offlinesec_client.sap_table import SAPTable
 
 SYS_TYPES = ["prd", "qa", "dev", "pre-prd", "sndbox"]
-
+UNKNOWN = "unknown"
 
 class YamlCfgRfc:
     def __init__(self, file_name):
@@ -84,7 +84,7 @@ class YamlCfgRfc:
     def read_rfcdes_table(self, file_name, sid):
         lines = list()
         if not os.path.isfile(file_name):
-            self.err_list.append("* [WARNING] File %s not exist" % (file_name))
+            self.err_list.append("* [WARNING] File %s not exist" % (file_name,))
             return
 
         tbl = SAPTable(table_name="RFCDES",
@@ -94,6 +94,8 @@ class YamlCfgRfc:
             if RFCTYPE_COLUMN in line.keys():
                 nl = rfcdes_parse_rfcdes_line(line, line[RFCTYPE_COLUMN])
                 nl["SRCSID"] = sid
+                if sid in self.sid_list:
+                    nl["SRC_SYS_ROLE"] = self.sid_list[sid]
                 lines.append(nl)
         return lines
 
@@ -122,18 +124,24 @@ class YamlCfgRfc:
         for system in systems:
             for conn in rfc_conn_list:
                 if "I" in conn.keys() and "M" in conn.keys() and "U" in conn.keys():
-
                     sys_in_conn = conn["I"]
                     if sys_in_conn == system:
-
                         if system in self.usr02_list.keys():
-
                             if system not in usr02_buffer:
                                 usr02_buffer[system] = self.read_usr02(self.usr02_list[system])
                             if usr02_buffer[system] is not None:
                                 conn.update(YamlCfgRfc.get_userinfo(user=conn["U"],
                                                                 client=conn["M"],
                                                                 usr02_table=usr02_buffer[system]))
+                            else:
+                                conn["USTYP"] = UNKNOWN
+                                conn["UFLAG"] = UNKNOWN
+                                conn["CLASS"] = UNKNOWN
+
+                        else:
+                            conn["USTYP"] = UNKNOWN
+                            conn["UFLAG"] = UNKNOWN
+                            conn["CLASS"] = UNKNOWN
 
 
     def read_usr02(self, file_name):
@@ -167,6 +175,7 @@ class YamlCfgRfc:
     @staticmethod
     def get_userinfo(user, client, usr02_table):
         userinfo = dict()
+        mandt_flag = False
         for line in usr02_table:
             if "MANDT" in line.keys() and "BNAME" in line.keys():
                 if line["MANDT"] == client and line["BNAME"] == user:
@@ -174,28 +183,47 @@ class YamlCfgRfc:
                     if "USTYP" in line.keys() and line["USTYP"]:
                         userinfo["USTYP"] = line["USTYP"]
                     else:
-                        userinfo["USTYP"] = "unknown"
+                        userinfo["USTYP"] = UNKNOWN
                     if "UFLAG" in line.keys() and line["UFLAG"]:
                         userinfo["UFLAG"] = line["UFLAG"]
                     else:
-                        userinfo["UFLAG"] = "unknown"
+                        userinfo["UFLAG"] = UNKNOWN
                     if "CLASS" in line.keys() and line["CLASS"]:
                         userinfo["CLASS"] = line["CLASS"]
                     else:
-                        userinfo["CLASS"] = "unknown"
-
+                        userinfo["CLASS"] = UNKNOWN
                     break
+                if line["MANDT"] == client:
+                    mandt_flag = True
+            else:
+                userinfo["USTYP"] = UNKNOWN
+                userinfo["UFLAG"] = UNKNOWN
+                userinfo["CLASS"] = UNKNOWN
+
+        if not len(userinfo) and not mandt_flag:
+            userinfo["USTYP"] = UNKNOWN
+            userinfo["UFLAG"] = UNKNOWN
+            userinfo["CLASS"] = UNKNOWN
         return userinfo
 
 
     @staticmethod
     def get_profiles(user, client, ust04_table):
         profiles = list()
+        mandt_flag = False
         for line in ust04_table:
             if "MANDT" in line.keys() and "BNAME" in line.keys() and "PROFILE" in line.keys():
                 if line["MANDT"] == client and line["BNAME"] == user:
                     if line["PROFILE"].startswith("S"):
                         profiles.append(line["PROFILE"])
+                if line["MANDT"] == client:
+                    mandt_flag = True
+            else:
+                return "unknown"
+
+        if not len(profiles) and not mandt_flag:
+            return "unknown"
+
         return ", ".join(profiles)
 
 
@@ -218,3 +246,5 @@ class YamlCfgRfc:
                 if "I" in conn.keys():
                     if conn["I"] not in self.sid_list:
                         conn["UNKNOWN_DSTSID"] = True
+                    else:
+                        conn["DST_SYS_ROLE"] = self.sid_list[conn["I"]]
