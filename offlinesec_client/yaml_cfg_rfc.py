@@ -94,6 +94,8 @@ class YamlCfgRfc:
             if RFCTYPE_COLUMN in line.keys():
                 nl = rfcdes_parse_rfcdes_line(line, line[RFCTYPE_COLUMN])
                 nl["SRCSID"] = sid
+                if nl["RFCTYPE"] == "3" and ("I" not in nl.keys() or nl["I"].strip() == ""):
+                    nl["I"] = sid
                 if sid in self.sid_list:
                     nl["SRC_SYS_ROLE"] = self.sid_list[sid]
                 lines.append(nl)
@@ -102,46 +104,44 @@ class YamlCfgRfc:
     def ust04_enrichment(self, rfc_conn_list, systems):
         ust04_buffer = dict()
 
-        for system in systems:
-            for conn in rfc_conn_list:
-                if "I" in conn.keys() and "M" in conn.keys() and "U" in conn.keys():
-                    sys_in_conn = conn["I"]
-                    if sys_in_conn == system:
-                        if system in self.ust04_list.keys():
-                            if system not in ust04_buffer:
-                                ust04_buffer[system] = self.read_ust04(self.ust04_list[system])
-                            if ust04_buffer[system] is not None:
-                                conn["PROFILES"] = YamlCfgRfc.get_profiles(user=conn["U"],
-                                                                        client=conn["M"],
-                                                                        ust04_table=ust04_buffer[system])
-                            else:
-                                conn["PROFILES"] = "unknown"
+        for conn in rfc_conn_list:
+            if conn["RFCTYPE"] == "3":
+                system_in_conn = conn["I"]
+                if "U" in conn.keys() and "M" in conn.keys() and conn["U"].strip() != "" and conn["M"].strip() != "":
+                    if system_in_conn in self.ust04_list.keys():
+                        if system_in_conn not in ust04_buffer:
+                            ust04_buffer[system_in_conn] = self.read_ust04(self.ust04_list[system_in_conn])
+                        if ust04_buffer[system_in_conn] is not None:
+                            conn["PROFILES"] = YamlCfgRfc.get_profiles(user=conn["U"],
+                                                                           client=conn["M"],
+                                                                           ust04_table=ust04_buffer[system_in_conn])
                         else:
-                            conn["PROFILES"] = "unknown"
+                            conn["PROFILES"] = UNKNOWN
+                    else:
+                        conn["PROFILES"] = UNKNOWN
+
 
     def usr02_enrichment(self, rfc_conn_list, systems):
         usr02_buffer = dict()
-        for system in systems:
-            for conn in rfc_conn_list:
-                if "I" in conn.keys() and "M" in conn.keys() and "U" in conn.keys():
-                    sys_in_conn = conn["I"]
-                    if sys_in_conn == system:
-                        if system in self.usr02_list.keys():
-                            if system not in usr02_buffer:
-                                usr02_buffer[system] = self.read_usr02(self.usr02_list[system])
-                            if usr02_buffer[system] is not None:
-                                conn.update(YamlCfgRfc.get_userinfo(user=conn["U"],
+        for conn in rfc_conn_list:
+            if conn["RFCTYPE"] == "3":
+                system_in_conn = conn["I"]
+                if "U" in conn.keys() and "M" in conn.keys() and conn["U"].strip() != "" and conn["M"].strip() != "":
+                    if system_in_conn in self.usr02_list:
+                        if system_in_conn not in usr02_buffer:
+                            usr02_buffer[system_in_conn] = self.read_usr02(self.usr02_list[system_in_conn])
+                        if usr02_buffer[system_in_conn] is not None:
+                            conn.update(YamlCfgRfc.get_userinfo(user=conn["U"],
                                                                 client=conn["M"],
-                                                                usr02_table=usr02_buffer[system]))
-                            else:
-                                conn["USTYP"] = UNKNOWN
-                                conn["UFLAG"] = UNKNOWN
-                                conn["CLASS"] = UNKNOWN
-
+                                                                usr02_table=usr02_buffer[system_in_conn]))
                         else:
                             conn["USTYP"] = UNKNOWN
                             conn["UFLAG"] = UNKNOWN
                             conn["CLASS"] = UNKNOWN
+                    else:
+                        conn["USTYP"] = UNKNOWN
+                        conn["UFLAG"] = UNKNOWN
+                        conn["CLASS"] = UNKNOWN
 
 
     def read_usr02(self, file_name):
@@ -149,14 +149,15 @@ class YamlCfgRfc:
         if not os.path.isfile(file_name):
             self.err_list.append("* [WARNING] Table %s not found" % (file_name, ))
             return None
-
-        tbl = SAPTable(table_name="USR02",
+        try:
+            tbl = SAPTable(table_name="USR02",
                         file_name=file_name )
-
-        for line in tbl:
-            lines.append(line)
-        return lines
-
+        except Exception as err:
+            return
+        else:
+            for line in tbl:
+                lines.append(line)
+            return lines
 
 
     def read_ust04(self, file_name):
@@ -165,12 +166,15 @@ class YamlCfgRfc:
             self.err_list.append("* [WARNING] Table %s not found" % (file_name, ))
             return None
 
-        tbl = SAPTable(table_name="UST04",
+        try:
+            tbl = SAPTable(table_name="UST04",
                         file_name=file_name)
-
-        for line in tbl:
-            lines.append(line)
-        return lines
+        except Exception as err:
+            return
+        else:
+            for line in tbl:
+                lines.append(line)
+            return lines
 
     @staticmethod
     def get_userinfo(user, client, usr02_table):
@@ -184,7 +188,7 @@ class YamlCfgRfc:
                         userinfo["USTYP"] = line["USTYP"]
                     else:
                         userinfo["USTYP"] = UNKNOWN
-                    if "UFLAG" in line.keys() and line["UFLAG"]:
+                    if "UFLAG" in line.keys() and line["UFLAG"].strip() != "":
                         userinfo["UFLAG"] = line["UFLAG"]
                     else:
                         userinfo["UFLAG"] = UNKNOWN
@@ -244,7 +248,11 @@ class YamlCfgRfc:
         for conn in rfc_conn_list:
             if conn[RFCTYPE_COLUMN] == "3":
                 if "I" in conn.keys():
-                    if conn["I"] not in self.sid_list:
+                    if conn["I"] not in self.sid_list and conn["I"].strip() != "":
                         conn["UNKNOWN_DSTSID"] = True
-                    else:
+                    elif conn["I"] in self.sid_list:
                         conn["DST_SYS_ROLE"] = self.sid_list[conn["I"]]
+                    else:
+                        conn["DST_SYS_ROLE"] = conn["SRC_SYS_ROLE"]
+                else:
+                    conn["DST_SYS_ROLE"] = conn["SRC_SYS_ROLE"]

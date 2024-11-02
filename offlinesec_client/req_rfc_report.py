@@ -58,8 +58,8 @@ def data_masking(rfc_conn_list):
         if "RFCDEST" in conn.keys():
             conn["RFCDEST"] = rfcdest_masking.do_mask(conn["RFCDEST"])
         if "U" in conn.keys():
-            #exclude standard users
-            conn["U"] = user_masking.do_mask(conn["U"])
+            if not conn["U"] in ("SAP*", "DDIC", "TMSADM", "SAPCPIC", "EARLYWATCH", "WF-BATCH"):
+                conn["U"] = user_masking.do_mask(conn["U"])
         if "D" in conn.keys():
             # exclude standard users
             conn["D"] = user_masking.do_mask(conn["D"])
