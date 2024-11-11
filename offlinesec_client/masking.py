@@ -33,7 +33,7 @@ TEMPLATES = {
 class Masking:
     def __init__(self, masking_type):
         if masking_type not in FILENAMES.keys():
-            raise ValueError("Unsupported masking type %s" % (masking_type))
+            raise ValueError("Unsupported masking type %s" % (masking_type,))
         self.masking_type = masking_type
         self.data = list()
         self.read_masking()
@@ -54,7 +54,7 @@ class Masking:
             return tmpl % (str(idx),)
         else:
             pos = len(self.data)
-            self.data.append(in_value)
+            self.data.append(in_value.upper())
             return tmpl % (str(pos),)
 
     def do_unmask(self, in_value):

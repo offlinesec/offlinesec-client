@@ -16,7 +16,7 @@ class YamlCfgRfc:
         self.sid_list = dict()
 
         if not os.path.isfile(file_name):
-            self.err_list.append("* [ERROR] File %s not found" % (file_name))
+            self.err_list.append("* [ERROR] File %s not found" % (file_name,))
             return
 
         self.file_name = file_name
@@ -76,9 +76,8 @@ class YamlCfgRfc:
             rfc_conn_list.extend(lines)
 
         self.check_systems(rfc_conn_list)
-        system_list_with_users  = self.get_user_list(rfc_conn_list)
-        self.ust04_enrichment(rfc_conn_list, system_list_with_users)
-        self.usr02_enrichment(rfc_conn_list, system_list_with_users)
+        self.ust04_enrichment(rfc_conn_list)
+        self.usr02_enrichment(rfc_conn_list)
         return rfc_conn_list
 
     def read_rfcdes_table(self, file_name, sid):
@@ -101,7 +100,7 @@ class YamlCfgRfc:
                 lines.append(nl)
         return lines
 
-    def ust04_enrichment(self, rfc_conn_list, systems):
+    def ust04_enrichment(self, rfc_conn_list):
         ust04_buffer = dict()
 
         for conn in rfc_conn_list:
@@ -121,7 +120,7 @@ class YamlCfgRfc:
                         conn["PROFILES"] = UNKNOWN
 
 
-    def usr02_enrichment(self, rfc_conn_list, systems):
+    def usr02_enrichment(self, rfc_conn_list):
         usr02_buffer = dict()
         for conn in rfc_conn_list:
             if conn["RFCTYPE"] == "3":
@@ -230,19 +229,10 @@ class YamlCfgRfc:
 
         return ", ".join(profiles)
 
-
-    def get_user_list(self, rfc_conn_list):
-        user_list = list()
-        for conn in rfc_conn_list:
-            if conn[RFCTYPE_COLUMN] == "3":
-                if "U" in conn.keys():
-                    if "I" in conn.keys():
-                        if "M" in conn.keys():
-                            if not "UNKNOWN_DSTSID" in conn.keys():
-                                nu = conn["I"]
-                                if not nu in user_list:
-                                    user_list.append(nu)
-        return user_list
+    @staticmethod
+    def get_system_list_with_users(rfc_conn_list):
+        system_list = [conn["I"] for conn in rfc_conn_list if "U" in conn.keys() and "I" in conn.keys() and "M" in conn.keys() and not "UNKNOWN_DSTSID" in conn.keys()]
+        return list(set(system_list))
 
     def check_systems(self, rfc_conn_list):
         for conn in rfc_conn_list:

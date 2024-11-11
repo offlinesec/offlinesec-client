@@ -4,8 +4,9 @@ import os
 import argparse
 from pathlib import Path
 
+from build.lib.offlinesec_client.masking import RFCDEST_MASK
 from offlinesec_client.const import SUBDIR, FILE
-from offlinesec_client.masking import Masking, SAPSID_MASK
+from offlinesec_client.masking import Masking, SAPSID_MASK, USER_MASK,HOST_MASK, PATH_MASK
 import offlinesec_client.func
 import json
 
@@ -33,6 +34,72 @@ def init_args():
 
     parser.parse_args()
     return vars(parser.parse_args())
+
+def do_rfc_transform(file_name, sheet_name="Parameters"):
+    wb = editpyxl.Workbook()
+    source_filename = file_name
+
+    wb.open(source_filename)
+
+    if not sheet_name in wb.sheetnames:
+        wb.close()
+        return
+
+    ws = wb[sheet_name]
+
+    masking = {
+        SAPSID_MASK: Masking(SAPSID_MASK),
+        USER_MASK: Masking(USER_MASK),
+        HOST_MASK: Masking(HOST_MASK),
+        PATH_MASK: Masking(PATH_MASK),
+        RFCDEST_MASK: Masking(RFCDEST_MASK)
+    }
+
+    column_map = {
+        "Source SID": SAPSID_MASK,
+        "RFC Destination": RFCDEST_MASK,
+        "Destination SID": SAPSID_MASK,
+        "Source Host": HOST_MASK,
+        "User in Destination System": USER_MASK,
+        "Proxy": HOST_MASK,
+        "URL": PATH_MASK
+    }
+
+
+    max_masking = 20
+    columns = list()
+    for i in range(1, max_masking + 1):
+        try:
+            column_name = ws.cell(row=1, column=i).value
+            if column_name is None or column_name.strip() == "":
+                break
+            if column_name in column_map:
+                columns.append(column_map[column_name])
+            else:
+                columns.append(None)
+                continue
+        except IndexError as err:
+            break
+
+    max_lines = 10000
+    for i, column in enumerate(columns):
+        for k in range(2, max_lines + 1):
+            if column is not None:
+                try:
+                    cell = ws.cell(row=k, column=i + 1).value
+
+                except IndexError as err:
+                    break
+                else:
+                    if cell is not None and cell.strip() != "":
+                        new_value = masking[column].do_unmask(cell)
+                        ws.cell(row=k, column=i + 1).value = new_value
+                    else:
+                        break
+
+    wb.save(fullFilename=file_name)
+    wb.close()
+
 
 
 def do_secnotes_transform(file_name):
@@ -64,6 +131,8 @@ def read_file(file):
     flag = False
     if os.path.basename(file).startswith("roles_"):
         flag = True
+    elif os.path.basename(file).startswith("rfc_") and os.path.basename(file).endswith(".xlsx"):
+        do_rfc_transform(file)
     elif os.path.basename(file).startswith("secnotes_") and os.path.basename(file).endswith(".xlsx"):
         do_secnotes_transform(file)
 
@@ -79,9 +148,6 @@ def read_file(file):
         ws = wb.worksheets[1]
         resolve_roles_page2(ws, roles)
 
-        #img = openpyxl.drawing.image.Image('logo.jpg')
-        #img.anchor = 'A1'
-        #ws.add_image(img)
 
         wb.save(file)
         print(" * Roles in file %s have been converted" % (os.path.basename(file),))
