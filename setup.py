@@ -27,6 +27,7 @@ setup(
                                       'offlinesec_bo_notes = offlinesec_client.req_bo_notes:main',
                                       'offlinesec_java_notes = offlinesec_client.req_java_notes:main',
                                       'offlinesec_abap_rep = offlinesec_client.req_abap_review:main',
+                                      'offlinesec_rfc_report = offlinesec_client.req_rfc_report:main',
                                       'offlinesec_inverse_transform = offlinesec_client.resolve_report:main'], },
     install_requires=required,
     include_package_data=True
