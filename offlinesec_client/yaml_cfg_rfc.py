@@ -5,6 +5,15 @@ from offlinesec_client.rfcdes import *
 from offlinesec_client.sap_table import SAPTable
 
 SYS_TYPES = ["prd", "qa", "dev", "pre-prd", "sndbox"]
+
+SYS_ROLES = {
+    "prd" : ["prod", "prd", "production"],
+    "qa": ["test", "QA", "qa"],
+    "dev": ["dev", "development"],
+    "pre-prd": ["pre-prd", "pre-production", "pre-prod"],
+    "sndbox": ["sandbox", "sndbx"]
+}
+
 UNKNOWN = "unknown"
 
 class YamlCfgRfc:
@@ -200,7 +209,7 @@ class YamlCfgRfc:
                         userinfo["UFLAG"] = line["UFLAG"]
                     else:
                         userinfo["UFLAG"] = UNKNOWN
-                    if "CLASS" in line.keys() and line["CLASS"]:
+                    if "CLASS" in line.keys():
                         userinfo["CLASS"] = line["CLASS"]
                     else:
                         userinfo["CLASS"] = UNKNOWN
