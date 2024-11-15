@@ -16,6 +16,33 @@ RFCDEST_COLUMN = "RFCDEST"
 
 COLUMNS = [RFCDEST_COLUMN, RFCTYPE_COLUMN]
 
+SID_SIGNATURES = [
+    r"([\S]{3})CLNT[\d]{3}",
+    r"(^[\S]{3})[\d]{3}$",
+    "_([\S]{3})_TRUSTED_BACK",
+    r"\@([\S]{3})\.",
+    r"TRUSTED\@([\S]{3})",
+    r"TRUSTING\@([\S]{3})",
+    r"_([\S]{3})_[\d]{2}$",
+    r"^([\S]{3})$",
+  #  r"^([\S]{3})[_-]",
+
+]
+
+# "BACK"
+# local
+# test in production
+
+def get_sid_from_rfc_name(rfc_name):
+    if rfc_name is None or rfc_name.strip() == "":
+        return
+    for sign in SID_SIGNATURES:
+        res = re.search(sign, rfc_name)
+        if res:
+            return res.group(1)
+
+
+
 def rfcdes_parse_rfcdes_line(line, rfctype):
     out_line = dict()
     for column in COLUMNS:

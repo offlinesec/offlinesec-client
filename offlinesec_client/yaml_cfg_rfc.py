@@ -93,10 +93,19 @@ class YamlCfgRfc:
             if RFCTYPE_COLUMN in line.keys():
                 nl = rfcdes_parse_rfcdes_line(line, line[RFCTYPE_COLUMN])
                 nl["SRCSID"] = sid
-                if nl["RFCTYPE"] == "3" and ("I" not in nl.keys() or nl["I"].strip() == ""):
-                    nl["I"] = sid
+                if nl["RFCTYPE"] == "3":
+                    if "I" not in nl.keys() or nl["I"] is None or nl["I"].strip() == "":
+                        if "H" not in nl.keys() or nl["H"].strip() == "":
+                            nl["I"] = sid
+                        else:
+                            temp_sid = get_sid_from_rfc_name(nl["RFCDEST"])
+                            if temp_sid is not None:
+                                nl["I"] = temp_sid
+
                 if sid in self.sid_list:
                     nl["SRC_SYS_ROLE"] = self.sid_list[sid]
+                else:
+                    print(sid)
                 lines.append(nl)
         return lines
 
@@ -104,7 +113,7 @@ class YamlCfgRfc:
         ust04_buffer = dict()
 
         for conn in rfc_conn_list:
-            if conn["RFCTYPE"] == "3":
+            if conn["RFCTYPE"] == "3" and "I" in conn.keys():
                 system_in_conn = conn["I"]
                 if "U" in conn.keys() and "M" in conn.keys() and conn["U"].strip() != "" and conn["M"].strip() != "":
                     if system_in_conn in self.ust04_list.keys():
@@ -123,7 +132,7 @@ class YamlCfgRfc:
     def usr02_enrichment(self, rfc_conn_list):
         usr02_buffer = dict()
         for conn in rfc_conn_list:
-            if conn["RFCTYPE"] == "3":
+            if conn["RFCTYPE"] == "3" and "I" in conn.keys():
                 system_in_conn = conn["I"]
                 if "U" in conn.keys() and "M" in conn.keys() and conn["U"].strip() != "" and conn["M"].strip() != "":
                     if system_in_conn in self.usr02_list:
@@ -237,7 +246,7 @@ class YamlCfgRfc:
     def check_systems(self, rfc_conn_list):
         for conn in rfc_conn_list:
             if conn[RFCTYPE_COLUMN] == "3":
-                if "I" in conn.keys():
+                if "I" in conn.keys() and conn["I"] is not None:
                     if conn["I"] not in self.sid_list and conn["I"].strip() != "":
                         conn["UNKNOWN_DSTSID"] = True
                     elif conn["I"] in self.sid_list:

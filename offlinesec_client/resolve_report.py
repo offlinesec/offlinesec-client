@@ -4,9 +4,8 @@ import os
 import argparse
 from pathlib import Path
 
-from build.lib.offlinesec_client.masking import RFCDEST_MASK
 from offlinesec_client.const import SUBDIR, FILE
-from offlinesec_client.masking import Masking, SAPSID_MASK, USER_MASK,HOST_MASK, PATH_MASK
+from offlinesec_client.masking import Masking, SAPSID_MASK, USER_MASK,HOST_MASK, PATH_MASK, RFCDEST_MASK
 import offlinesec_client.func
 import json
 
