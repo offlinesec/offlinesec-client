@@ -51,8 +51,23 @@ class YamlCfgRfc:
                 role = system["role"] if "role" in system.keys() else ""
                 if role not in SYS_TYPES:
                     self.err_list.append("* [WARNING] Wrong system type %s (System %s). Allowed only: %s" % (role, name, ", ".join(SYS_TYPES)))
-                ust04 = os.path.join(root_dir, system["ust04"]) if "ust04" in system.keys() else ""
-                usr02 = os.path.join(root_dir, system["usr02"]) if "usr02" in system.keys() else ""
+
+                if "usr02" in system.keys():
+                    if isinstance(system["usr02"],list):
+                        usr02 = list()
+                        for item in system["usr02"]:
+                            usr02.append(os.path.join(root_dir, item))
+                    elif isinstance(system["usr02"], str):
+                        usr02 = os.path.join(root_dir, system["usr02"])
+                        # string or list
+
+                if "ust04" in system.keys():
+                    if isinstance(system["ust04"],list):
+                        ust04 = list()
+                        for item in system["ust04"]:
+                            ust04.append(os.path.join(root_dir, item))
+                    elif isinstance(system["ust04"], str):
+                        ust04 = os.path.join(root_dir, system["ust04"])
 
                 if rfcdes:
                     if name not in self.rfcdes_list.keys():
@@ -113,8 +128,7 @@ class YamlCfgRfc:
 
                 if sid in self.sid_list:
                     nl["SRC_SYS_ROLE"] = self.sid_list[sid]
-                else:
-                    print(sid)
+
                 lines.append(nl)
         return lines
 
@@ -163,35 +177,52 @@ class YamlCfgRfc:
 
     def read_usr02(self, file_name):
         lines = list()
-        if not os.path.isfile(file_name):
-            self.err_list.append("* [WARNING] Table %s not found" % (file_name, ))
-            return None
-        try:
-            tbl = SAPTable(table_name="USR02",
-                        file_name=file_name )
-        except Exception as err:
-            return
+
+        if isinstance(file_name, list):
+            tables = file_name
         else:
-            for line in tbl:
-                lines.append(line)
-            return lines
+            tables = list()
+            tables.append(file_name)
+
+        for file in tables:
+            if not os.path.isfile(file):
+                self.err_list.append("* [WARNING] Table file %s not found" % (file, ))
+                continue
+            try:
+                tbl = SAPTable(table_name="USR02",
+                            file_name=file )
+            except Exception as err:
+                self.err_list.append("* [WARNING] Bad table file %s" % (file,))
+                continue
+            else:
+                for line in tbl:
+                    lines.append(line)
+        return lines
 
 
     def read_ust04(self, file_name):
         lines = list()
-        if not os.path.isfile(file_name):
-            self.err_list.append("* [WARNING] Table %s not found" % (file_name, ))
-            return None
 
-        try:
-            tbl = SAPTable(table_name="UST04",
-                        file_name=file_name)
-        except Exception as err:
-            return
+        if isinstance(file_name, list):
+            tables = file_name
         else:
-            for line in tbl:
-                lines.append(line)
-            return lines
+            tables = list()
+            tables.append(file_name)
+
+        for file in tables:
+            if not os.path.isfile(file):
+                self.err_list.append("* [WARNING] Table file %s not found" % (file, ))
+                continue
+            try:
+                tbl = SAPTable(table_name="UST04",
+                            file_name=file )
+            except Exception as err:
+                self.err_list.append("* [WARNING] Bad table file %s" % (file,))
+                continue
+            else:
+                for line in tbl:
+                    lines.append(line)
+        return lines
 
     @staticmethod
     def get_userinfo(user, client, usr02_table):
