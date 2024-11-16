@@ -1,7 +1,7 @@
 
 # How to request Insecure RFC Connections Report
 
-1. Prepare all needed data for report. You need to extract the following tables from all SAPs in the scope:
+1. Prepare all needed data for the report. You need to extract the following tables from all SAPs in the scope:
    * RFCDES table
    * USR02 table - optional. This table contains info about user status, user type, user group. You can export only the following columns: MANDT, BNAME, UFLAG, CLASS, USTYP. 
    * UST04 table - optional (only data about system profiles which starts with letter 'S'). This table contains info about critical profile assignments (SAP_ALL, SAP_NEW, ...). 
@@ -19,4 +19,4 @@ Note: All sensitive information (RFC destination names, Usernames, Host IP Addre
 ```sh
 offlinesec_rfc_report -f "sapsystems.yaml" --do-not-send
 ```
-It prepares all data on client side but will not send it to the server. Then when you will download the report all data will be automatically deanonymized on client side.
+It prepares all data on client side but will not send them to the server. Then when you will download the report all data will be automatically deanonymized on client side.
