@@ -119,7 +119,7 @@ class ABAPSystem (SAPSystem):
 
         if notes is None or not len(notes):
             print("* [WARNING] File {} has wrong format or doesn't contain completely implemented notes"
-                  .format(system_name, cwbntcust_file,))
+                  .format(cwbntcust_file,))
 
         return notes
 

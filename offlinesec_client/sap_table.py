@@ -27,11 +27,11 @@ COLUMN_REPLACEMENT = {
 
     "CWBNTCUST" : {
         "NUMM" : ["Note number"],
-        "NTSTATUS" : ["Processing Status"],
-        "PRSTATUS" : ["Implementation State"],
+        "NTSTATUS" : ["Processing Status", "Proc. Status"],
+        "PRSTATUS" : ["Implementation State", "Impl. State"],
         "CWBUSER" : ["User Name"],
         "REQID" : ["Request ID"],
-        "IMPL_PROGRESS": ["Implementation Progress"]
+        "IMPL_PROGRESS": ["Implementation Progress", "Impl."]
     }
 }
 
