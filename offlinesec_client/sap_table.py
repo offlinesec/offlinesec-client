@@ -26,14 +26,22 @@ COLUMN_REPLACEMENT = {
     },
 
     "CWBNTCUST" : {
-        "NUMM" : ["Note number"],
-        "NTSTATUS" : ["Processing Status", "Proc. Status"],
-        "PRSTATUS" : ["Implementation State", "Impl. State"],
-        "CWBUSER" : ["User Name"],
-        "REQID" : ["Request ID"],
+        "NUMM" : ["Note number", "Hinweisnummer"],
+        "NTSTATUS" : ["Processing Status", "Proc. Status", "Bearb. Stat."],
+        "PRSTATUS" : ["Implementation State", "Impl. State", "Einbaustand"],
+        "CWBUSER" : ["User Name", "Benutzername"],
+        "REQID" : ["Request ID", "Request-Id"],
         "IMPL_PROGRESS": ["Implementation Progress", "Impl."]
+    },
+
+    "JAVA_SOFTS" : {
+        "Version": [],
+        "Vendor": [],
+        "Name": [],
+        "Location": []
     }
 }
+
 
 DATA_REPLACEMENT = {
     "CWBNTCUST" : {

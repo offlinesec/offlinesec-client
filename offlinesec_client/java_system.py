@@ -1,4 +1,5 @@
 from offlinesec_client.sap_system import SAPSystem
+from offlinesec_client.sap_table import SAPTable
 import os
 
 JAVA = "JAVA"
@@ -26,11 +27,35 @@ class JAVASystem (SAPSystem):
             path = softs_file
         if not os.path.exists(path):
             raise FileNotFoundError("File %s not found" % (path,))
-        if not (softs_file.upper().endswith(".TXT") or softs_file.upper().endswith(".CSV")):
-            raise ValueError("File {} has wrong extension. Only TXT or CSV files supported".format(softs_file))
 
+        if softs_file.upper().endswith(".TXT") or softs_file.upper().endswith(".CSV"):
+            out_softs = JAVASystem.parse_csv_file(softs_file)
+        elif softs_file.upper().endswith(".XLSX"):
+            out_softs = JAVASystem.parse_xlsx_file(softs_file)
+        else:
+            raise ValueError("File {} has wrong extension. Only TXT,CSV and XLSX files supported".format(softs_file))
+
+        if not len(out_softs):
+            raise ValueError("File {} has wrong format".format(softs_file))
+        return out_softs
+
+    @staticmethod
+    def parse_xlsx_file(file_name):
         out_softs = list()
+        tbl = SAPTable(table_name="JAVA_SOFTS", file_name=file_name)
+        if tbl:
+            idx_name = tbl.columns.index("Name")
+            idx_ver = tbl.columns.index("Version")
+            if idx_name is not None and idx_ver is not None:
+                for line in tbl.data:
+                    name = line[idx_name]
+                    ver = line[idx_ver]
+                    out_softs.append((name, ver))
+        return out_softs
 
+    @staticmethod
+    def parse_csv_file(path):
+        out_softs = list()
         with open(path, 'r') as f:
             columns = dict()
             first_line = True
@@ -48,13 +73,9 @@ class JAVASystem (SAPSystem):
                             if column1.lower() in column2.lower().strip():
                                 columns[column1] = pos
                         if column1 not in columns:
-                            raise ValueError("The column '{}' not found in the file {}".format(column1, softs_file))
+                            raise ValueError("The column '{}' not found in the file {}".format(column1, path))
                 else:
                     name = line[columns[CSV_COLUMNS[1]]]
                     ver = line[columns[CSV_COLUMNS[0]]]
                     out_softs.append((name, ver))
-
-        if not len(out_softs):
-            raise ValueError("File {} has wrong format".format(softs_file))
         return out_softs
-

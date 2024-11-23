@@ -17,7 +17,7 @@ def check_variant(s):
 
 
 def check_file_arg(s):
-    return offlinesec_client.func.check_file_arg(s, ['csv'], 200000)
+    return offlinesec_client.func.check_file_arg(s, ['csv', 'xlsx'], 200000)
 
 
 def check_exclude_file(s):

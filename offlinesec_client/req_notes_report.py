@@ -20,6 +20,9 @@ def check_patch_level(s):
 def check_system_name(s):
     return offlinesec_client.func.check_system_name(s)
 
+def check_file_arg_sla(s):
+    res = offlinesec_client.func.check_file_arg(s, ['yaml'], 200000)
+    return res
 
 def check_variant(s):
     return offlinesec_client.func.check_variant(s)
@@ -43,12 +46,20 @@ def init_args():
                         help="Kernel Version (for instance 7.53)", required=False)
     parser.add_argument("-p", "--%s" % (KRNL_PL,), action="store", type=check_patch_level,
                         help="Kernel Patch Level (for instance 1200)", required=False)
+    parser.add_argument("--host-agent-ver", action="store", type=check_version,
+                        help="Host Agent Version (for instance 7.22)", required=False)
+    parser.add_argument("--host-agent-patch", action="store", type=check_patch_level,
+                        help="Host Agent Patch Level (for instance 12)", required=False)
     parser.add_argument("-c", "--%s" % (CWBNTCUST,), action="store", type=check_cwbntcust,
                         help="CWBNTCUST table (txt or xlsx)", required=False)
     parser.add_argument("-e", "--exclude", action="store",
                         help='Exclude SAP security notes', required=False)
     parser.add_argument("-v", "--variant", action="store", type=check_variant,
                         help="Check Variant (numeric)", required=False)
+    parser.add_argument("-l", "--sla", action="store", type=check_file_arg_sla,
+                        help="SLA file in YAML format")
+    parser.add_argument('--do-not-send', action='store_true', help="Don't upload data to the server (review first)")
+    parser.add_argument("-d","--date", action='store', help="The report on specific date in past (DD-MM-YYYY)")
     parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
     parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
 
@@ -56,11 +67,18 @@ def init_args():
     parser.parse_args()
     return vars(parser.parse_args())
 
-
-def send_file(file, system_name="", kernel_version="", kernel_patch="",
-              cwbntcust="", exclude="", variant="", wait=False, do_not_wait=False):
+def send_file(args):
     additional_keys = dict()
     system_list = list()
+
+    system_name = args[SYSTEM_NAME] if SYSTEM_NAME in args else None
+    kernel_version = args[KRNL_VER] if KRNL_VER in args else None
+    kernel_patch = args[KRNL_PL] if KRNL_PL in args else None
+    cwbntcust = args[CWBNTCUST] if CWBNTCUST in args else None
+    file = args[FILE] if FILE in args else None
+    exclude = args[EXCLUDE] if EXCLUDE in args else None
+    wait = args[WAIT] if WAIT in args else None
+    do_not_wait = args[DO_NOT_WAIT] if DO_NOT_WAIT in args else None
 
     if system_name is None or system_name == "":
         system_name = DEFAULT_SYSTEM_NAME
@@ -70,8 +88,21 @@ def send_file(file, system_name="", kernel_version="", kernel_patch="",
         sapsid_masking.save_masking()
 
     additional_keys[VERSION] = offlinesec_client.__version__
-    if variant:
-        additional_keys[VARIANT] = variant
+
+    if "variant" in args and args["variant"] is not None:
+        additional_keys["variant"] = args["variant"]
+
+    if "host_agent_ver" in args and args["host_agent_ver"] is not None:
+        additional_keys["host_agent_ver"] = args["host_agent_ver"]
+
+    if "host_agent_patch" in args and args["host_agent_patch"] is not None:
+        additional_keys["host_agent_patch"] = args["host_agent_patch"]
+
+    if "date" in args and args["date"] is not None:
+        additional_keys["on_date"] = offlinesec_client.func.parse_date(args["date"])
+
+    if "sla" in args and args["sla"] is not None:
+        additional_keys["sla"] = offlinesec_client.func.check_sla_file(args["sla"])
 
     try:
         new_abap_system = ABAPSystem(krnl_version=kernel_version,
@@ -87,6 +118,11 @@ def send_file(file, system_name="", kernel_version="", kernel_patch="",
     if new_abap_system is not None:
         system_list.append(new_abap_system)
 
+    if "do_not_send" in args and args["do_not_send"]:
+        offlinesec_client.func.save_to_json(data=system_list,
+                                            extras=additional_keys)
+        return
+
     offlinesec_client.func.send_to_server(data=system_list,
                                           url=UPLOAD_URL,
                                           extras=additional_keys,
@@ -94,10 +130,12 @@ def send_file(file, system_name="", kernel_version="", kernel_patch="",
                                           do_not_wait=do_not_wait)
 
 
-def process_it(file, system_name="", kernel_version="", kernel_patch="", cwbntcust="",
-               guiscript=False, variant="", wait=False, exclude="", do_not_wait=False):
+def process_it(args):
     if not offlinesec_client.func.check_server():
         return
+    guiscript = args[GUISCRIPT] if GUISCRIPT in args else None
+    system_name = args[SYSTEM_NAME] if SYSTEM_NAME in args else None
+    wait = args[WAIT] if WAIT in args else None
 
     if guiscript:
         import platform
@@ -109,30 +147,14 @@ def process_it(file, system_name="", kernel_version="", kernel_patch="", cwbntcu
             print("SAP GUI Scripting not supported on this platform. Run SAP Gui Scripting only on Windows platform")
         return
 
-    send_file(file=file,
-              system_name=system_name,
-              kernel_version=kernel_version,
-              kernel_patch=kernel_patch,
-              cwbntcust=cwbntcust,
-              exclude=exclude,
-              wait=wait,
-              do_not_wait=do_not_wait)
+    send_file(args)
 
 
 def main():
     args = init_args()
 
     if (FILE in args and args[FILE]) or ("guiscript" in args and args["guiscript"]):
-        process_it(file=args[FILE],
-                   system_name=args[SYSTEM_NAME],
-                   kernel_version=args[KRNL_VER],
-                   kernel_patch=args[KRNL_PL],
-                   cwbntcust=args[CWBNTCUST],
-                   guiscript=args[GUISCRIPT],
-                   variant=args[VARIANT],
-                   wait=args[WAIT],
-                   exclude=args[EXCLUDE],
-                   do_not_wait=args[DO_NOT_WAIT])
+        process_it(args)
     else:
         print("You need to specify input file(s) (-f option) or --guiscript option (to run gui script)")
 

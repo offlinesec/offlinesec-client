@@ -1,11 +1,14 @@
-from .config import config
+import datetime
 import socket
 import argparse
 import json
 import os
+import yaml
 import sys
 import requests
 import time
+import datetime
+from offlinesec_client.config import config
 from offlinesec_client.const import ERR_MESSAGE
 from offlinesec_client.cwbntcust import Cwbntcust
 from offlinesec_client.const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR, CWBNTCUST,\
@@ -169,6 +172,57 @@ def send_to_server(data, url, extras={}, wait=False, do_not_wait=False):
         except Exception as err:
             print("[ERROR] " + str(err))
             print("[ERROR] No response from the Offline Security server. Please try later")
+
+def save_to_json(data, extras):
+    json_filename =get_file_name("secnotes.json","")
+
+    send_data = get_base_json()
+    send_data["systems"] = [item.to_dict() for item in data]
+    if len(extras):
+        send_data.update(extras)
+
+    with open(json_filename, 'w') as f:
+        json.dump(send_data, f)
+    print("* The data saved to the '%s' file. Review it and send it with option -j to the server" % (json_filename,))
+
+def parse_date(date_from_cli):
+    try:
+        temp_dat = datetime.datetime.strptime(date_from_cli, "%d-%m-%Y")
+    except ValueError as err:
+        print(" * [Warning] Wrong the date format: %s (expected DD-MM-YYYY)" % (date_from_cli,))
+    else:
+        present = datetime.datetime.now()
+        if temp_dat < present:
+            return date_from_cli
+        else:
+            print(" * [Warning] The date %s from future not supported" % (date_from_cli,))
+
+def check_sla_file(sla_file):
+    if not os.path.isfile(sla_file):
+        print(" * [Warning] The SLA file %s not found" % (sla_file,))
+        return
+    if not sla_file.lower().endswith(".yaml"):
+        print(" * [Warning] Bad SLA file %s (supported only YAML format)" % (sla_file,))
+        return
+    try:
+        with open(sla_file, 'r', encoding="utf-8") as f:
+            file_content = yaml.safe_load(f)
+    except Exception as err:
+        print(" * [Warning] can't read the SLA file %s" % (sla_file,))
+        return
+    else:
+        supported_keys = ["hotnews", "medium", "low", "high"]
+
+        for key in file_content.keys():
+            if key not in supported_keys:
+                print(" * [Warning] Unsupported key %s in the SLA file %s" % (key, sla_file,))
+                return
+            if not isinstance(file_content[key], int):
+                print(" * [Warning] Unsupported value %s for the key %s in the SLA file %s. Please set a numeric value" %
+                      (file_content[key], key, sla_file,))
+                return
+        if len(file_content):
+            return file_content
 
 
 def send_to_server_gen(data, url, extras={}, wait=False, do_not_wait=False):

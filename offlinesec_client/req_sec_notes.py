@@ -20,16 +20,24 @@ def check_file_arg(s):
             raise argparse.ArgumentTypeError("Wrong the YAML file (%s) structure. The 'sap_systems' key not found" % (s,))
     return res
 
+def check_file_arg_sla(s):
+    res = offlinesec_client.func.check_file_arg(s, ['yaml'], 200000)
+    return res
+
 
 def init_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", action="store", type=check_file_arg,
                         help="File Name (SAP systems (ABAP, JAVA, BO, ...) and their software components in YAML format)", required=True)
     parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
+    parser.add_argument("-l", "--sla", action="store", type=check_file_arg_sla,
+                        help="SLA file in YAML format")
     parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
     parser.add_argument('-i', '--id', action='store', help="The scan Id (any unique identifier)")
     parser.add_argument("-v", "--variant", action="store", type=check_variant,
                         help="Check Variant (numeric)", required=False)
+    parser.add_argument('--do-not-send', action='store_true', help="Don't upload data to the server (review first)")
+    parser.add_argument("-d","--date", action='store', help="The report on specific date in past (DD-MM-YYYY)")
     parser.parse_args()
     return vars(parser.parse_args())
 
@@ -47,16 +55,27 @@ def process_it(args):
     do_masking(systems)
     additional_keys = dict()
 
-    if args[SCAN_ID]:
-        additional_keys[SCAN_ID] = args[SCAN_ID]
-
     additional_keys[VERSION] = offlinesec_client .__version__
 
-    if "variant" in args:
+    if args[SCAN_ID] and args[SCAN_ID] is not None:
+        additional_keys[SCAN_ID] = args[SCAN_ID]
+
+    if "variant" in args and args["variant"] is not None:
         additional_keys["variant"] = args["variant"]
+
+    if "date" in args and args["date"] is not None:
+        additional_keys["on_date"] = offlinesec_client.func.parse_date(args["date"])
+
+    if "sla" in args and args["sla"] is not None:
+        additional_keys["sla"] = offlinesec_client.func.check_sla_file(args["sla"])
 
     wait = args[WAIT] if WAIT in args else ""
     do_not_wait = args[DO_NOT_WAIT] if DO_NOT_WAIT in args else ""
+
+    if "do_not_send" in args and args["do_not_send"]:
+        offlinesec_client.func.save_to_json(data=systems,
+                                            extras=additional_keys)
+        return
 
     offlinesec_client.func.send_to_server(data=systems,
                                           url=UPLOAD_URL,
@@ -64,14 +83,12 @@ def process_it(args):
                                           wait=wait,
                                           do_not_wait=do_not_wait)
 
-
 def main():
     args = init_args()
     if FILE in args and args[FILE]:
         process_it(args)
     else:
         print("Please choose the configuration YAML file (-f option)")
-
 
 if __name__ == '__main__':
     main()

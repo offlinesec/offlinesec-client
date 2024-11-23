@@ -31,12 +31,20 @@ class ABAPSystem (SAPSystem):
         if self.kernel_version == "" and len(self.softs) == 0:
             raise ValueError("[ERROR] System '{}' you must specify 'softs' or 'krnl_version' keys"
                              .format(self.system_name))
-
-        self.cwbntcust = ABAPSystem.parse_cwbntcust_file(args["cwbntcust"], root_dir, self.system_name) \
-            if "cwbntcust" in args.keys() and args["cwbntcust"] is not None and args["cwbntcust"] != ""else list()
+        if "cwbntcust" in args.keys() and args["cwbntcust"] is not None:
+            self.parse_cwbntcust_file(args["cwbntcust"], root_dir, self.system_name)
+        else:
+            self.cwbntcust = list()
+            self.cwbntcust_new = dict()
 
         self.exclude = ABAPSystem.parse_exclude_file(args["exclude"], root_dir, self.system_name) \
             if "exclude" in args.keys() and args["exclude"] is not None and args["exclude"] != ""else list()
+
+        self.host_agent_version = ABAPSystem.check_kernel_version(args["host_agent_version"]) \
+            if ("host_agent_version" in args.keys() and args["host_agent_version"] is not None and args["host_agent_version"] != "") else ""
+
+        self.host_agent_patch = ABAPSystem.check_kernel_patch(args["host_agent_patch"]) \
+            if "host_agent_patch" in args.keys() and args["host_agent_patch"] is not None and args["host_agent_patch"] != ""else ""
 
     @staticmethod
     def check_kernel_version(kernel_version):
@@ -101,8 +109,7 @@ class ABAPSystem (SAPSystem):
 
         return softs
 
-    @staticmethod
-    def parse_cwbntcust_file(cwbntcust_file, root_dir, system_name):
+    def parse_cwbntcust_file(self, cwbntcust_file, root_dir, system_name):
         if root_dir:
             path = os.path.join(root_dir, cwbntcust_file)
         else:
@@ -115,13 +122,12 @@ class ABAPSystem (SAPSystem):
 
 
         tbl = SAPTable(table_name="CWBNTCUST", file_name=path)
-        notes = ABAPSystem.parse_cwbntcust_data(tbl)
+        self.cwbntcust = ABAPSystem.parse_cwbntcust_data(tbl)
+        self.cwbntcust_new = ABAPSystem.parse_cwbntcust_data_new(tbl)
 
-        if notes is None or not len(notes):
+        if self.cwbntcust is None or not len(self.cwbntcust):
             print("* [WARNING] File {} has wrong format or doesn't contain completely implemented notes"
                   .format(cwbntcust_file,))
-
-        return notes
 
     @staticmethod
     def parse_cwbntcust_data(cwbntcust_table):
@@ -138,6 +144,26 @@ class ABAPSystem (SAPSystem):
                 prstatus = line[idx_prstatus]
                 if prstatus == "E" or prstatus == "O":
                     notes.append(line[idx_note])
+
+        return notes
+
+    @staticmethod
+    def parse_cwbntcust_data_new(cwbntcust_table):
+        notes = dict()
+        PRSTATUS_COLUMN = "PRSTATUS"
+        NTSTATUS_COLUMN = "NTSTATUS"
+        NOTE_COLUMN = "NUMM"
+        if not cwbntcust_table:
+            raise ValueError("Bad CWBNTCUST table")
+
+        if (PRSTATUS_COLUMN in cwbntcust_table.columns and
+                NOTE_COLUMN in cwbntcust_table.columns and
+                NTSTATUS_COLUMN in cwbntcust_table.columns):
+            idx_prstatus = cwbntcust_table.columns.index(PRSTATUS_COLUMN)
+            idx_note = cwbntcust_table.columns.index(NOTE_COLUMN)
+            idx_ntstatus = cwbntcust_table.columns.index(NTSTATUS_COLUMN)
+            for line in cwbntcust_table.data:
+                notes[line[idx_note]] =  [line[idx_ntstatus], line[idx_prstatus]]
 
         return notes
 
