@@ -1,10 +1,7 @@
 import argparse
 import os
-import json
-import requests
-from offlinesec_client import func
-from offlinesec_client.const import FILE, SYSTEM_NAME
-from offlinesec_client.const import ERR_MESSAGE
+import offlinesec_client.func
+from offlinesec_client.const import FILE, SYSTEM_NAME, WAIT, DO_NOT_WAIT, VERSION
 from offlinesec_client.rsparam import RsparamReport
 
 FILE_ALLOWED_EXTENSIONS = ["xlsx"]
@@ -75,6 +72,10 @@ def init_args():
     parser.add_argument("-z", "--zip_file", action="store", type=check_zip_arg,
                         help="ZIP file prepared earlier", required=False)
 
+    parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
+    parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
+
+
     parser.parse_args()
     return vars(parser.parse_args())
 
@@ -94,43 +95,25 @@ def process_it(args):
         return
 
     if zip_file:
-        if not func.check_server():
+        if not offlinesec_client.func.check_server():
             return
-        upload_file(zip_file, args)
+        additional_keys = dict()
+        additional_keys[VERSION] = offlinesec_client.__version__
 
+        if "variant" in args and args["variant"] is not None:
+            additional_keys["variant"] = args["variant"]
 
-def upload_file(zip_file, args):
-    url = func.get_connection_str(UPLOAD_URL)
+        if SYSTEM_NAME in args and args[SYSTEM_NAME] is not None:
+            additional_keys[SYSTEM_NAME] = args[SYSTEM_NAME]
 
-    system_name = args[SYSTEM_NAME] if SYSTEM_NAME in args else ""
-    variant = args["variant"] if "variant" in args else ""
+        wait = args[WAIT] if WAIT in args else None
+        do_not_wait = args[DO_NOT_WAIT] if DO_NOT_WAIT in args else None
 
-    data = func.get_base_json(system_name=system_name, variant=variant)
-
-    file_body = open(zip_file, 'rb')
-
-    files = {
-        'json': ('description', json.dumps(data), 'application/json'),
-        'file': (os.path.basename(zip_file), file_body, 'application/zip')
-    }
-
-    print("Uploading file %s" % (os.path.basename(zip_file)))
-    r = requests.post(url, files=files)
-
-    if r.content:
-        try:
-            response = json.loads(r.content)
-            if ERR_MESSAGE in response:
-                print(" * " + response[ERR_MESSAGE])
-                if file_body:
-                    file_body.close()
-                if os.path.isfile(zip_file):
-                    os.remove(zip_file)
-                return
-        except:
-            pass
-
-    print("No response from server. Please try later")
+        offlinesec_client.func.send_file_to_server(file_name=zip_file,
+                                                   extras=additional_keys,
+                                                   url=UPLOAD_URL,
+                                                   wait=wait,
+                                                   do_not_wait=do_not_wait)
 
 
 def main():

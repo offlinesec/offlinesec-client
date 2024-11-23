@@ -142,6 +142,41 @@ def ask_and_wait_5_minutes(wait, do_not_wait=False, seconds=310):
         elif resp[0].lower() == "y":
             wait_5_minutes(seconds)
 
+def send_file_to_server(file_name, url, extras={}, wait=False, do_not_wait=False, remove_file=True):
+    url = get_connection_str(url)
+
+    send_data = get_base_json()
+    if len(extras):
+        send_data.update(extras)
+    file_body = open(file_name, 'rb')
+    files = {
+        'json': ('description', json.dumps(send_data), 'application/json'),
+        'file': (os.path.basename(file_name), file_body, 'application/zip')
+    }
+
+    r = requests.post(url, files=files)
+    if r.content:
+        try:
+            response = json.loads(r.content)
+            if file_body:
+                file_body.close()
+            if ERR_MESSAGE in response:
+                if "File successfully" in response[ERR_MESSAGE]:
+                    print(" * " + response[ERR_MESSAGE])
+                    print(" * Your report will be available in 5 minutes (Please run offlinesec_get_reports in 5 minutes)")
+                else:
+                    raise "[ERROR] " + response[ERR_MESSAGE]
+
+        except Exception as err:
+            print("[ERROR] " + str(err))
+            print("[ERROR] No response from the Offline Security server. Please try later")
+        else:
+            if remove_file:
+                if os.path.isfile(file_name):
+                    os.remove(file_name)
+            ask_and_wait_5_minutes(wait=wait,
+                                   do_not_wait=do_not_wait)
+
 
 def send_to_server(data, url, extras={}, wait=False, do_not_wait=False):
     url = get_connection_str(url)
