@@ -21,3 +21,8 @@ Then open archive and review file content. If everything is ok you can proceed w
 ```sh
 offlinesec_sap_params -z "rsparam.zip" -s "Demo System"
 ```
+
+In 5 minutes please download your report:
+```sh
+offlinesec_get_reports
+```

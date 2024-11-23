@@ -113,6 +113,11 @@ offlinesec_get_reports
 6. SAP Security Audit Log Analysis, ICF services, Users with critical authorizations
 * Will be available in next releases
 
+Each time do not forget to download your report from the server:
+```sh
+offlinesec_get_reports
+```
+
 If you need more  - email me info@offlinesec.com.
 
 ## Important Notes:
