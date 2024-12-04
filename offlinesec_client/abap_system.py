@@ -37,6 +37,9 @@ class ABAPSystem (SAPSystem):
             self.cwbntcust = list()
             self.cwbntcust_new = dict()
 
+        if "sla" in args:
+            self.parse_sla(args["sla"])
+
         self.exclude = ABAPSystem.parse_exclude_file(args["exclude"], root_dir, self.system_name) \
             if "exclude" in args.keys() and args["exclude"] is not None and args["exclude"] != ""else list()
 

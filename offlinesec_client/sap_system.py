@@ -1,5 +1,6 @@
 from datetime import datetime
 import yaml
+from offlinesec_client.func import check_sla_file
 import os
 
 
@@ -9,6 +10,10 @@ class SAPSystem:
 
     def to_dict(self):
         return self.__dict__
+
+    def parse_sla(self, sla_file):
+        if os.path.isfile(sla_file):
+            self.sla = check_sla_file(sla_file)
 
     @staticmethod
     def parse_exclude_file(exclude_yaml_file, root_dir, system_name):

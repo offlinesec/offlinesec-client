@@ -67,7 +67,9 @@ def process_it(args):
         additional_keys["on_date"] = offlinesec_client.func.parse_date(args["date"])
 
     if "sla" in args and args["sla"] is not None:
-        additional_keys["sla"] = offlinesec_client.func.check_sla_file(args["sla"])
+        for system in systems:
+            if not hasattr(system,"sla") or system.sla is None:
+                system.sla = offlinesec_client.func.check_sla_file(args["sla"])
 
     wait = args[WAIT] if WAIT in args else ""
     do_not_wait = args[DO_NOT_WAIT] if DO_NOT_WAIT in args else ""
