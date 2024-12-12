@@ -11,9 +11,10 @@ class SAPSystem:
     def to_dict(self):
         return self.__dict__
 
-    def parse_sla(self, sla_file):
-        if os.path.isfile(sla_file):
-            self.sla = check_sla_file(sla_file)
+    def parse_sla(self, sla_file, root_dir):
+        full_path = os.path.join(root_dir, sla_file)
+        if os.path.isfile(full_path):
+            self.sla = check_sla_file(full_path)
 
     @staticmethod
     def parse_exclude_file(exclude_yaml_file, root_dir, system_name):

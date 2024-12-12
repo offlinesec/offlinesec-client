@@ -1,5 +1,4 @@
 from offlinesec_client.sap_system import SAPSystem
-from offlinesec_client.cwbntcust import Cwbntcust
 from offlinesec_client.sap_table import SAPTable
 import os
 import re
@@ -38,7 +37,7 @@ class ABAPSystem (SAPSystem):
             self.cwbntcust_new = dict()
 
         if "sla" in args:
-            self.parse_sla(args["sla"])
+            self.parse_sla(args["sla"], root_dir)
 
         self.exclude = ABAPSystem.parse_exclude_file(args["exclude"], root_dir, self.system_name) \
             if "exclude" in args.keys() and args["exclude"] is not None and args["exclude"] != ""else list()

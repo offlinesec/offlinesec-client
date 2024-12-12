@@ -113,14 +113,18 @@ def do_secnotes_transform(file_name):
 
     ws = wb["Parameters"]
     sapsid_masking = Masking(SAPSID_MASK)
-
-    for i in range(2, 5 + 1):
+    max_lines = 10000
+    for i in range(2, max_lines):
         try:
             cell = ws.cell(row=i, column=1).value
         except IndexError as err:
             break
-        new_value = sapsid_masking.do_unmask(cell)
-        ws.cell(row=i, column=1).value = new_value
+        else:
+            if cell is not None and cell.strip() != "":
+                new_value = sapsid_masking.do_unmask(cell)
+                ws.cell(row=i, column=1).value = new_value
+            else:
+                break
 
     wb.save(fullFilename=file_name)
     wb.close()

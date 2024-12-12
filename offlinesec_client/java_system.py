@@ -11,7 +11,6 @@ class JAVASystem (SAPSystem):
         super().__init__(args["name"])
         self.type = JAVA
         root_dir = args["root_dir"] if "root_dir" in args else None
-
         self.softs = JAVASystem.parse_softs_file(args["softs"], root_dir) if "softs" in args.keys() else list()
         if len(self.softs) == 0:
             raise ValueError("[ERROR] System '{}' you must specify 'soft' key"
@@ -29,9 +28,9 @@ class JAVASystem (SAPSystem):
             raise FileNotFoundError("File %s not found" % (path,))
 
         if softs_file.upper().endswith(".TXT") or softs_file.upper().endswith(".CSV"):
-            out_softs = JAVASystem.parse_csv_file(softs_file)
+            out_softs = JAVASystem.parse_csv_file(path)
         elif softs_file.upper().endswith(".XLSX"):
-            out_softs = JAVASystem.parse_xlsx_file(softs_file)
+            out_softs = JAVASystem.parse_xlsx_file(path)
         else:
             raise ValueError("File {} has wrong extension. Only TXT,CSV and XLSX files supported".format(softs_file))
 

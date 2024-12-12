@@ -11,8 +11,9 @@ import datetime
 from offlinesec_client.config import config
 from offlinesec_client.const import ERR_MESSAGE
 from offlinesec_client.cwbntcust import Cwbntcust
+from offlinesec_client import __version__
 from offlinesec_client.const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR, CWBNTCUST,\
-    KRNL_PL, KRNL_VER, VAR
+    KRNL_PL, KRNL_VER, VAR, VERSION, SCAN_ID
 
 
 def check_server():
@@ -66,6 +67,24 @@ def get_base_json(action="", system_name="", variant="",
             data[CWBNTCUST] = notes
     return data
 
+def save_json(data_to_save,filename_template):
+    json_filename = get_file_name(filename_template)
+    with open(json_filename, 'w') as f:
+        json.dump(data_to_save, f)
+    print("* The data saved to the '%s' file. Review it and send it with option -j to the server" % (json_filename,))
+
+
+def read_json(file_name):
+    if not os.path.isfile(file_name):
+        print(" * [ERROR] File %s not exist" % (file_name,))
+        return
+
+    try:
+        with open(file_name, 'r') as file:
+            data = json.load(file)
+            return data
+    except Exception as err:
+        print(" * [ERROR] " + str(err))
 
 def get_file_name(filename, folder=""):
     full_path = os.path.join(folder, filename)
@@ -177,6 +196,20 @@ def send_file_to_server(file_name, url, extras={}, wait=False, do_not_wait=False
             ask_and_wait_5_minutes(wait=wait,
                                    do_not_wait=do_not_wait)
 
+def populate_additional_keys(args):
+    additional_keys = dict()
+    if SCAN_ID in args.keys() and args[SCAN_ID]:
+        additional_keys[SCAN_ID] = args[SCAN_ID]
+
+    additional_keys[VERSION] = __version__
+    additional_keys["request_type"] = "rfc"
+
+    if "variant" in args.keys() and args["variant"]:
+        additional_keys["variant"] = args["variant"]
+
+    return additional_keys
+
+
 
 def send_to_server(data, url, extras={}, wait=False, do_not_wait=False):
     url = get_connection_str(url)
@@ -247,6 +280,10 @@ def check_sla_file(sla_file):
         return
     else:
         supported_keys = ["hotnews", "medium", "low", "high"]
+
+        if not isinstance(file_content, dict):
+            print(" * [Warning] Bad SLA file format %s" % (sla_file,))
+            return
 
         for key in file_content.keys():
             if key not in supported_keys:
