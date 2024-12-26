@@ -1,0 +1,15 @@
+root_dir: "D:\\offlinesec\\Test\\1\\"
+sap_systems:
+  - name: "ECC"
+    params_0: "RSPARAM.xlsx"
+    params_1: "RSPARAM1.xlsx"
+
+  - name: "S/4"
+    params_0: "S4_PARAMS.xls"
+
+  - name: "PRD"
+    params_0: "PRD_PARAMS_0.xls"
+    params_1: "PRD_PARAMS_1.xls"
+    params_2: "PRD_PARAMS_2.xls"
+    params_3: "PRD_PARAMS_3.xls"
+    params_4: "PRD_PARAMS_4.xls"
