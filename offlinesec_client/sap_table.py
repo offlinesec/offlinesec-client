@@ -28,7 +28,7 @@ COLUMN_REPLACEMENT = {
     "CWBNTCUST" : {
         "NUMM" : ["Note number", "Hinweisnummer"],
         "NTSTATUS" : ["Processing Status", "Proc. Status", "Bearb. Stat."],
-        "PRSTATUS" : ["Implementation State", "Impl. State", "Einbaustand"],
+        "PRSTATUS" : ["Implementation State", "Impl. State", "Einbaustand", "Impl. Status"],
         "CWBUSER" : ["User Name", "Benutzername"],
         "REQID" : ["Request ID", "Request-Id"],
         "IMPL_PROGRESS": ["Implementation Progress", "Impl."]
@@ -39,9 +39,16 @@ COLUMN_REPLACEMENT = {
         "Vendor": [],
         "Name": [],
         "Location": []
+    },
+
+    "RSPARAM": {
+        "Parameter Name": [],
+        "User-Defined Value": [],
+        "System Default Value": [],
+        "System Default Value(Unsubstituted Form)": [],
+        "Comment": []
     }
 }
-
 
 DATA_REPLACEMENT = {
     "CWBNTCUST" : {

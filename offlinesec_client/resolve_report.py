@@ -138,6 +138,8 @@ def read_file(file):
         do_rfc_transform(file)
     elif os.path.basename(file).startswith("secnotes_") and os.path.basename(file).endswith(".xlsx"):
         do_secnotes_transform(file)
+    elif os.path.basename(file).startswith("params_") and os.path.basename(file).endswith(".xlsx"):
+        do_secnotes_transform(file)
 
     if not flag:
         return
