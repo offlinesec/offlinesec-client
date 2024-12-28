@@ -10,11 +10,16 @@ def process_yaml_file(args):
     error_list = list()
     system_list = list()
 
-    with open(file_name, 'r', encoding="utf-8") as f:
-        file_content = yaml.safe_load(f)
+    try:
+        with open(file_name, 'r', encoding="utf-8") as f:
+            file_content = yaml.safe_load(f)
+    except:
+        print(" * [ERROR] Bad YAML file structure in %s. Check the file content" % (file_name,))
+        return
 
     root_dir = file_content["root_dir"] if "root_dir" in file_content else ""
     if not "sap_systems" in file_content:
+        print(" * [ERROR] The required 'sap_systems' key not defined in the YAML file %s" % (file_name,))
         return
 
     for num, system in enumerate(file_content["sap_systems"]):
@@ -24,7 +29,7 @@ def process_yaml_file(args):
         if root_dir != "":
             system["root_dir"] = root_dir
         if system_type == "":
-            err = "[ERROR] System '{}' doesn't contain key 'type'".format(system["name"])
+            err = " * [ERROR] The system '{}' doesn't contain the required 'type' key. Please set the 'type' attribute (ABAP, JAVA or BO)".format(system["name"])
             print(err)
             continue
 
@@ -36,11 +41,11 @@ def process_yaml_file(args):
             elif system_type.upper().strip() == "BO":
                 new_item = BOSystem(**system)
             else:
-                err = "[ERROR] System '{}' Unknown system type '{}'".format(system["name"], system_type)
+                err = " * [ERROR] The unknown system type '{}' is set for system '{}'. Supported only: ABAP, JAVA, BO".format(system_type,system["name"])
                 print(err)
                 continue
         except (FileNotFoundError, ValueError) as error:
-            err = "[ERROR] System '{}' {}".format(system["name"], str(error))
+            err = " * [ERROR] System '{}' {}".format(system["name"], str(error))
             print(err)
             continue
         else:

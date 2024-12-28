@@ -28,16 +28,16 @@ def check_file_arg_sla(s):
 def init_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", action="store", type=check_file_arg,
-                        help="File Name (SAP systems (ABAP, JAVA, BO, ...) and their software components in YAML format)", required=True)
-    parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
-    parser.add_argument("-l", "--sla", action="store", type=check_file_arg_sla,
-                        help="SLA file in YAML format")
-    parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
-    parser.add_argument('-i', '--id', action='store', help="The scan Id (any unique identifier)")
+                        help="The config file name (SAP systems (ABAP, JAVA, BO, ...) and their software components in YAML format)", required=True)
     parser.add_argument("-v", "--variant", action="store", type=check_variant,
                         help="Check Variant (numeric)", required=False)
-    parser.add_argument('--do-not-send', action='store_true', help="Don't upload data to the server (review first)")
+    parser.add_argument("-l", "--sla", action="store", type=check_file_arg_sla,
+                        help="SLA file in YAML format")
     parser.add_argument("-d","--date", action='store', help="The report on specific date in past (DD-MM-YYYY)")
+    parser.add_argument('-i', '--id', action='store', help="The scan Id (any unique identifier)")
+    parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
+    parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
+    parser.add_argument('--do-not-send', action='store_true', help="Don't upload data to the server (review first)")
     parser.parse_args()
     return vars(parser.parse_args())
 
