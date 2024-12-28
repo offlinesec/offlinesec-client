@@ -14,10 +14,15 @@ def check_variant(s):
 
 def check_file_arg(s):
     res = offlinesec_client.func.check_file_arg(s, ['yaml'], 200000)
-    with open(s, 'r') as file:
-        yaml_content = yaml.safe_load(file)
+    try:
+        with open(s, 'r') as file:
+            yaml_content = yaml.safe_load(file)
         if SAP_SYSTEMS_KEY not in yaml_content:
-            raise argparse.ArgumentTypeError("Wrong the YAML file (%s) structure. The 'sap_systems' key not found" % (s,))
+            raise argparse.ArgumentTypeError(" * [ERROR] Bad YAML file structure (%s). The 'sap_systems' key not found in YAML file" % (s,))
+    except:
+        raise argparse.ArgumentTypeError(
+            " * [ERROR] Bad YAML file structure (%s). Please check the file content" % (s,))
+
     return res
 
 def check_file_arg_sla(s):
