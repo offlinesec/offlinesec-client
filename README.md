@@ -81,15 +81,34 @@ offlinesec_get_reports
 5. Find your downloaded report in Downloads folder. Enjoy.
 
 ## Use Cases
-1. SAP Security Notes Analysis (Vulnerabilities Check)
+1. Missed SAP Security Notes (Unpatched SAP security vulnerabilities)
+Installing security patches on the SAP platform is critical for ensuring the integrity, confidentiality, and availability of your SAP environment. Here are the main reasons why security patches are essential for SAP systems:
+* Protection from cyberattacks. Mitigating the Risk of Exploitation of Known Vulnerabilities
+* Compliance with industry regulations (GDPR, HIPAA, SOX, ...)
+* Safeguarding sensitive business data in SAP (financial records, customer information, intellectual property, ...)
+* Preventing downtime and system disruptions. Sometimes it helps maintain System Stability and Performance
+* Protecting Against Data Breaches
+
+The following report options are available: 
+* one system - offlinesec_sap_notes
+* multi systems - offlinesec_sec_notes
+
+The report (excel spreadsheet) will contain:
+* Information about missed sap security notes for SAP systems. Our knowledge base is constantly updated and contain all SAP security notes released since 2015. The Offline Security Knowledgebase contains definitions for ABAP, JAVA, Kernel(ABAP,JAVA,WD), Business Object, Host Agent software.
+* Charts about the most critical findings and general statistic
+* For single system mode (offlinesec_sap_notes) VBS automation for ABAP system is available
+* The implementation status and progress status from the SNOTE transaction (if the note was downloaded to the system)
+* The info about available workaround and public exploits for security notes
+* SLA violation for system patching if the note was released a long time ago (need to set SLA rules)
+* the API to integrate with SIEM or VM is already available
+
+Anonymised on the client side (the info doesn't leave your laptop):
+* System Names (SIDs)
+* Usernames who implemented patches (sap notes)
+
+What else:
 * [How to prepare data and request report](./docs/how_to_prepare_sap_softs.md)
 * [Report example](./docs/sap_security_notes_report.md)
-* Our knowledge base is constantly updated and contain all SAP security notes released in 2015-2023. You can find the date of last loaded SAP Security Note in your report.
-* since version 1.0.29 SAP Business Object systems are supported
-* since version 1.0.30 SAP JAVA systems are supported
-* since version 1.1.0 Offlinsec tool supports multi-system scan
-* since version 1.1.0 Offlinesec tool supports last patch day scan
-* since version 1.1.2 the API to integrate with SIEM or VM is available in Offlinesec tool
 
 2. Profile Parameters/Compliance Analysis (SAP Security Baseline Checks)
    (Available since version 1.0.12)
