@@ -5,13 +5,13 @@ Finally, we produce analysis on server side and issue for you report which can d
 
 # Advantages
 
-* Quick start: Only you need to install client tool using one cli command
-* Full Transparency. All configurations files are open. The source code of client application is available to read as well
+* Quick start: Only you need to install client tool on any laptop with Python using one cli command
+* Full Transparency. All configurations files are open. The source code of client application is available to read as well (open source)
 * You don't need to invest money to SAP Solution Manager consultants or buy expensive products like Onapsis or SecurityBridge
 * Don't need to create user account in target SAP systems. Don't need to install any ABAP code
 * Possibility of customisation. Based on predefined check list you can create your own checks (probably even not related to Information Security)
-* Our database is regularly updated. Always base checks are available out-of-box. Even you can see what configurations are used by other clients
-* Cool reports, easy to use with predefined filter options 
+* Our database is regularly updated. Always base checks are available out-of-box
+* Excellent reports in Excel spreadsheet format, easy to use and filter 
 
 ## Table of contents
 
@@ -43,7 +43,7 @@ Then add Python folder to the PATH variable:
 export PATH="$PATH:/Users/<username>/Library/Python/3.8/bin"
 ```
 
-### Installation last version from the repository on [github.com](https://github.com/offlinesec/offlinesec-client)
+### Installation the last version from the repository [github.com](https://github.com/offlinesec/offlinesec-client)
 ```sh
 git clone https://github.com/offlinesec/offlinesec-client.git
 python3 -m pip install --upgrade pip
@@ -53,12 +53,12 @@ python3 -m pip install dist\offlinesec_client-1.0.8-py3-none-any.whl
 ```
 The Version could be different! Please verify generated wheel name. 
 
-### Upgrade to last published version
+### Upgrade to the latest published version
 ```sh
 pip3 install --upgrade offlinesec_client
 ```
 
-### Check what version is installed
+### Check what version is installed rith now on your laptop
 ```sh
 pip3 show offlinesec_client
 ```
@@ -66,22 +66,21 @@ pip3 show offlinesec_client
 ## Quick Start
 
 How to discovery missed SAP Security Notes:
-1. Prepare text file with installed SAP software component versions ([details](./docs/how_to_prepare_sap_softs.md))
-2. Download CWBNTCUST table ([details](./docs/how_to_prepare_sap_softs.md))
+1. Prepare a text file with installed SAP software component versions ([details](./docs/how_to_prepare_sap_softs.md))
+2. Download CWBNTCUST table content ([details](./docs/how_to_prepare_sap_softs.md))
 3. Check kernel version and kernel patch
-4. Send files to the server (optional you can set SAP system name):
+4. Send all prepared files to the server (optionally you can set the SAP system name):
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx"
 ```
-3. Wait aprox 5 minutes (Depends on server load)
-4. Download your report:
+5. Download your report in 5 minutes with:
 ```sh
 offlinesec_get_reports
 ```
-5. Find your downloaded report in Downloads folder. Enjoy.
+6. Find your report in Downloads folder. Enjoy.
 
 ## Use Cases
-1. Missed SAP Security Notes (Unpatched SAP security vulnerabilities)
+### Missed SAP Security Notes (Unpatched SAP security vulnerabilities)
 Installing security patches on the SAP platform is critical for ensuring the integrity, confidentiality, and availability of your SAP environment. Here are the main reasons why security patches are essential for SAP systems:
 * Protection from cyberattacks. Mitigating the Risk of Exploitation of Known Vulnerabilities
 * Compliance with industry regulations (GDPR, HIPAA, SOX, ...)
@@ -90,7 +89,7 @@ Installing security patches on the SAP platform is critical for ensuring the int
 * Protecting Against Data Breaches
 
 The following report options are available: 
-* one system - offlinesec_sap_notes
+* one system - offlinesec_sap_notes (ABAP), offlinesec_java_notes, offlinesec_bo_notes
 * multi systems - offlinesec_sec_notes
 
 The report (excel spreadsheet) will contain:
@@ -99,7 +98,9 @@ The report (excel spreadsheet) will contain:
 * For single system mode (offlinesec_sap_notes) VBS automation for ABAP system is available
 * The implementation status and progress status from the SNOTE transaction (if the note was downloaded to the system)
 * The info about available workaround and public exploits for security notes
+* You can register some exclusions for SAP notes (in case of false positives or workaround implementations)
 * SLA violation for system patching if the note was released a long time ago (need to set SLA rules)
+* Information about patching progress (historical data from previous scans)
 * the API to integrate with SIEM or VM is already available
 
 Anonymised on the client side (the info doesn't leave your laptop):
@@ -110,26 +111,49 @@ What else:
 * [How to prepare data and request report](./docs/how_to_prepare_sap_softs.md)
 * [Report example](./docs/sap_security_notes_report.md)
 
-2. Profile Parameters/Compliance Analysis (SAP Security Baseline Checks)
-   (Available since version 1.0.12)
+### System Parameters Report (SAP Security Baseline Checks, DSAG, SAP Notes and Documentation)
+Configuring SAP systems according to the SAP Security Baseline is essential for ensuring that your SAP environment is secure, compliant, and protected from various internal and external threats. The SAP Security Baseline is a set of recommended security configurations and best practices designed by SAP (or someone else) to minimize risks, enhance system integrity, and protect sensitive business data. Here are key reasons why SAP systems need to be configured according to the SAP Security Baseline:
+* Mitigating Security Risks
+* Standardization of Security Measures in Companies
+* Compliance with Regulatory Requirements (GDPR, HIPAA, SOX, ...)
+* Protecting Sensitive Business Data
+* Improving Incident Detection and Response
+* Preventing Unauthorized Access and Insider Threats
+
+The following report options are available:
+* multi systems - offlinesec_sap_params
+
+The report (excel spreadsheet) will contain:
+* Information about baseline violations
+* Charts about the most critical findings and general statistic
+* Three baselines are already available by default: SAP Security Baseline, DSAG Recommendation, Recommendations from SAP notes and documentation
+* You can register some exclusions for parameters
+* You can register your personal custom baseline and check if your SAP meet your custom requirements
+* Information on remediation progress (historical data from previous scans)
+
+Anonymised on the client side (the info doesn't leave your laptop):
+* System Names (SIDs)
+* File paths with SID
+
+What else:
 * [How to generate report](./docs/how_to_prepare_sap_params.md)
 * [Report Example](./docs/sap_params_report.md)
-* All sensitive information is excluded from the upload file (SAPSIDs, server names, ...)
+
 * Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
 
-3. Roles/Critical Privileges Analysis (Available since version 1.0.15)
+### Roles/Critical Privileges Analysis (Available since version 1.0.15)
 * [How to generate report](./docs/how_to_prepare_sap_roles.md)
 * [Report Example](./docs/sap_roles_report.md)
 * All sensitive information is excluded from the upload file (Role names)
 * Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
 
-4. Transport Request Analysis (Available since version 1.1.8)
+### Transport Request Analysis (Available since version 1.1.8)
 * [How to generate report](./docs/how_to_prepare_abap_report.md)
 
-5. Insecure RFC Connections (Available since version 1.1.20): RFC connections without encryption, RFC connection with SAP_ALL, RFC connections from development to production and other use cases.
+### Insecure RFC Connections (Available since version 1.1.20): RFC connections without encryption, RFC connection with SAP_ALL, RFC connections from development to production and other use cases.
 * [How to generate report](./docs/how_to_request_rfc_report.md)
 
-6. SAP Security Audit Log Analysis, ICF services, Users with critical authorizations
+### SAP Security Audit Log Analysis, ICF services, Users with critical authorizations
 * Will be available in next releases
 
 Each time do not forget to download your report from the server:
