@@ -139,8 +139,6 @@ What else:
 * [How to generate report](./docs/how_to_prepare_sap_params.md)
 * [Report Example](./docs/sap_params_report.md)
 
-* Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
-
 ### Roles/Critical Privileges Analysis (Available since version 1.0.15)
 * [How to generate report](./docs/how_to_prepare_sap_roles.md)
 * [Report Example](./docs/sap_roles_report.md)
