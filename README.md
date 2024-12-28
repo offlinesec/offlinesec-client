@@ -58,7 +58,7 @@ The Version could be different! Please verify generated wheel name.
 pip3 install --upgrade offlinesec_client
 ```
 
-### Check what version is installed rith now on your laptop
+### Check what version is installed right now on your laptop
 ```sh
 pip3 show offlinesec_client
 ```
