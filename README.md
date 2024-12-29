@@ -128,6 +128,7 @@ The report (excel spreadsheet) will contain:
 * Charts about the most critical findings and general statistic
 * Three baselines are already available by default: SAP Security Baseline, DSAG Recommendation, Recommendations from SAP notes and documentation
 * You can register some exclusions for parameters
+* Parameter Discrepancies (if you have different values for security parameters on different application servers) 
 * You can register your personal custom baseline and check if your SAP meet your custom requirements
 * Information on remediation progress (historical data from previous scans)
 
