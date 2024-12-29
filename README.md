@@ -148,7 +148,28 @@ What else:
 ### Transport Request Analysis (Available since version 1.1.8)
 * [How to generate report](./docs/how_to_prepare_abap_report.md)
 
-### Insecure RFC Connections (Available since version 1.1.20): RFC connections without encryption, RFC connection with SAP_ALL, RFC connections from development to production and other use cases.
+### Insecure RFC Connections 
+Securing RFC (Remote Function Call) connections between SAP systems is crucial for several reasons. RFC is a protocol used by SAP systems to enable communication between different systems, whether within the same landscape or across different environments. If these connections are not secured, it could lead to a variety of security risks, including unauthorized access, data theft, and system vulnerabilities. Here's why securing RFC connections is essential:
+* Protection Against Unauthorized Access
+* Preventing Man-in-the-Middle Attacks
+* Preventing Privilege Escalation Techniques
+* Compliance and Regulatory Requirements
+
+The report (excel spreadsheet) will contain:
+* List of all RFC and HTTP connections between SAP systems
+* Charts about the most critical findings and general statistic
+* RFC connections without encryption
+* RFC connections under dialog user
+* RFC connections with critical authorizations
+* RFC connections to production systems from non-production
+
+Anonymised on the client side (the info doesn't leave your laptop):
+* System Names (SIDs)
+* RFC Destinations
+* Hostnames, Proxies and IP addresses
+* URLs
+
+What else:
 * [How to generate report](./docs/how_to_request_rfc_report.md)
 
 ### SAP Security Audit Log Analysis, ICF services, Users with critical authorizations
