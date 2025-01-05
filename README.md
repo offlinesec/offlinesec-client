@@ -1,6 +1,5 @@
 # Offline Security Client
-You definitely haven't seen such approach before! Suitable for those who would like to protect his SAP systems and don’t want to pay a lot. Or maybe you are only interested in Compliance topic.
-So, Offline Security is cloud based application which is intended to assess security aspects of SAP systems. All needed information for our security reports/analytics you gather yourself (or you can easily automate it using any RPA solution). Then you send us all gathered information (using cli tool). Important: All sensitive information (SAPSIDs, IP addresses, server names, and so on) is masked. And we don’t request any identity data of our clients.  It means that NOBODY – our administrators, developers or external hacker can’t link this information with particular client, particular system or particular company.
+The Offline Security is cloud based application which is intended to assess security aspects of SAP systems. All needed information for our security reports/analytics you gather yourself (or you can use [Offline Security Connector](https://github.com/offlinesec/offlinesec-connector)). Then you send us all gathered information (using cli tool) to the cloud server. Important: All sensitive information (SAPSIDs, IP addresses, server names, and so on) is masked on client side and doesn't leave your laptop. Also we don’t collect any identity data of our users (for instance emails and company name).  It means that NOBODY – our administrators, developers or external hacker can’t link this information with particular client, particular system or particular company.
 Finally, we produce analysis on server side and issue for you report which can download only you (client application that sent all data).   
 
 # Advantages
@@ -8,7 +7,7 @@ Finally, we produce analysis on server side and issue for you report which can d
 * Quick start: Only you need to install client tool on any laptop with Python using one cli command
 * Full Transparency. All configurations files are open. The source code of client application is available to read as well (open source)
 * You don't need to invest money to SAP Solution Manager consultants or buy expensive products like Onapsis or SecurityBridge
-* Don't need to create user account in target SAP systems. Don't need to install any ABAP code
+* Don't need to create user account in target SAP systems (The user is needed only for Offline Security Connector). Don't need to install any ABAP code on your systems!
 * Possibility of customisation. Based on predefined check list you can create your own checks (probably even not related to Information Security)
 * Our database is regularly updated. Always base checks are available out-of-box
 * Excellent reports in Excel spreadsheet format, easy to use and filter 
@@ -42,6 +41,9 @@ Then add Python folder to the PATH variable:
 ```sh
 export PATH="$PATH:/Users/<username>/Library/Python/3.8/bin"
 ```
+
+If you need full automatic process please install [Offline Security Connector](https://github.com/offlinesec/offlinesec-connector)
+
 
 ### Installation the last version from the repository [github.com](https://github.com/offlinesec/offlinesec-client)
 ```sh
