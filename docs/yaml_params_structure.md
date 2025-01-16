@@ -16,10 +16,10 @@ name: "DEV"
 
 2. Set all param files (from all application servers) [here](./exclude_file_structure.md). List all profile files using keys which start with "params":
 ```sh
-param_app0: "RSPARAM1.xls"
-param_app1: "RSPARAM2.xls"
-param_app2: "RSPARAM3.xls"
-param_app3: "RSPARAM4.xls"
+params_app0: "RSPARAM1.xls"
+params_app1: "RSPARAM2.xls"
+params_app2: "RSPARAM3.xls"
+params_app3: "RSPARAM4.xls"
 ```
 
 The config file example you can find [here](./yaml_params_file_example.yaml).
