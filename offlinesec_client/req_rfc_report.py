@@ -155,7 +155,6 @@ def process_it(args):
                                           wait=wait,
                                           do_not_wait=do_not_wait)
 
-
 def main():
     args = init_args()
     if args["file"] or args["json_file"]:

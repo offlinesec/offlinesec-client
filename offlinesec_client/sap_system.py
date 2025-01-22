@@ -69,6 +69,24 @@ class SAPSystem:
 
             return outlist
 
+    @staticmethod
+    def check_kernel_version(kernel_version):
+        kernel_version = str(kernel_version).replace(',', '')
+        kernel_version = kernel_version.replace('.', '')
+        try:
+            return int(kernel_version)
+        except ValueError:
+            raise ValueError("Kernel Version must be numeric. For example: 7.53 or 753.")
+
+    @staticmethod
+    def check_kernel_patch(kernel_patch):
+        kernel_patch = str(kernel_patch).replace(',', '')
+        kernel_patch = kernel_patch.replace('.', '')
+        try:
+            return int(kernel_patch)
+        except ValueError:
+            raise ValueError("Kernel Patch Level must be numeric. For example: 1100.")
+
 
 class SimpleSystem(SAPSystem):
     def __init__(self, system_name="", version=""):

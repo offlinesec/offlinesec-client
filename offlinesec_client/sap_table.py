@@ -5,10 +5,10 @@ import openpyxl
 
 COLUMN_REPLACEMENT = {
     "RFCDES" : {
-        "RFCDEST": ["RFC Destination", "Destination"],
-        "RFCTYPE": ["Connection Type"],
-        "RFCOPTIONS": ["Options"],
-        "RFCDOC1": ["Description"]
+        "RFCDEST": ["RFC Destination", "Destination", "RFC-Destination"],
+        "RFCTYPE": ["Connection Type", "Verbindungstyp"],
+        "RFCOPTIONS": ["Options", "Optionen"],
+        "RFCDOC1": ["Description", "Beschreibung"]
     },
 
     "UST04" : {
@@ -42,11 +42,11 @@ COLUMN_REPLACEMENT = {
     },
 
     "RSPARAM": {
-        "Parameter Name": [],
-        "User-Defined Value": [],
-        "System Default Value": [],
-        "System Default Value(Unsubstituted Form)": [],
-        "Comment": []
+        "Parameter Name": ["Parametername"],
+        "User-Defined Value": ["Benutzerdefinierter Wert"],
+        "System Default Value": ["System-Defaultwert"],
+        "System Default Value(Unsubstituted Form)": ["System-Defaultwert (Unsubst.Form)"],
+        "Comment": ["Kommentar"]
     }
 }
 

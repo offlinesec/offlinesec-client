@@ -18,10 +18,10 @@ class ABAPSystem (SAPSystem):
         self.type = ABAP
         root_dir = args["root_dir"] if "root_dir" in args else None
 
-        self.kernel_version = ABAPSystem.check_kernel_version(args["krnl_version"]) \
+        self.kernel_version = SAPSystem.check_kernel_version(args["krnl_version"]) \
             if ("krnl_version" in args.keys() and args["krnl_version"] is not None and args["krnl_version"] != "") else ""
 
-        self.kernel_patch = ABAPSystem.check_kernel_patch(args["krnl_patch"]) \
+        self.kernel_patch = SAPSystem.check_kernel_patch(args["krnl_patch"]) \
             if "krnl_patch" in args.keys() and args["krnl_patch"] is not None and args["krnl_patch"] != ""else ""
 
         self.softs = ABAPSystem.parse_softs_file(args["softs"], root_dir) \
@@ -48,23 +48,6 @@ class ABAPSystem (SAPSystem):
         self.host_agent_patch = ABAPSystem.check_kernel_patch(args["host_agent_patch"]) \
             if "host_agent_patch" in args.keys() and args["host_agent_patch"] is not None and args["host_agent_patch"] != ""else ""
 
-    @staticmethod
-    def check_kernel_version(kernel_version):
-        kernel_version = str(kernel_version).replace(',', '')
-        kernel_version = kernel_version.replace('.', '')
-        try:
-            return int(kernel_version)
-        except ValueError:
-            raise ValueError("Kernel Version must be numeric. For example: 7.53 or 753.")
-
-    @staticmethod
-    def check_kernel_patch(kernel_patch):
-        kernel_patch = str(kernel_patch).replace(',', '')
-        kernel_patch = kernel_patch.replace('.', '')
-        try:
-            return int(kernel_patch)
-        except ValueError:
-            raise ValueError("Kernel Patch Level must be numeric. For example: 1100.")
 
     @staticmethod
     def check_soft_line(soft, version, pkg_num, package):

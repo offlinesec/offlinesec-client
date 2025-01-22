@@ -12,6 +12,11 @@ class JAVASystem (SAPSystem):
         self.type = JAVA
         root_dir = args["root_dir"] if "root_dir" in args else None
         self.softs = JAVASystem.parse_softs_file(args["softs"], root_dir) if "softs" in args.keys() else list()
+        self.kernel_version = SAPSystem.check_kernel_version(args["krnl_version"]) \
+            if ("krnl_version" in args.keys() and args["krnl_version"] is not None and args["krnl_version"] != "") else ""
+
+        self.kernel_patch = SAPSystem.check_kernel_patch(args["krnl_patch"]) \
+            if "krnl_patch" in args.keys() and args["krnl_patch"] is not None and args["krnl_patch"] != ""else ""
         if len(self.softs) == 0:
             raise ValueError("[ERROR] System '{}' you must specify 'soft' key"
                              .format(self.system_name))
