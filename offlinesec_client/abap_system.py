@@ -36,6 +36,11 @@ class ABAPSystem (SAPSystem):
             self.cwbntcust = list()
             self.cwbntcust_new = dict()
 
+        if "cwbntcust_dev" in args.keys() and args["cwbntcust_dev"] is not None:
+            self.parse_dev_cwbntcust(args["cwbntcust_dev"], root_dir)
+        else:
+            self.cwbntcust_dev = dict()
+
         if "sla" in args:
             self.parse_sla(args["sla"], root_dir)
 
@@ -113,6 +118,21 @@ class ABAPSystem (SAPSystem):
         if self.cwbntcust is None or not len(self.cwbntcust):
             print("* [WARNING] File {} has wrong format or doesn't contain completely implemented notes"
                   .format(cwbntcust_file,))
+
+    def parse_dev_cwbntcust(self, cwbntcust_file, root_dir):
+        if root_dir:
+            path = os.path.join(root_dir, cwbntcust_file)
+        else:
+            path = cwbntcust_file
+        if not os.path.exists(path):
+            raise FileNotFoundError("File %s not found" % (cwbntcust_file,))
+
+        if not (cwbntcust_file.upper().endswith(".TXT") or cwbntcust_file.upper().endswith(".XLSX")):
+            raise ValueError("File {} has wrong extension. Only TXT or XLSX files supported".format(cwbntcust_file))
+
+
+        tbl = SAPTable(table_name="CWBNTCUST", file_name=path)
+        self.dev_cwbntcust = ABAPSystem.parse_cwbntcust_data_new(tbl)
 
     @staticmethod
     def parse_cwbntcust_data(cwbntcust_table):

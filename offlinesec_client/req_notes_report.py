@@ -52,6 +52,8 @@ def init_args():
                         help="Host Agent Patch Level (for instance 12)", required=False)
     parser.add_argument("-c", "--%s" % (CWBNTCUST,), action="store", type=check_cwbntcust,
                         help="CWBNTCUST table (txt or xlsx)", required=False)
+    parser.add_argument("-cd", "--dev-cwbntcust", action="store", type=check_cwbntcust,
+                        help="CWBNTCUST table (txt or xlsx) on DEV system", required=False)
     parser.add_argument("-e", "--exclude", action="store",
                         help='Exclude SAP security notes', required=False)
     parser.add_argument("-v", "--variant", action="store", type=check_variant,
@@ -75,6 +77,7 @@ def send_file(args):
     kernel_version = args[KRNL_VER] if KRNL_VER in args else None
     kernel_patch = args[KRNL_PL] if KRNL_PL in args else None
     cwbntcust = args[CWBNTCUST] if CWBNTCUST in args else None
+    cwbntcust_dev = args["dev_cwbntcust"] if "dev_cwbntcust" in args else None
     file = args[FILE] if FILE in args else None
     exclude = args[EXCLUDE] if EXCLUDE in args else None
     wait = args[WAIT] if WAIT in args else None
@@ -108,6 +111,7 @@ def send_file(args):
         new_abap_system = ABAPSystem(krnl_version=kernel_version,
                                      krnl_patch=kernel_patch,
                                      cwbntcust=cwbntcust,
+                                     cwbntcust_dev=cwbntcust_dev,
                                      exclude=exclude,
                                      name=system_name,
                                      softs=file)

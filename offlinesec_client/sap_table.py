@@ -59,13 +59,13 @@ DATA_REPLACEMENT = {
             "I" : ["In Process", "in Bearbeitung"]
         },
         "PRSTATUS" : {
-            "N" : ["Can be implemented"],
-            "E" : ["Completely implemented"],
-            "O" : ["Obsolete"],
-            "-" : ["Cannot be implemented"],
-            ""  : ["Undefined Implementation State"],
-            "U" : ["Incompletely implemented "],
-            "V" : ["Obsolete version implemented"],
+            "N" : ["Can be implemented", "einbaubar"],
+            "E" : ["Completely implemented", "vollständig eingebaut"],
+            "O" : ["Obsolete", "obsolet"],
+            "-" : ["Cannot be implemented", "nicht einbaubar"],
+            ""  : ["Undefined Implementation State", "unbestimmter Einbauzustand"],
+            "U" : ["Incompletely implemented", "unvollständig eingebaut"],
+            "V" : ["Obsolete version implemented", "veraltete Version eingebaut"],
         },
     }
 }

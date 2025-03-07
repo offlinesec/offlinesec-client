@@ -1,4 +1,6 @@
 # How to extract table from SAP
+When logging into SAP, select English.
+
 * Go to transaction SE16
 * Set the name of the table you wish to export (For inst. CWBNTCUST, RFCDES, UST04).  In order to download all data from RFCDES table (for Insecure RFC Connections Report) you need to choose ALV List Mode in Settings -> User Parameters... It allows you to extract more data from long column RFCOPTIONS.
 ![Screenshot](./img/se16_tablename.png)
