@@ -40,7 +40,7 @@ krnl_patch: 1101
 ```
 5. Cwbntcust form the dev system - the CWBNTCUST table content in txt or xlsx format. The details are available [here](./how_to_prepare_sap_softs.md).
 ```sh
-dev_cwbntcust: "dev_cwbntcust.txt"
+cwbntcust_dev: "dev_cwbntcust.txt"
 ```
 
 JAVA specific attributes:
