@@ -47,6 +47,9 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 1. Log in SAP System using SAP GUI software
 2. Go to the transaction SE16
 3. Download the CWBNTCUST table according to [this manual](./get_table.md)
+```sh
+offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx"
+```
 
 ### VBS script on ABAP platform (only on Windows)
 For those who installed offlinesec_client on Windows platform it's available gui scripting option.
@@ -105,7 +108,7 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -d "25-11-2024"
 ```
 
-10. Wait 5 minutes and download the report
+10. Wait up to 5 minutes and download the report
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -w
 ```
@@ -121,6 +124,11 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 and then repeat the command without the "--do-not-send" option
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
+```
+
+13. Add CWBNTCUST table from development system
+```sh
+offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx" -cd "dev_cwbntcust.xlsx"
 ```
 
 Note: Not to forget download your Offline Security report

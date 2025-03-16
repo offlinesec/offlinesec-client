@@ -35,7 +35,7 @@ def get_file_name(filename):
                 return full_path
 
 
-def get_statuses():
+def get_statuses(print_msg_from_server=True):
     url = offlinesec_client.func.get_connection_str(UPLOAD_URL)
     data = offlinesec_client.func.get_base_json(action=ACTION_GET_FILE_NAMES)
     files = {'json': ('Check available reports to download', json.dumps(data), 'application/json')}
@@ -52,7 +52,8 @@ def get_statuses():
         return
 
     if ERR_MESSAGE in response.keys():
-        print(response["message"])
+        if print_msg_from_server:
+            print(response["message"])
         return
 
     if "files" not in response.keys() or "files_num" not in response.keys():
@@ -64,7 +65,7 @@ def get_statuses():
         for error in response["errors"]:
             print(" * " + error)
 
-    print("%s report(s) are available to download from the server" % (response["files_num"],))
+    print("\n%s report(s) are available to download from the server" % (response["files_num"],))
 
     i = 0
     files_list = list()
@@ -97,7 +98,8 @@ def get_statuses():
     for file_name in files_list:
         read_file(file_name)
 
-    print("%s report(s) were downloaded. Please check 'Downloads' folder" % (i,))
+    print("\n%s report(s) were downloaded. Please check 'Downloads' folder" % (i,))
+    return len(files_list)
 
 
 def main():

@@ -38,6 +38,10 @@ krnl_version: "7.53"
 ```sh
 krnl_patch: 1101
 ```
+5. Cwbntcust form the dev system - the CWBNTCUST table content in txt or xlsx format. The details are available [here](./how_to_prepare_sap_softs.md).
+```sh
+dev_cwbntcust: "dev_cwbntcust.txt"
+```
 
 JAVA specific attributes:
 1. Softs - Installed JAVA software components and their versions file (csv format). More details are available [here](./how_to_prepare_java_softs.md).

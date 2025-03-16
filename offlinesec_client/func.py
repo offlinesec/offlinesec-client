@@ -8,9 +8,12 @@ import sys
 import requests
 import time
 import datetime
+
+import offlinesec_client.get_reports
 from offlinesec_client.config import config
 from offlinesec_client.const import ERR_MESSAGE
 from offlinesec_client.cwbntcust import Cwbntcust
+from offlinesec_client.get_reports import get_statuses
 from offlinesec_client import __version__
 from offlinesec_client.const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR, CWBNTCUST,\
     KRNL_PL, KRNL_VER, VAR, VERSION, SCAN_ID
@@ -139,23 +142,31 @@ def check_num_param(s, title="Argument"):
     return num
 
 
-def wait_5_minutes(seconds=310):
-    for remaining in range(seconds, 0, -1):
+def wait_5_minutes(seconds=300, every=5):
+    i = 0
+    for remaining in range(0, seconds):
         sys.stdout.write("\r")
-        sys.stdout.write("{:2d} seconds remaining".format(remaining))
+        sys.stdout.write("{:2d} seconds have passed".format(remaining))
         sys.stdout.flush()
         time.sleep(1)
+        i += 1
+        if i >= every:
+            i = 0
+            res = offlinesec_client.get_reports.get_statuses(print_msg_from_server=False)
+            if not res:
+                continue
+            else:
+                break
     print("")
-    os.system("offlinesec_get_reports")
 
 
-def ask_and_wait_5_minutes(wait, do_not_wait=False, seconds=310):
+def ask_and_wait_5_minutes(wait, do_not_wait=False, seconds=300):
     if do_not_wait:
         return
     elif wait:
         wait_5_minutes(seconds)
     else:
-        resp = input("Do you want to wait 5 minutes and get report automatically" + " (y/N):").strip().lower()
+        resp = input("Do you want to wait (usually a few seconds) and get report automatically within 5 minutes" + " (y/N):").strip().lower()
         if resp is None or resp == "" or resp[0].lower() == "n":
             return
         elif resp[0].lower() == "y":
@@ -182,7 +193,7 @@ def send_file_to_server(file_name, url, extras={}, wait=False, do_not_wait=False
             if ERR_MESSAGE in response:
                 if "File successfully" in response[ERR_MESSAGE]:
                     print(" * " + response[ERR_MESSAGE])
-                    print(" * Your report will be available in 5 minutes (Please run offlinesec_get_reports in 5 minutes)")
+                    print(" * Your report will be available in a few seconds (Please run offlinesec_get_reports to get your report)")
                 else:
                     raise "[ERROR] " + response[ERR_MESSAGE]
 
@@ -231,7 +242,7 @@ def send_to_server(data, url, extras={}, wait=False, do_not_wait=False):
             if ERR_MESSAGE in response:
                 if response[ERR_MESSAGE].startswith("The data successfully"):
                     print(" * " + response[ERR_MESSAGE])
-                    print(" * Your report will be available in 5 minutes (Please run offlinesec_get_reports in 5 minutes)")
+                    print(" * Your report will be available in a few seconds (Please run offlinesec_get_reports to get your report)")
                     ask_and_wait_5_minutes(wait=wait,
                                            do_not_wait=do_not_wait)
                 else:
@@ -321,7 +332,7 @@ def send_to_server_gen(data, url, extras={}, wait=False, do_not_wait=False):
             if ERR_MESSAGE in response:
                 if response[ERR_MESSAGE].startswith("The data successfully"):
                     print(" * " + response[ERR_MESSAGE])
-                    print(" * Your report will be available in 5 minutes (Please run offlinesec_get_reports in 5 minutes)")
+                    print(" * Your report will be available in a few seconds (Please run offlinesec_get_reports to get your report)")
                     ask_and_wait_5_minutes(wait=wait,
                                            do_not_wait=do_not_wait)
                 else:
