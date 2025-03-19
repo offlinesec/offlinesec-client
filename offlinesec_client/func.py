@@ -144,6 +144,7 @@ def check_num_param(s, title="Argument"):
 
 def wait_5_minutes(seconds=300, every=5):
     i = 0
+    flag = False
     for remaining in range(0, seconds):
         sys.stdout.write("\r")
         sys.stdout.write("{:2d} seconds have passed".format(remaining))
@@ -156,7 +157,10 @@ def wait_5_minutes(seconds=300, every=5):
             if not res:
                 continue
             else:
+                flag = True
                 break
+    if not flag:
+        print(" * [Warning] The report isn't ready yet. Please try later with offlinesec_get_reports")
     print("")
 
 
@@ -242,9 +246,10 @@ def send_to_server(data, url, extras={}, wait=False, do_not_wait=False):
             if ERR_MESSAGE in response:
                 if response[ERR_MESSAGE].startswith("The data successfully"):
                     print(" * " + response[ERR_MESSAGE])
-                    print(" * Your report will be available in a few seconds (Please run offlinesec_get_reports to get your report)")
+                    print(" * Your report will be available in a few seconds")
                     ask_and_wait_5_minutes(wait=wait,
-                                           do_not_wait=do_not_wait)
+                                           do_not_wait=do_not_wait,
+                                           seconds=100)
                 else:
                     print("[ERROR] " + response[ERR_MESSAGE])
                 return

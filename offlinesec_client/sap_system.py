@@ -35,6 +35,8 @@ class SAPSystem:
         except:
             raise ValueError("File {} has wrong structure. Only YAML files supported".format(path))
         else:
+            if file_content is None:
+                return list()
             outlist = list()
             note_num = 0
             for item in file_content:

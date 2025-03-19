@@ -38,10 +38,9 @@ def init_args():
                         help="Check Variant (numeric)", required=False)
     parser.add_argument("-l", "--sla", action="store", type=check_file_arg_sla,
                         help="SLA file in YAML format")
+    parser.add_argument('-nr', '--keep-not_relevant', action='store_true', help="Do not exclude notes marked as 'Not Relevant'")
     parser.add_argument("-d","--date", action='store', help="The report on specific date in past (DD-MM-YYYY)")
     parser.add_argument('-i', '--id', action='store', help="The scan Id (any unique identifier)")
-    parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
-    parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
     parser.add_argument('--do-not-send', action='store_true', help="Don't upload data to the server (review first)")
     parser.parse_args()
     return vars(parser.parse_args())
@@ -76,8 +75,11 @@ def process_it(args):
             if not hasattr(system,"sla") or system.sla is None:
                 system.sla = offlinesec_client.func.check_sla_file(args["sla"])
 
-    wait = args[WAIT] if WAIT in args else ""
-    do_not_wait = args[DO_NOT_WAIT] if DO_NOT_WAIT in args else ""
+    if "keep_not_relevant" in args and args["keep_not_relevant"]:
+        additional_keys["keep_not_relevant"] = True
+
+    wait = True
+    do_not_wait = False
 
     if "do_not_send" in args and args["do_not_send"]:
         offlinesec_client.func.save_to_json(data=systems,

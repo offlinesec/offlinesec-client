@@ -108,16 +108,7 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -d "25-11-2024"
 ```
 
-10. Wait up to 5 minutes and download the report
-```sh
-offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -w
-```
-
-11. Don't ask if you d like to wait or not - don't wait
-```sh
-offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -nw
-```
-12. Don't send all information to the server. Review the info first
+10. Don't send all information to the server. Review the info first
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 --do-not-sent
 ```
@@ -126,7 +117,7 @@ and then repeat the command without the "--do-not-send" option
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 ```
 
-13. Add CWBNTCUST table from development system
+11. Add CWBNTCUST table from development system
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx" -cd "dev_cwbntcust.xlsx"
 ```
@@ -136,7 +127,10 @@ Note: Not to forget download your Offline Security report
 offlinesec_get_reports
 ```
 
-
+12. Keep notes marked as 'Not Relevant' (option -nr)
+```sh
+offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -nr
+```
 
 
 

@@ -54,6 +54,8 @@ def init_args():
                         help="CWBNTCUST table (txt or xlsx)", required=False)
     parser.add_argument("-cd", "--dev-cwbntcust", action="store", type=check_cwbntcust,
                         help="CWBNTCUST table (txt or xlsx) on DEV system", required=False)
+    parser.add_argument('-nr', '--keep-not_relevant', action='store_true', help="Do not exclude notes marked as 'Not Relevant'")
+
     parser.add_argument("-e", "--exclude", action="store",
                         help='Exclude SAP security notes', required=False)
     parser.add_argument("-v", "--variant", action="store", type=check_variant,
@@ -62,8 +64,6 @@ def init_args():
                         help="SLA file in YAML format")
     parser.add_argument('--do-not-send', action='store_true', help="Don't upload data to the server (review first)")
     parser.add_argument("-d","--date", action='store', help="The report on specific date in past (DD-MM-YYYY)")
-    parser.add_argument('-w', '--wait', action='store_true', help="Wait 5 minutes and download the report")
-    parser.add_argument('-nw', '--do-not-wait', action='store_true', help="Don't ask to download the report")
 
     parser.add_argument('--guiscript', action='store_true', help="Run GUI script to prepare the input data")
     parser.parse_args()
@@ -80,8 +80,8 @@ def send_file(args):
     cwbntcust_dev = args["dev_cwbntcust"] if "dev_cwbntcust" in args else None
     file = args[FILE] if FILE in args else None
     exclude = args[EXCLUDE] if EXCLUDE in args else None
-    wait = args[WAIT] if WAIT in args else None
-    do_not_wait = args[DO_NOT_WAIT] if DO_NOT_WAIT in args else None
+    wait = True
+    do_not_wait = False
 
     if system_name is None or system_name == "":
         system_name = DEFAULT_SYSTEM_NAME
@@ -106,6 +106,9 @@ def send_file(args):
 
     if "sla" in args and args["sla"] is not None:
         additional_keys["sla"] = offlinesec_client.func.check_sla_file(args["sla"])
+
+    if "keep_not_relevant" in args and args["keep_not_relevant"]:
+        additional_keys["keep_not_relevant"] = True
 
     try:
         new_abap_system = ABAPSystem(krnl_version=kernel_version,
