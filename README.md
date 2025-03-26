@@ -1,16 +1,16 @@
 # Offline Security Client
-The Offline Security is cloud based application which is intended to assess security aspects of SAP systems. All needed information for our security reports/analytics you gather yourself (or you can use [Offline Security Connector](https://github.com/offlinesec/offlinesec-connector)). Then you send us all gathered information (using cli tool) to the cloud server. Important: All sensitive information (SAPSIDs, IP addresses, server names, and so on) is masked on client side and doesn't leave your laptop. Also we don’t collect any identity data of our users (for instance emails and company name).  It means that NOBODY – our administrators, developers or external hacker can’t link this information with particular client, particular system or particular company.
-Finally, we produce analysis on server side and issue for you report which can download only you (client application that sent all data).   
+The Offline Security is cloud based application which is intended to assess security aspects of SAP systems. All needed information for our security reports/analytics you gather yourself (or you can use [Offline Security Connector](https://github.com/offlinesec/offlinesec-connector)). Then you send us all gathered information (using cli tool) to the cloud server. Important: All sensitive information (SAPSIDs, IP addresses, server names, usernames and so on) is masked on client side and doesn't leave your laptop (that's why we need client software). Also we don’t collect any identity data of our users (for instance IPs, emails and company name). So it can provide additional level of security.
+Finally, we produce analysis on server side and issue for you report which can download only you.   
 
 # Advantages
 
-* Quick start: Only you need to install client tool on any laptop with Python using one cli command
+* Quick start: Only you need to install client tool on ANY LAPTOP with Python using one cli command
 * Full Transparency. All configurations files are open. The source code of client application is available to read as well (open source)
-* You don't need to invest money to SAP Solution Manager consultants or buy expensive products like Onapsis or SecurityBridge
+* You don't need to invest money to SAP Solution Manager consultants or buy expensive products for SAP Security
 * Don't need to create user account in target SAP systems (The user is needed only for Offline Security Connector). Don't need to install any ABAP code on your systems!
 * Possibility of customisation. Based on predefined check list you can create your own checks (probably even not related to Information Security)
 * Our database is regularly updated. Always base checks are available out-of-box
-* Excellent reports in Excel spreadsheet format, easy to use and filter 
+* Excellent reports in Excel spreadsheet format, easy to use, share and filter 
 
 ## Table of contents
 
@@ -22,7 +22,7 @@ Finally, we produce analysis on server side and issue for you report which can d
 ## Installation
 
 ### Python installation
-Install last version of Python 3.x [from here](https://www.python.org/downloads/)<br />
+Install the last version of Python 3.x [from here](https://www.python.org/downloads/)<br />
 We support only Python 3.x!
 
 ### Published version installation (recommended)
@@ -42,18 +42,7 @@ Then add Python folder to the PATH variable:
 export PATH="$PATH:/Users/<username>/Library/Python/3.8/bin"
 ```
 
-If you need full automatic process please install [Offline Security Connector](https://github.com/offlinesec/offlinesec-connector)
-
-
-### Installation the last version from the repository [github.com](https://github.com/offlinesec/offlinesec-client)
-```sh
-git clone https://github.com/offlinesec/offlinesec-client.git
-python3 -m pip install --upgrade pip
-pip3 install setuptools wheel
-python3 setup.py bdist_wheel
-python3 -m pip install dist\offlinesec_client-1.0.8-py3-none-any.whl
-```
-The Version could be different! Please verify generated wheel name. 
+If you need full automatic process please install [Offline Security Connector](https://github.com/offlinesec/offlinesec-connector) - RFC connector
 
 ### Upgrade to the latest published version
 ```sh
@@ -66,7 +55,6 @@ pip3 show offlinesec_client
 ```
 
 ## Quick Start
-
 How to discovery missed SAP Security Notes:
 1. Prepare a text file with installed SAP software component versions ([details](./docs/how_to_prepare_sap_softs.md))
 2. Download CWBNTCUST table content ([details](./docs/how_to_prepare_sap_softs.md))
@@ -75,11 +63,8 @@ How to discovery missed SAP Security Notes:
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402 -c "cwbntcust.xlsx"
 ```
-5. Download your report in 5 minutes with:
-```sh
-offlinesec_get_reports
-```
-6. Find your report in Downloads folder. Enjoy.
+The report will be automatically downloaded in few seconds.
+5. Find your report in Downloads folder. Enjoy.
 
 ## Use Cases
 ### Missed SAP Security Notes (Unpatched SAP security vulnerabilities)
@@ -108,6 +93,16 @@ The report (excel spreadsheet) will contain:
 Anonymised on the client side (the info doesn't leave your laptop):
 * System Names (SIDs)
 * Usernames who implemented patches (sap notes)
+The names will be restored after the report is downloaded.
+
+Available additional options:
+* Manage exclusions (exclude some notes from the report)
+* Exclude SAP Notes marked as "Not Relevant"
+* Attach information from DEV environment
+* Define SLA rules for Note Implementation (How quick BASIS must install security patches)
+* Add Host Agent version and Patch
+* Add Kernel version and Patch
+* VBS automation (gui script) to collect all required data (only for Windows laptops)
 
 What else:
 * [How to prepare data and request report](./docs/how_to_prepare_sap_softs.md)
