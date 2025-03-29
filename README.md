@@ -83,13 +83,11 @@ The following report options are available:
 The report (excel spreadsheet) will contain:
 * Information about missed sap security notes for SAP systems. Our knowledge base is constantly updated and contain all SAP security notes released since 2015. The Offline Security Knowledgebase contains definitions for ABAP, JAVA, Kernel(ABAP,JAVA,WD), Business Object, Host Agent software.
 * Charts about the most critical findings and general statistic
-* For single system mode (offlinesec_sap_notes) VBS automation for ABAP system is available
 * The implementation status and progress status from the SNOTE transaction (if the note was downloaded to the system)
+* The implementation status and progress status from the SNOTE transaction on development system (if the note was downloaded to the system)
 * The info about available workaround and public exploits for security notes
-* You can register some exclusions for SAP notes (in case of false positives or workaround implementations)
 * SLA violation for system patching if the note was released a long time ago (need to set SLA rules)
 * Information about patching progress (historical data from previous scans)
-* the API to integrate with SIEM or VM is already available
 
 Anonymised on the client side (the info doesn't leave your laptop):
 * System Names (SIDs)
@@ -104,6 +102,7 @@ Available additional options:
 * Add Host Agent version and Patch
 * Add Kernel version and Patch
 * VBS automation (gui script) to collect all required data (only for Windows laptops)
+* the API to integrate with SIEM or VM is already available
 
 What else:
 * [How to prepare data and request report](./docs/how_to_prepare_sap_softs.md)
