@@ -49,17 +49,17 @@ class Agr1251:
                     header_flag = False
                 else:
                     splited_line = line.split("|")
-                    deleted = splited_line[12].strip()
+                    deleted = splited_line[11].strip()
                     if deleted.strip() == "X":
                         continue
                     new_item = dict()
-                    new_item["mandt"] = splited_line[2].strip()
-                    new_item["agr_name"] = splited_line[3].strip()
-                    new_item["object"] = splited_line[5].strip()
-                    new_item["auth"] = splited_line[6].strip()
-                    new_item["field"] = splited_line[8].strip()
-                    new_item["low"] = splited_line[9].strip()
-                    new_item["high"] = splited_line[10].strip()
+                    new_item["mandt"] = splited_line[1].strip()
+                    new_item["agr_name"] = splited_line[2].strip()
+                    new_item["object"] = splited_line[4].strip()
+                    new_item["auth"] = splited_line[5].strip()
+                    new_item["field"] = splited_line[7].strip()
+                    new_item["low"] = splited_line[8].strip()
+                    new_item["high"] = splited_line[9].strip()
 
                     self.data.append(new_item)
 
