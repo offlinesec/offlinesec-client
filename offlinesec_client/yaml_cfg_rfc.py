@@ -47,6 +47,8 @@ class YamlCfgRfc:
                     self.err_list.append("* [WARNING] System (%s) without name in file %f" % (str(num), os.path.basename(self.file_name)))
                     continue
                 name = system["name"]
+                usr02 = None
+                ust04 = None
                 rfcdes = os.path.join(root_dir, system["rfcdes"]) if "rfcdes" in system.keys() else ""
                 role = system["role"] if "role" in system.keys() else ""
                 if role not in SYS_TYPES:
