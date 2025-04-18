@@ -13,7 +13,6 @@ import offlinesec_client.get_reports
 from offlinesec_client.config import config
 from offlinesec_client.const import ERR_MESSAGE
 from offlinesec_client.cwbntcust import Cwbntcust
-from offlinesec_client.get_reports import get_statuses
 from offlinesec_client import __version__
 from offlinesec_client.const import APIKEY, CLIENT_ID, INST_DATE, ACTION, SYSTEM_NAME, CONNECTION_STR, CWBNTCUST,\
     KRNL_PL, KRNL_VER, VAR, VERSION, SCAN_ID
@@ -140,6 +139,7 @@ def check_num_param(s, title="Argument"):
     except:
         raise argparse.ArgumentTypeError("%s must be numeric" % (title,))
     return num
+
 
 
 def wait_5_minutes(seconds=300, every=5):
