@@ -62,7 +62,7 @@ def process_it(args):
     for key1 in COPY_KEYS_FROM_CMD:
         if key1 in args and args[key1] is not None:
             additional_keys[key1] = args[key1]
-    return
+
     offlinesec_client.func.send_file_to_server(file_name=zip_file_name,
                                                extras=additional_keys,
                                                url=UPLOAD_URL)
