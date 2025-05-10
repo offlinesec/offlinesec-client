@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 import os.path
@@ -39,6 +40,25 @@ COLUMN_REPLACEMENT = {
         "Vendor": [],
         "Name": [],
         "Location": []
+    },
+
+    "AGR_USERS": {
+        "MANDT" : ["Client", "Mandant"],
+        "AGR_NAME": ["Role", "Rolle"],
+        "UNAME": ["User Name", "Benutzername"],
+        "FROM_DAT": ["Start date", "Beginndatum"],
+        "TO_DAT": ["End date", "Enddatum"],
+
+    },
+    "AGR_1251": {
+        "MANDT": ["Client", "Mandant"],
+        "AGR_NAME": ["Role", "Rolle"],
+        "OBJECT": ["Object", "Objekt"],
+        "AUTH": ["User Master Maint.: Authorization Name", "Benutzerstammpflege: Berechtigungsname"],
+        "FIELD": ["Field name", "Feldname"],
+        "LOW": ["Authorization value", "Berechtigungswert"],
+        "HIGH": ["Authorization value", "Berechtigungswert"],
+        "DELETED": ["ID whether object is deleted", "Kennzeichen, ob Objekt gelöscht"]
     },
 
     "RSPARAM": {
@@ -91,7 +111,8 @@ class SAP_Table_SE16:
                 if item in self.columns:
                     idx = self.columns.index(item)
                     self.columns[idx] = column
-                    continue
+                    #continue
+                    break
 
     def replace_data_values(self, new_line):
         if self.table_name in DATA_REPLACEMENT:

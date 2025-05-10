@@ -182,6 +182,7 @@ def send_file_to_server(file_name, url, extras={}, wait=False, do_not_wait=False
     send_data = get_base_json()
     if len(extras):
         send_data.update(extras)
+
     file_body = open(file_name, 'rb')
     files = {
         'json': ('description', json.dumps(send_data), 'application/json'),
