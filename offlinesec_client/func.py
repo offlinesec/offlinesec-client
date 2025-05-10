@@ -200,7 +200,7 @@ def send_file_to_server(file_name, url, extras={}, wait=False, do_not_wait=False
                     print(" * " + response[ERR_MESSAGE])
                     print(" * Your report will be available in a few seconds (Please run offlinesec_get_reports to get your report)")
                 else:
-                    raise "[ERROR] " + response[ERR_MESSAGE]
+                    raise Exception("[ERROR] " + response[ERR_MESSAGE])
 
         except Exception as err:
             print("[ERROR] " + str(err))
