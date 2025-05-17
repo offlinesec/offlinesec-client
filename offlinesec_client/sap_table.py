@@ -34,6 +34,11 @@ COLUMN_REPLACEMENT = {
         "REQID" : ["Request ID", "Request-Id"],
         "IMPL_PROGRESS": ["Implementation Progress", "Impl."]
     },
+    "CWBNTHEAD" : {
+        "NUMM" : ["Note number", "Hinweisnummer"],
+        "VERSNO": ["Version"],
+        "INCOMPLETE": ["TRUE"]
+    },
 
     "JAVA_SOFTS" : {
         "Version": [],

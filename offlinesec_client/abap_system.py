@@ -44,6 +44,12 @@ class ABAPSystem (SAPSystem):
         if "sla" in args:
             self.parse_sla(args["sla"], root_dir)
 
+        # versions
+        if "cwbnthead" in args.keys() and args["cwbnthead"] is not None:
+            self.parse_cwbnthead(args["cwbnthead"], root_dir)
+        else:
+            self.cwbnthead = dict()
+
         self.exclude = ABAPSystem.parse_exclude_file(args["exclude"], root_dir, self.system_name) \
             if "exclude" in args.keys() and args["exclude"] is not None and args["exclude"] != ""else list()
 
@@ -133,6 +139,36 @@ class ABAPSystem (SAPSystem):
 
         tbl = SAPTable(table_name="CWBNTCUST", file_name=path)
         self.dev_cwbntcust = ABAPSystem.parse_cwbntcust_data_new(tbl)
+
+
+    def parse_cwbnthead(self, cwbnthead_file, root_dir):
+        if root_dir:
+            path = os.path.join(root_dir, cwbnthead_file)
+        else:
+            path = cwbnthead_file
+        if not os.path.exists(path):
+            raise FileNotFoundError("File %s not found" % (cwbnthead_file,))
+
+        if not (cwbnthead_file.upper().endswith(".TXT") or cwbnthead_file.upper().endswith(".XLSX")):
+            raise ValueError("File {} has wrong extension. Only TXT or XLSX files supported".format(cwbnthead_file))
+
+        tbl = SAPTable(table_name="CWBNTHEAD", file_name=path)
+
+        outdict = dict()
+        for line in tbl:
+            if "NUMM" in line and "VERSNO" in line:
+                if ("INCOMPLETE" in line and line["INCOMPLETE"] != "X") or "INCOMPLETE" not in line:
+                    try:
+                        note_id = line["NUMM"].lstrip("0")
+                        vers = int(line["VERSNO"])
+                    except:
+                        continue
+                    else:
+                        if note_id not in outdict:
+                            outdict[note_id] = vers
+                        elif note_id in outdict and outdict[note_id] < vers:
+                            outdict[note_id] = vers
+        self.cwbnthead = outdict
 
     @staticmethod
     def parse_cwbntcust_data(cwbntcust_table):
