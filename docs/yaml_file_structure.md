@@ -16,37 +16,49 @@ name: "SAP Demo System"
 ```sh
 type: "ABAP"
 ```
-3. Exclude  - note exclusions file (to exclude false positives) in yaml format. Please find more details [here](./exclude_file_structure.md).
+3. Exclude - note exclusions file (to exclude false positives) in yaml format. Please find more details [here](./exclude_file_structure.md).
 ```sh
 exclude: "exclude.yaml"
 ```
 
 ABAP specific attributes:
-1. Softs - software components file (txt format). The details are available [here](./how_to_prepare_sap_softs.md).
+1. softs - software components file (txt format). The details are available [here](./how_to_prepare_sap_softs.md).
 ```sh
 softs: "softs.txt"
 ```
-2. Cwbntcust - the CWBNTCUST table content in txt or xlsx format. The details are available [here](./how_to_prepare_sap_softs.md).
+2. cwbntcust - the CWBNTCUST table content in txt or xlsx format. The details are available [here](./how_to_prepare_sap_softs.md).
 ```sh
 cwbntcust: "cwbntcust.txt"
 ```
-3. Krnl_version - The Kernel version in the following format  "7.53"
+3. krnl_version - The Kernel version in the following format  "7.53"
 ```sh
 krnl_version: "7.53"
 ```
-4. Krnl_patch - Installed kernel patch number
+4. krnl_patch - Installed kernel patch number
 ```sh
 krnl_patch: 1101
 ```
-5. Cwbntcust form the dev system - the CWBNTCUST table content in txt or xlsx format. The details are available [here](./how_to_prepare_sap_softs.md).
+5. cwbntcust form the dev system - the CWBNTCUST table content in txt or xlsx format. The details are available [here](./how_to_prepare_sap_softs.md).
 ```sh
 cwbntcust_dev: "dev_cwbntcust.txt"
+```
+6. cwbnthead - the CWBNTHEAD table (to check for obsoleted SAP security notes)
+```sh
+cwbnthead: "cwbnthead.txt"
 ```
 
 JAVA specific attributes:
 1. Softs - Installed JAVA software components and their versions file (csv format). More details are available [here](./how_to_prepare_java_softs.md).
 ```sh
 softs: "java_softs.csv"
+```
+2. krnl_version - The Kernel version in the following format  "7.53"
+```sh
+krnl_version: "7.53"
+```
+3. krnl_patch - Installed kernel patch number
+```sh
+krnl_patch: 1101
 ```
 
 BO specific attributes:

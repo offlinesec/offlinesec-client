@@ -7,6 +7,7 @@ When logging into SAP, select English.
 * On next screen extend Maximum No. of Hits (For inst. set it to 1000000, to extract all rows from the table)
 ![Screenshot](./img/se16_second_screen.png)
 * If you'd like to exclude some columns (For inst. with sensitive info) go to menu Settings -> Format List -> Choose Fields... and unselect columns which you going to exlude
+* (optionally) only for the CWBNTHEAD table you can significantly reduce exported table lines: Exclude in the INCOMPLETE table field value "X".
 * Press F8 (or click on Execute button).
 * To extract table content in XLSX format go to menu Table Entry -> List -> Export -> Spreadsheet...
 ![Screenshot](./img/se16_xlsx.png)

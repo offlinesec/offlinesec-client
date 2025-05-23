@@ -1,11 +1,11 @@
 # How to generate SAP Security Note Report
 
-Single system mode (for different system types): 
+Single system mode (quickly scan one system): 
 * [SAP Businees Objects](./how_to_prepare_bo_version.md)
 * [SAP NetWeaver JAVA](./how_to_prepare_java_softs.md)
 * [Patch Day Scan](./how_to_request_patch_day_scan.md)
 
-Multi system mode:
+Multi system mode (more features, recommended):
 * [Multi-system Scan](./how_to_request_multi_system_scan.md)
 
 ## Data preparation
@@ -43,6 +43,12 @@ You should do the following:
 ```sh
 offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 ```
+
+### Installed SAP Security note versions (only for [Multi-system Scan](./how_to_request_multi_system_scan.md))
+(it helps to identify obosleted note versions)
+1. Log in SAP System using SAP GUI software
+2. Go to the transaction SE16
+3. Download the CWBNTHEAD table according to [this manual](./get_table.md)
 
 ### Implemented sap notes (without package) - information from the SNOTE transaction
 (it helps to reduce false positive number)
