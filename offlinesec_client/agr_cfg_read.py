@@ -8,6 +8,9 @@ from offlinesec_client.sap_table import SAPTable
 from offlinesec_client.yaml_cfg_read import YamlCfgFile
 from offlinesec_client.masking import Masking, ROLE_MASK, SAPSID_MASK
 
+FF_MASK_KEY = "ff_mask"
+
+
 class RolesCfgFile:
     def __init__(self,
                  file_name,
@@ -26,15 +29,15 @@ class RolesCfgFile:
             yaml_file = YamlCfgFile(file_name=self.file_name)
 
             if not yaml_file.check_class_item():
-                print("\n".join(yaml_file.err_list))
+                self.err_list.extend(yaml_file.err_list)
                 self.err_flag = True
                 return
 
-            if "ff_masks" in yaml_file.content:
-                if isinstance(yaml_file.content["ff_masks"], list):
-                    self.ff_masks = yaml_file.content["ff_masks"]
+            if FF_MASK_KEY in yaml_file.content:
+                if isinstance(yaml_file.content[FF_MASK_KEY], list):
+                    self.ff_masks = yaml_file.content[FF_MASK_KEY]
                 else:
-                    self.ff_masks.append(yaml_file.content["ff_masks"])
+                    self.ff_masks.append(yaml_file.content[FF_MASK_KEY])
 
             outdict = dict()
             for system in yaml_file:
@@ -42,15 +45,15 @@ class RolesCfgFile:
 
                 agr_users = dict()
                 if "agr_users" in system:
-                    agr_users = RolesCfgFile.read_agr_users(system["agr_users"])
+                    agr_users = self.read_agr_users(system["agr_users"], sys_name=name)
 
                 usr02 = dict()
                 if "usr02" in system:
-                    usr02 = RolesCfgFile.read_usr02(system["usr02"])
+                    usr02 = self.read_usr02(system["usr02"], sys_name=name)
 
                 agr_1251 = dict()
                 if "agr_1251" in system:
-                    agr_1251 = RolesCfgFile.read_agr_1251(system["agr_1251"])
+                    agr_1251 = self.read_agr_1251(system["agr_1251"], sys_name=name)
 
                 if name not in outdict:
                     # add ff flag
@@ -59,12 +62,14 @@ class RolesCfgFile:
                                                 usr02=usr02,
                                                 agr_1251=agr_1251,
                                                 ff_masks=self.ff_masks
-                    )
+                                                )
                 else:
-                    print(" * [Warning] Duplicated name %s. Repeated definitions are ignored" % (name,))
+                    self.err_list.append(" * [WARNING] Duplicated name %s. Repeated definitions are ignored" % (name,))
 
-            #Exclude not assigned roles, ff roles
-            self.filter_roles(outdict)
+            if len(outdict):
+                #Exclude not assigned roles, ff roles
+                self.filter_roles(outdict)
+
             return outdict
 
     def filter_roles(self, outdict):
@@ -150,21 +155,59 @@ class RolesCfgFile:
                                                    assigned_to_active_npa_users)
         return temp_list
 
-    @staticmethod
-    def read_agr_users(tables):
-        if not isinstance(tables,list):
+
+    def read_one_table(self, table_name, file_name, sys_name=None):
+        if not os.path.isfile(file_name):
+            if sys_name:
+                self.err_list.append(
+                    " * [WARNING] File %s not found (the %s table in %s)" % (file_name, table_name, sys_name))
+            else:
+                self.err_list.append(" * [WARNING] File %s not found (the %s table)" % (file_name, table_name))
+            return
+        try:
+            tbl = SAPTable(table_name=table_name,
+                           file_name=file_name,
+                           sys_name=sys_name)
+        except Exception as err:
+            if sys_name:
+                self.err_list.append(
+                    " * [WARNING] Can't read the table from file %s due to %s (the %s table in %s)" % (
+                    file_name, str(err), table_name, sys_name))
+            else:
+                self.err_list.append(" * [WARNING] Can't read the table from file %s due to %s (the %s table)" % (
+                file_name, str(err), table_name))
+            return
+        else:
+            if tbl is None:
+                if sys_name:
+                    self.err_list.append(
+                        " * [WARNING] Unknown error in the file %s (the %s table in %s)" % (file_name, table_name, sys_name))
+                else:
+                    self.err_list.append(" * [WARNING] Unknown error in the file %s (the %s table)" % (file_name, table_name))
+                return
+
+            if not tbl.check_columns():
+                self.err_list.extend(tbl.err_list)
+                return
+
+            return tbl
+
+    def read_agr_users(self, tables, sys_name=None):
+        AGR_USERS = "AGR_USERS"
+
+        if not isinstance(tables, list):
             new_item = tables
             tables = list()
             tables.append(new_item)
 
         temp_list = dict()
         for table in tables:
-            if not os.path.isfile(table):
-                print(" * [Warning] File %s not found" % (table,))
+            tbl = self.read_one_table(file_name=table,
+                                      table_name=AGR_USERS,
+                                      sys_name=sys_name)
+            if not tbl:
                 continue
 
-            tbl = SAPTable(table_name="AGR_USERS",
-                           file_name=table)
             tbl_content = list(filter(lambda x: len(x["AGR_NAME"]) > 1 and x["AGR_NAME"][0].upper() in ("Z", "Y"), tbl))
             cur_date = datetime.now()
             tbl_content = list(filter(lambda x: RolesCfgFile.compare_time_stamp(cur_date, x["FROM_DAT"], x["TO_DAT"]), tbl_content))
@@ -179,10 +222,12 @@ class RolesCfgFile:
                 user = item["UNAME"]
                 if user not in temp_list[mandt][role_name]:
                     temp_list[mandt][role_name].append(user)
+
         return temp_list
 
-    @staticmethod
-    def read_usr02(tables):
+
+    def read_usr02(self, tables, sys_name=None):
+        USR02 = "USR02"
         if not isinstance(tables,list):
             new_item = tables
             tables = list()
@@ -190,32 +235,36 @@ class RolesCfgFile:
 
         temp_list = dict()
         for table in tables:
-            if not os.path.isfile(table):
-                print(" * [Warning] File %s not found" % (table,))
+            tbl = self.read_one_table(file_name=table,
+                                      table_name=USR02,
+                                      sys_name=sys_name)
+            if not tbl:
                 continue
-            tbl = SAPTable(table_name="USR02",
-                           file_name=table)
+
             temp_list = dict()
             for item in tbl:
                 mandt = item["MANDT"]
                 if mandt not in temp_list:
                     temp_list[mandt] = dict()
                 user_name = item["BNAME"]
-                #valid from, valid to
+                cur_date = datetime.now()
                 uflag = item["UFLAG"]
-                active_user = True if (uflag.strip() == "0" or uflag.strip() == "") else False
+                validity = RolesCfgFile.compare_time_stamp(cur_date, item["GLTGB"], item["GLTGV"])
+                active_user = ((uflag.strip() == "0" or uflag.strip() == "") and validity)
                 ustyp = item["USTYP"]
                 dialog_user = True if (ustyp in ("A", "S")) else False
                 if user_name not in temp_list[mandt]:
                     temp_list[mandt][user_name] = (active_user, dialog_user)
+
         return temp_list
 
     @staticmethod
     def check_auth(line):
         return line["DELETED"].strip() != "X" and line["OBJECT"].startswith("S_")
 
-    @staticmethod
-    def read_agr_1251(tables):
+
+    def read_agr_1251(self, tables, sys_name=None):
+        AGR_1251 = "AGR_1251"
         if not isinstance(tables,list):
             new_item = tables
             tables = list()
@@ -223,12 +272,11 @@ class RolesCfgFile:
 
         temp_list = dict()
         for table in tables:
-            if not os.path.isfile(table):
-                print(" * [Warning] File %s not found" % (table,))
+            tbl = self.read_one_table(file_name=table,
+                                      table_name=AGR_1251,
+                                      sys_name=sys_name)
+            if not tbl:
                 continue
-
-            tbl = SAPTable(table_name="AGR_1251",
-                           file_name=table)
 
             tbl_content = list(filter(lambda x: RolesCfgFile.check_auth(x), tbl))
             for line in tbl_content:

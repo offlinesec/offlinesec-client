@@ -41,6 +41,16 @@ def process_it(args):
         return
     cfg = RolesCfgFile(file_name, ignore_na_roles=ignore_na, ignore_ff_roles=ignore_ff)
     data = cfg.parse()
+
+    if len(cfg.err_list):
+        for err in cfg.err_list:
+            print(err)
+        if cfg.err_flag:
+            return
+        resp = input("There are some warning. Do you want to continue?" + " (y/N):").strip().lower()
+        if resp is None or resp == "" or resp[0].lower() == "n":
+            return
+
     new_data = RolesCfgFile.masking(data)
     zip_file_name = RolesCfgFile.save_and_zip(new_data)
 
@@ -63,9 +73,13 @@ def process_it(args):
         if key1 in args and args[key1] is not None:
             additional_keys[key1] = args[key1]
 
+    wait = True
+    do_not_wait = False
     offlinesec_client.func.send_file_to_server(file_name=zip_file_name,
                                                extras=additional_keys,
-                                               url=UPLOAD_URL)
+                                               url=UPLOAD_URL,
+                                               wait=wait,
+                                               do_not_wait=do_not_wait)
 
 def main():
     args = init_args()

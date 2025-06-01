@@ -160,7 +160,7 @@ def wait_5_minutes(seconds=300, every=5):
                 flag = True
                 break
     if not flag:
-        print(" * [Warning] The report isn't ready yet. Please try later with offlinesec_get_reports")
+        print(" * [WARNING] The report isn't ready yet. Please try later with offlinesec_get_reports")
     print("")
 
 

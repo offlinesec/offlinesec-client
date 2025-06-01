@@ -23,11 +23,6 @@ class YamlCfgRfc:
         self.ust04_list = dict()
         self.usr02_list = dict()
         self.sid_list = dict()
-
-        if not os.path.isfile(file_name):
-            self.err_list.append("* [ERROR] File %s not found" % (file_name,))
-            return
-
         self.file_name = file_name
 
     def read_file(self):

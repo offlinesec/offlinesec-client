@@ -1,99 +1,8 @@
-
 # -*- coding: utf-8 -*-
 
 import os.path
 import openpyxl
-
-COLUMN_REPLACEMENT = {
-    "RFCDES" : {
-        "RFCDEST": ["RFC Destination", "Destination", "RFC-Destination"],
-        "RFCTYPE": ["Connection Type", "Verbindungstyp"],
-        "RFCOPTIONS": ["Options", "Optionen"],
-        "RFCDOC1": ["Description", "Beschreibung"]
-    },
-
-    "UST04" : {
-        "MANDT": ["Client", "Mandant"],
-        "BNAME": ["User", "Benutzername"],
-        "PROFIL": ["Profile", "Profil"],
-    },
-
-    "USR02" : {
-        "MANDT": ["Client", "Mandant"],
-        "BNAME": ["User Name", "Benutzername"],
-        "USTYP": ["User Type", "Benutzertyp"],
-        "UFLAG": ["User Lock Status", "Status der Benutzersperre"],
-        "CLASS": ["User Master Maintenance: User Group", "Benutzerstammpflege: Benutzergruppe"],
-    },
-
-    "CWBNTCUST" : {
-        "NUMM" : ["Note number", "Hinweisnummer"],
-        "NTSTATUS" : ["Processing Status", "Proc. Status", "Bearb. Stat."],
-        "PRSTATUS" : ["Implementation State", "Impl. State", "Einbaustand", "Impl. Status"],
-        "CWBUSER" : ["User Name", "Benutzername"],
-        "REQID" : ["Request ID", "Request-Id"],
-        "IMPL_PROGRESS": ["Implementation Progress", "Impl."]
-    },
-    "CWBNTHEAD" : {
-        "NUMM" : ["Note number", "Hinweisnummer"],
-        "VERSNO": ["Version"],
-        "INCOMPLETE": ["TRUE"]
-    },
-
-    "JAVA_SOFTS" : {
-        "Version": [],
-        "Vendor": [],
-        "Name": [],
-        "Location": []
-    },
-
-    "AGR_USERS": {
-        "MANDT" : ["Client", "Mandant"],
-        "AGR_NAME": ["Role", "Rolle"],
-        "UNAME": ["User Name", "Benutzername"],
-        "FROM_DAT": ["Start date", "Beginndatum"],
-        "TO_DAT": ["End date", "Enddatum"],
-
-    },
-    "AGR_1251": {
-        "MANDT": ["Client", "Mandant"],
-        "AGR_NAME": ["Role", "Rolle"],
-        "OBJECT": ["Object", "Objekt"],
-        "AUTH": ["User Master Maint.: Authorization Name", "Benutzerstammpflege: Berechtigungsname"],
-        "FIELD": ["Field name", "Feldname"],
-        "LOW": ["Authorization value", "Berechtigungswert"],
-        "HIGH": ["Authorization value", "Berechtigungswert"],
-        "DELETED": ["ID whether object is deleted", "Kennzeichen, ob Objekt gelöscht"]
-    },
-
-    "RSPARAM": {
-        "Parameter Name": ["Parametername"],
-        "User-Defined Value": ["Benutzerdefinierter Wert"],
-        "System Default Value": ["System-Defaultwert"],
-        "System Default Value(Unsubstituted Form)": ["System-Defaultwert (Unsubst.Form)"],
-        "Comment": ["Kommentar"]
-    }
-}
-
-DATA_REPLACEMENT = {
-    "CWBNTCUST" : {
-        "NTSTATUS" : {
-            "A" : ["Finished","erledigt"],
-            "N" : ["new", "neu"],
-            "R" : ["Not Relevant", "nicht relevant"],
-            "I" : ["In Process", "in Bearbeitung"]
-        },
-        "PRSTATUS" : {
-            "N" : ["Can be implemented", "einbaubar"],
-            "E" : ["Completely implemented", "vollständig eingebaut"],
-            "O" : ["Obsolete", "obsolet"],
-            "-" : ["Cannot be implemented", "nicht einbaubar"],
-            ""  : ["Undefined Implementation State", "unbestimmter Einbauzustand"],
-            "U" : ["Incompletely implemented", "unvollständig eingebaut"],
-            "V" : ["Obsolete version implemented", "veraltete Version eingebaut"],
-        },
-    }
-}
+from offlinesec_client.sap_table_def import COLUMN_REPLACEMENT, DATA_REPLACEMENT
 
 
 class SAP_Table_SE16:
@@ -255,22 +164,25 @@ class XLSX_SE16_Table(SAP_Table_SE16):
 
 
 class SAPTable:
-    def __init__(self, table_name, file_name):
+    def __init__(self, table_name, file_name, sys_name=None):
         classmap = {
             "SAP_Table_SE16": SAP_Table_SE16,
             "HANA_SAP_Table": HANA_SAP_Table,
             "XLSX_SE16_Table": XLSX_SE16_Table,
         }
+
         self.table_name = table_name
+        self.file_name = file_name
+        self.sys_name = sys_name
 
         created_object = None
-        err_list = list()
+        self.err_list = list()
         for class_name in classmap:
             try:
                 created_object = classmap[class_name](table_name, file_name)
                 self.class_name = class_name
             except ValueError as err:
-                err_list.append(class_name + ": " + str(err))
+                self.err_list.append(class_name + ": " + str(err))
             else:
                 break
 
@@ -278,10 +190,10 @@ class SAPTable:
             self.tbl = created_object
             self.columns = self.tbl.columns
             self.data = self.tbl.data
+
         else:
-            print(err_list)
-            raise ValueError("* [WARNING] Unsupported file format: %s. Supported files: HANA STUDIO, SE16-Unconverted, SE16-Spreadsheet" %
-                             (file_name,))
+            raise ValueError("Unsupported file format")
+
 
     def __iter__(self):
         for row in self.tbl.data:
@@ -289,3 +201,17 @@ class SAPTable:
             for num, column in enumerate(self.tbl.columns):
                 out_row[column] = row[num]
             yield out_row
+
+    def check_columns(self):
+        if self.table_name in COLUMN_REPLACEMENT:
+            for column in COLUMN_REPLACEMENT[self.table_name]:
+                if column not in self.columns:
+                    if self.sys_name:
+                        self.err_list.append(" * [WARNING] The %s column not found in the %s file (the %s table in %s)" % (
+                            column, self.file_name, self.table_name, self.sys_name))
+                    else:
+                        self.err_list.append(" * [WARNING] The %s column not found in the %s file (the %s table)" % (
+                            column, self.file_name, self.table_name))
+                    return False
+
+        return True
