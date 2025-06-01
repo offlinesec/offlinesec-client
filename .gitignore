@@ -141,3 +141,8 @@ offlinesec/config.json
 config.json
 systems.yaml
 sapsystems.txt
+/params.yaml
+/exclude.yaml
+/system_java.yaml
+
+_pylightxl_secnotes_20241026_201102.xlsx/
