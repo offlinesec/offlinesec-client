@@ -25,8 +25,8 @@ def init_args():
                         help="The config file name (SAP systems (ABAP, JAVA, BO, ...) and role tables (AGR_1251, AGR_USERS, USR02) in YAML format)", required=True)
     parser.add_argument("-v", "--variant", action="store", type=check_variant,
                         help="Check Variant (numeric)", required=False)
-    parser.add_argument('-na', '--ignore_na_roles', action='store_true', help="Do not exclude notes marked as 'Not Relevant'")
-    parser.add_argument('-ff', '--ignore_ff', action='store_true', help="Do not exclude notes marked as 'Not Relevant'")
+    parser.add_argument('-na', '--ignore_na_roles', action='store_true', help="Exclude roles not assigned to any user")
+    parser.add_argument('-ff', '--ignore_ff', action='store_true', help="Exclude FF roles")
     parser.add_argument('--do-not-send', action='store_true', help="Don't upload data to the server (review first)")
     parser.parse_args()
 

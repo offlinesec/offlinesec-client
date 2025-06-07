@@ -1,0 +1,7 @@
+root_dir: "D:\\offlinesec\\Test\\"
+ff_masks: ["_FF_"]
+sap_systems:
+  - name: "ECC"
+    agr_1251: ["ECC_020_AGR_1251.XLSX", "ECC_030_AGR_1251.XLSX"]
+    agr_users: ["ECC_020_AGR_USERS.TXT", "ECC_030_AGR_1251.XLSX"]
+    usr02: ["ECC_020_USR02.TXT", "ECC_030_AGR_1251.XLSX"]

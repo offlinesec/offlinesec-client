@@ -17,6 +17,7 @@ Required column list for tables:
   - AGR_USERS table - MANDT, AGR_NAME, UNAME, FROM_DAT, TO_DAT columns
   - AGR_1251 table - MANDT, AGR_NAME, OBJECT, AUTH, FIELD, LOW, HIGH, DELETED columns
 * (for CWBNTHEAD table only) only for the CWBNTHEAD table you can significantly reduce exported table lines: Exclude in the INCOMPLETE table field value "X".
+* (for AGR_1251 and AGR_USERS table only) only for the AGR_1251 and AGR_USERS tables you can significantly reduce exported table lines: Include only roles that start with Z,Y - custom roles (Z*, Y*).
 * Press F8 (or click on Execute button).
 * To extract table content in text format go to menu System -> List -> Save -> Local file. Then choose Unconverted format
 ![Screenshot](./img/se16_unconverted_choose.png)
