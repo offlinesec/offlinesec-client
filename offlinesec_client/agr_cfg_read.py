@@ -8,7 +8,7 @@ from offlinesec_client.sap_table import SAPTable
 from offlinesec_client.yaml_cfg_read import YamlCfgFile
 from offlinesec_client.masking import Masking, ROLE_MASK, SAPSID_MASK
 
-FF_MASK_KEY = "ff_mask"
+FF_MASK_KEY = "ff_masks"
 
 
 class RolesCfgFile:
@@ -99,32 +99,18 @@ class RolesCfgFile:
 
     @staticmethod
     def compare_time_stamp(today_date, from_dat, to_dat):
-        cur_year = str(today_date.year)
-        if from_dat[6:] < cur_year < to_dat[6:]:
+        date_format = '%d.%m.%Y'
+
+        if isinstance(today_date, datetime):
+            today_date = today_date.date()
+
+        date_from = datetime.strptime(from_dat, date_format).date()
+        date_to = datetime.strptime(to_dat, date_format).date()
+
+        if date_from <= today_date <= date_to:
             return True
-
-        cur_month = str(today_date.month)
-        cur_day = str(today_date.day)
-
-        if from_dat[6:] > cur_year:
+        else:
             return False
-        if from_dat[6:] == cur_year:
-            if from_dat[3:5] > cur_month:
-                return False
-            if from_dat[3:5] == cur_month:
-                if from_dat[0:2] > cur_day:
-                    return False
-
-        if to_dat[6:] < cur_year:
-            return False
-        if to_dat[6:] == cur_year:
-            if to_dat[3:5] < cur_month:
-                return False
-            if to_dat[3:5] == cur_month:
-                if to_dat[0:2] < cur_day:
-                    return False
-
-        return True
 
     @staticmethod
     def join_tables(agr_users, usr02):
@@ -241,7 +227,6 @@ class RolesCfgFile:
             if not tbl:
                 continue
 
-            temp_list = dict()
             for item in tbl:
                 mandt = item["MANDT"]
                 if mandt not in temp_list:
