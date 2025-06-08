@@ -15,7 +15,6 @@
 ```sh
 offlinesec_sap_roles -f "cfg_roles_report.yaml"
 ```
-
 4. (optionally) you can additionally set in the script:
    * "-na" Exclude roles that are not assigned to any user (Required AGR_USERS and USR02 tables)
    * "-ff" Exclude FireFighter roles from the check. (In YAML file you need to set masks for FF roles)

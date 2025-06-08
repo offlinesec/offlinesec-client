@@ -293,42 +293,39 @@ class RolesCfgFile:
 
     @staticmethod
     def get_user_info(clientid, role_name, agr_users, usr02):
-        if agr_users and len(agr_users):
-            if usr02 and len(usr02):
-                if role_name in agr_users[clientid]:
-                    user_list = agr_users[clientid][role_name]
-                    if clientid in usr02:
-                        assigned_to_users = 0
-                        assigned_to_active_users = 0
-                        assigned_to_active_dialog_users = 0
-                        assigned_to_active_npa_users = 0
-                        for user in usr02[clientid]:
-                            if user in user_list:
-                                active, dialog = usr02[clientid][user]
-                                assigned_to_users += 1
-                                if active:
-                                    assigned_to_active_users += 1
-                                    if dialog:
-                                        assigned_to_active_dialog_users += 1
-                                    else:
-                                        assigned_to_active_npa_users += 1
-                        return (
-                            assigned_to_users,
-                            assigned_to_active_users,
-                            assigned_to_active_dialog_users,
-                            assigned_to_active_npa_users)
-
-                    else:
-                        return 0
-                else:
+        if agr_users and len(agr_users) and clientid in agr_users:
+            if usr02 and len(usr02) and clientid in usr02:
+                if role_name not in agr_users[clientid]:
                     return 0
+                if len(agr_users[clientid][role_name]) == 0:
+                    return 0, 0, 0, 0
+
+                user_list = agr_users[clientid][role_name]
+                assigned_to_users = 0
+                assigned_to_active_users = 0
+                assigned_to_active_dialog_users = 0
+                assigned_to_active_npa_users = 0
+
+                for user in usr02[clientid]:
+                    if user in user_list:
+                        active, dialog = usr02[clientid][user]
+                        assigned_to_users += 1
+                        if active:
+                            assigned_to_active_users += 1
+                            if dialog:
+                                assigned_to_active_dialog_users += 1
+                            else:
+                                assigned_to_active_npa_users += 1
+                return (
+                    assigned_to_users,
+                    assigned_to_active_users,
+                    assigned_to_active_dialog_users,
+                    assigned_to_active_npa_users)
             else:
-                if clientid in agr_users:
-                    if role_name in agr_users[clientid]:
-                        return len(agr_users[clientid][role_name])
-                    else:
-                        return 0
+                # only one value int
+                return len(agr_users[clientid][role_name]) if role_name in agr_users[clientid] else 0
         else:
+            # not defined
             return
 
     @staticmethod
