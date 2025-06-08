@@ -63,6 +63,7 @@ class RolesCfgFile:
                                                 agr_1251=agr_1251,
                                                 ff_masks=self.ff_masks
                                                 )
+
                 else:
                     self.err_list.append(" * [WARNING] Duplicated name %s. Repeated definitions are ignored" % (name,))
 
@@ -253,7 +254,7 @@ class RolesCfgFile:
                 user_name = item["BNAME"]
                 cur_date = datetime.now()
                 uflag = item["UFLAG"]
-                validity = RolesCfgFile.compare_time_stamp(cur_date, item["GLTGB"], item["GLTGV"])
+                validity = RolesCfgFile.compare_time_stamp(cur_date, item["GLTGV"], item["GLTGB"])
                 active_user = ((uflag.strip() == "0" or uflag.strip() == "") and validity)
                 ustyp = item["USTYP"]
                 dialog_user = True if (ustyp in ("A", "S")) else False
