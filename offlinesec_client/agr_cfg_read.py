@@ -104,13 +104,32 @@ class RolesCfgFile:
         if isinstance(today_date, datetime):
             today_date = today_date.date()
 
-        date_from = datetime.strptime(from_dat, date_format).date()
-        date_to = datetime.strptime(to_dat, date_format).date()
+        if from_dat is not None and from_dat.strip() != "" and \
+            to_dat is not None and to_dat.strip() != "":
+            date_from = datetime.strptime(from_dat, date_format).date()
+            date_to = datetime.strptime(to_dat, date_format).date()
 
-        if date_from <= today_date <= date_to:
-            return True
+            if date_from <= today_date <= date_to:
+                return True
+            else:
+                return False
+
+        elif from_dat is not None and from_dat.strip() != "":
+            date_from = datetime.strptime(from_dat, date_format).date()
+            if date_from <= today_date:
+                return True
+            else:
+                return False
+
+        elif to_dat is not None and to_dat.strip() != "":
+            date_to = datetime.strptime(to_dat, date_format).date()
+            if today_date <= date_to:
+                return True
+            else:
+                return False
         else:
-            return False
+            return True
+
 
     @staticmethod
     def join_tables(agr_users, usr02):
