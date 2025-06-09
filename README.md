@@ -190,19 +190,19 @@ What else:
 ### SAP Security Audit Log Analysis, ICF services, Users with critical authorizations
 * Will be available in next releases
 
-Each time do not forget to download your report from the server:
+If the report was not downloaded automatically, please download it manually:
 ```sh
 offlinesec_get_reports
 ```
 
 If you need more  - please email me info@offlinesec.com.
 
-## Important Notes:
+## Important Notes (security measures):
 1. We don't collect any client identity like email address, SAP SIDs, company, ip addresses. All Checks are performed fully anonymously.
 2. The reports aren't stored on server side. Once you have downloaded the report it's deleted.
 3. All data transferred to server is encrypted with HTTPS protocol. 
 4. The report could download only the person who has token (Random String generated on first start).
-5. Review the source code. You can be 100% confident what happening on client side with your data and how it is processed.
+5. Review the source code. You can be 100% confident what happening on client side with your data, how it is processed and which information will be sent to the server
 
 Additional documentation is available [here](./docs/README.md)
 
