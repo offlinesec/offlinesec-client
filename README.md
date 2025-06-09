@@ -91,8 +91,6 @@ The report (excel spreadsheet) will contain:
 
 Anonymised on the client side (the info doesn't leave your laptop):
 * System Names (SIDs)
-* Usernames who implemented patches (sap notes)
-The names will be restored after the report is downloaded.
 
 Available additional options:
 * Manage exclusions (exclude some notes from the report)
@@ -182,6 +180,7 @@ The report (excel spreadsheet) will contain:
 Anonymised on the client side (the info doesn't leave your laptop):
 * System Names (SIDs)
 * RFC Destinations
+* Usernames
 * Hostnames, Proxies and IP addresses
 * URLs
 
