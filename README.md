@@ -138,10 +138,28 @@ What else:
 * [Report Example](./docs/sap_params_report.md)
 
 ### Roles/Critical Privileges Analysis (Available since version 1.0.15)
+In any SAP environment, roles define what users can do and what they shouldn’t be able to do. When roles contain critical authorizations, they can pose serious risks if not properly managed.
+Here’s why it’s crucial to identify them:
+* Prevent Fraud and Misuse. Critical authorizations (like unrestricted access to financial transactions or user management) can be exploited for fraudulent activity if assigned to the wrong users.
+* Protect Sensitive Data. SAP systems often hold business-critical and personal data. Uncontrolled access can lead to data breaches or violations of data protection laws (e.g., GDPR).
+* Pass Internal and External Audits. Auditors frequently review access rights. Roles with unchecked critical permissions can trigger audit findings, penalties, or even project delays.
+* Reduce Attack Surface. Insecure authorizations increase the likelihood of cyberattacks or insider threats. Minimizing critical permissions limits potential damage.
+* Comply with Best Practices and Standards. Standards like the SAP Security Baseline and DSAG recommendations emphasize the need for strict control over critical authorizations. Following them improves your overall security posture.
+* Avoid SoD (Segregation of Duties) Violations. Some critical combinations of permissions (e.g., create and approve payments) lead to SoD conflicts. These must be identified and remediated to maintain internal control integrity.
+
+The report (excel spreadsheet) will contain:
+* Critical authorisations in roles
+* Information about users (how many users have this role)
+* Sign if role is FireFighter or not
+* Critical authorisation definitions are based on SAP Security Baseline, DSAG, best practises 
+
+Anonymised on the client side (the info doesn't leave your laptop):
+* System Names (SIDs)
+* Role names
+
+What else:
 * [How to generate report](./docs/how_to_prepare_sap_roles.md)
 * [Report Example](./docs/sap_roles_report.md)
-* All sensitive information is excluded from the upload file (Role names)
-* Please remember you can create your own check variants. The details are available [here](https://github.com/offlinesec/offlinesec-knowledgebase)
 
 ### Transport Request Analysis (Available since version 1.1.8)
 * [How to generate report](./docs/how_to_prepare_abap_report.md)
