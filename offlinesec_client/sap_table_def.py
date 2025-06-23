@@ -67,7 +67,19 @@ COLUMN_REPLACEMENT = {
         "System Default Value": ["System-Defaultwert"],
         "System Default Value(Unsubstituted Form)": ["System-Defaultwert (Unsubst.Form)"],
         "Comment": ["Kommentar"]
-    }
+    },
+    "ICFSERVLOC": {
+        "ICF_NAME": [],
+        "ICFPARGUID": [],
+        "ICFACTIVE": [],
+    },
+    "ICFSERVICE": {
+        "ICF_NAME": [],
+        "ICFPARGUID": [],
+        "ICFNODGUID": [],
+        "ICF_USER": [],
+        "ICFALTNME": []
+    },
 }
 
 DATA_REPLACEMENT = {

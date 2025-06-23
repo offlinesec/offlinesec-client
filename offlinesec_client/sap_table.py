@@ -207,10 +207,10 @@ class SAPTable:
             for column in COLUMN_REPLACEMENT[self.table_name]:
                 if column not in self.columns:
                     if self.sys_name:
-                        self.err_list.append(" * [WARNING] The %s column not found in the %s file (the %s table in %s)" % (
+                        self.err_list.append("The required column %s not found in the file '%s' (the %s table in %s)" % (
                             column, self.file_name, self.table_name, self.sys_name))
                     else:
-                        self.err_list.append(" * [WARNING] The %s column not found in the %s file (the %s table)" % (
+                        self.err_list.append("The required column %s not found in the file '%s' (the %s table)" % (
                             column, self.file_name, self.table_name))
                     return False
 

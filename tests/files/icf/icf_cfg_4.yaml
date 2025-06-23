@@ -1,0 +1,5 @@
+sap_systems:
+  - name: "System ABC"
+    icfservice: "table1.txt"
+    icfservloc: "table2.txt"
+  - icfservice: "table1_1.txt"

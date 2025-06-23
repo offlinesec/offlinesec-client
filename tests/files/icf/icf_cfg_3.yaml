@@ -1,0 +1,9 @@
+root_dir: "..//tests//files//icf"
+sap_systems:
+  - name: "System ABC"
+    icfservice: "icfservice_1.txt"
+    icfservloc: "icfservloc_1.txt"
+
+  - name: "System BCD"
+    icfservice: "icfservice_1.txt"
+    icfservloc: "icfservloc_1.txt"

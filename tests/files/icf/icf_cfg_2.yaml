@@ -1,0 +1,3 @@
+sap_systems:
+  - name: "System ABC"
+    icfservice: "table1.txt"

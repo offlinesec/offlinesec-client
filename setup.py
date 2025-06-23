@@ -28,8 +28,8 @@ setup(
                                       'offlinesec_java_notes = offlinesec_client.req_java_notes:main',
                                       'offlinesec_abap_rep = offlinesec_client.req_abap_review:main',
                                       'offlinesec_rfc_report = offlinesec_client.req_rfc_report:main',
+                                      'offlinesec_icf_report = offlinesec_client.icf.req_icf_report:main',
                                       'offlinesec_inverse_transform = offlinesec_client.resolve_report:main'], },
     install_requires=required,
     include_package_data=True
 )
-# packages=['offlinesec_client'],
