@@ -193,6 +193,8 @@ def read_file(file):
             do_secnotes_transform(file)
         elif os.path.basename(file).startswith("params_"):
             do_secnotes_transform(file)
+        elif os.path.basename(file).startswith("icf_"):
+            do_secnotes_transform(file)
 
 def resolve_roles_page1(ws, roles):
     max_row = ws.max_row
