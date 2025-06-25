@@ -41,7 +41,7 @@ class OfflineSecRequest:
     def do_masking(self, data):
         return data
 
-    def process(self,wait=True, do_not_wait=False):
+    def process(self, wait=True, do_not_wait=False):
         data = self.get_data()
         if not data:
             print(" * [ERROR] No data to send to the server")
@@ -72,7 +72,7 @@ class OfflineSecRequest:
 
         if hasattr(yaml_file, "warnings"):
             if len(yaml_file.warnings):
-                warn_msgs = map (lambda x: " * [ERROR] " + x, yaml_file.errors)
+                warn_msgs = map (lambda x: " * [ERROR] " + x, yaml_file.warnings)
                 for msg in warn_msgs:
                     print(msg)
 
