@@ -69,17 +69,18 @@ COLUMN_REPLACEMENT = {
         "Comment": ["Kommentar"]
     },
     "ICFSERVLOC": {
-        "ICF_NAME": [],
-        "ICFPARGUID": [],
-        "ICFACTIVE": [],
+        "ICF_NAME": ["Service Name", "Service-Name"],
+        "ICFPARGUID": ["GUID of parent node", "GUID des Vater-Knotens"],
+        "ICFACTIVE": ["Service Activated", "Service aktiviert"],
     },
     "ICFSERVICE": {
-        "ICF_NAME": [],
-        "ICFPARGUID": [],
-        "ICFNODGUID": [],
-        "ICF_USER": [],
-        "ICFALTNME": []
+        "ICF_NAME": ["Service Name", "Service-Name"],
+        "ICFPARGUID": ["GUID of parent node", "GUID des Vater-Knotens"],
+        "ICFNODGUID": ["GUID of ICF service node", "GUID eines ICF-Service-Knotens"],
+        "ICF_USER": ["User Name", "Benutzer"],
+        "ICFALTNME": ["Alternative Service Name", "Alternative Servicenamen"]
     },
+
 }
 
 DATA_REPLACEMENT = {

@@ -55,7 +55,8 @@ class YamlICFCfg(YamlCfg):
         out_list = list()
         for service in services:
             if "user" in service:
-                out_list.append(service["name"])
+                if service["user"].upper().strip() not in ["SAP"]:
+                    out_list.append(service["name"])
 
         return out_list
 
