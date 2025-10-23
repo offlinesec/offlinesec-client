@@ -67,6 +67,35 @@ offlinesec_sap_notes -f "software_components.txt" -s "Demo System" -k 721 -p 402
 The report will be automatically downloaded in few seconds.
 5. Find your report in Downloads folder. Enjoy.
 
+## Technical support
+The technical support is also possible. Few options are available:
+1. Only software
+2. Software + Customisation + Limited expert support
+3. Software + Customization + Expert support
+
+Please reach out to us by email: info@offlinesec.com
+
+## Professional Services
+We can help you perform independent SAP security assessment / SAP Penetration Testing
+The assessment includes the following checks:
+* Missed Security Notes
+* Insecure RFC connections
+* System hardening (baseline checks)
+* Critical authorisations
+* Insecure ICF services
+
+The analysis duration is 24 hours for each SAP landscape (dev, qa, prod). So this means that the price will be significantly lower than others.
+
+Advantages of our approach:
+* Partially automated (we won't miss anything)
+* Expert included (to prioritize and remove false positives)
+* Quick start. Access to the SAP systems - not needed
+* Full control over the data sent
+* No installation required on ABAP
+* High Speed. 24h per entire SAP landscape
+
+Please reach out to us by email: info@offlinesec.com
+
 ## Use Cases
 ### Missed SAP Security Notes (Unpatched SAP security vulnerabilities)
 Installing security patches on the SAP platform is critical for ensuring the integrity, confidentiality, and availability of your SAP environment. Here are the main reasons why security patches are essential for SAP systems:
@@ -160,6 +189,7 @@ What else:
 * [Report Example](./docs/sap_roles_report.md)
 
 ### Transport Request Analysis (Available since version 1.1.8)
+* Temporary not supported
 * [How to generate report](./docs/how_to_prepare_abap_report.md)
 
 ### Insecure RFC Connections 
@@ -199,12 +229,14 @@ If you need more  - please email me info@offlinesec.com.
 
 ## Important Notes (security measures):
 1. We don't collect any client identity like email address, SAP SIDs, company, ip addresses. All Checks are performed fully anonymously.
-2. The reports aren't stored on server side. Once you have downloaded the report it's deleted.
-3. All data transferred to server is encrypted with HTTPS protocol. 
-4. The report could download only the person who has token (Random String generated on first start).
-5. Review the source code. You can be 100% confident what happening on client side with your data, how it is processed and which information will be sent to the server
+2. All sensitive data (user names, system names, role names, ...) in input tables is pseudonymisated (replaced on the client side). The client performs the reverse transformation after receiving the report.
+3. The reports aren't stored on the server side. Once you have downloaded the report it's deleted.
+4. All data transferred to the server is encrypted with HTTPS protocol.
+5. The report could download only the person who has token (random string generated on first start).
+6. Open source code. You can be 100% confident what happening on the client side with your data, how it is processed and which information will be sent to the server
 
-Additional documentation is available [here](./docs/README.md)
+## More information about supported use cases and platforms
+[Use cases](./docs/README.md)
 
 ## Known Issues
 1. SSL issue when communicate with the server
