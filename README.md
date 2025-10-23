@@ -87,9 +87,9 @@ The assessment includes the following checks:
 The analysis duration is 24 hours for each SAP landscape (dev, qa, prod). So this means that the price will be significantly lower than others.
 
 Advantages of our approach:
-* Partially automated (we won't miss anything)
+* Almost fully automated (we won't miss anything)
 * Expert included (to prioritize and remove false positives)
-* Quick start. Access to the SAP systems - not needed
+* Quick start. Access to the SAP systems - not required
 * Full control over the data sent
 * No installation required on ABAP
 * High Speed. 24h per entire SAP landscape
