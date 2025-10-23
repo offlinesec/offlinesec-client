@@ -69,9 +69,9 @@ The report will be automatically downloaded in few seconds.
 
 ## Technical support
 The technical support is also possible. Few options are available:
-1. Only software
-2. Software + Customisation + Limited expert support
-3. Software + Customization + Expert support
+1. Basic software
+2. Extended Software + Customisation + Limited expert support
+3. Extended Software + Customization + Expert support
 
 Please reach out to us by email: info@offlinesec.com
 
