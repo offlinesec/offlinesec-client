@@ -2,6 +2,7 @@ import argparse
 import offlinesec_client.func
 from offlinesec_client.const import FILE, SYSTEM_NAME, WAIT, EXCLUDE, DO_NOT_WAIT, ERROR_MSG_PREFIX, VERSION
 from offlinesec_client.java_system import JAVASystem
+from offlinesec_client.masking import Masking, SAPSID_MASK
 
 
 UPLOAD_URL = "/sec-notes"
@@ -40,6 +41,12 @@ def init_args():
     parser.parse_args()
     return vars(parser.parse_args())
 
+def do_masking(input_data):
+    sapsid_masking = Masking(SAPSID_MASK)
+    for sys in input_data:
+        if hasattr(sys, "system_name"):
+            sys.system_name = sapsid_masking.do_mask(sys.system_name)
+    sapsid_masking.save_masking()
 
 def send_file(file_name, system_name, exclude, wait=False, do_no_wait=False):
     additional_keys = dict()
@@ -59,7 +66,9 @@ def send_file(file_name, system_name, exclude, wait=False, do_no_wait=False):
     if new_java_system is not None:
         system_list.append(new_java_system)
 
-    offlinesec_client.func.send_to_server(data=system_list,
+    if len(system_list):
+        do_masking(system_list)
+        offlinesec_client.func.send_to_server(data=system_list,
                                           url=UPLOAD_URL,
                                           extras=additional_keys,
                                           wait=wait,
