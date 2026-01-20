@@ -1,8 +1,8 @@
 # How to generate SAP Security Note Report
 
 ## Supported system types:
-* SAP NetWeaver ABAP
-* SAP NetWeaver JAVA
+* SAP NetWeaver ABAP (+ Kernel, SAPUI5, HANA)
+* SAP NetWeaver JAVA (+ Kernel, HANA)
 * Business Object 
 
 ## Required information 
@@ -15,6 +15,8 @@ Whatever script you are going to use, you need to prepare the input data first.
 * (recommended) Installed sap note list from DEV environment: table CWBNTCUST from DEV system. [How to get info](./get_table.md). Reduces number of false positives. Shows note implementation progress.
 * (optionally) Installed sap note versions: table CWBNTHEAD. [How to get info](./get_table.md). Adds sap note version checks.
 * (optionally) Host agent version and patch level
+* (recommended) SAPUI5 version. FIORI portal, Personal settings->About.
+* (recommended) HANA DB version. Menu System:Status, Database data:Release.
 
 ### Required information from JAVA system
 * (required) Installed software component list. [How to get info](./how_to_prepare_java_softs.md)

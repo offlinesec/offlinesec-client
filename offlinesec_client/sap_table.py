@@ -4,6 +4,7 @@ import os.path
 import openpyxl
 from offlinesec_client.sap_table_def import COLUMN_REPLACEMENT, DATA_REPLACEMENT
 
+LONG_SAP_TABLES = ["ICFSERVICE"]
 
 class SAP_Table_SE16:
     def __init__(self, table_name, file_name):
@@ -90,6 +91,89 @@ class SAP_Table_SE16:
             for num, column in enumerate(self.columns):
                 out_row[column] = row[num]
             yield out_row
+
+
+class SAP_Long_Table_SE16(SAP_Table_SE16):
+    def read_table(self):
+        if not self.file_name:
+            raise ValueError("File name is empty")
+
+        if not os.path.isfile(self.file_name):
+            raise ValueError("File %s not exist" % (self.file_name,))
+
+        if not self.file_name.lower().endswith(".txt"):
+            raise ValueError("Bad file extension %s" % (self.file_name,))
+
+        f = open(self.file_name, "r", errors="ignore")
+        column_num = 0
+        column_lens = list()
+        self.columns = list()
+        separator = 0
+        buffer = list()
+        lines_per_raw = 0
+
+        for line in f:
+            if len(line.strip()) > 0 and line.strip() == "-" * len(line.strip()):
+                separator += 1
+
+                if separator == 1 :
+                    buffer = list()
+
+                elif separator == 2:
+                    column_line = "".join(buffer)
+                    self.columns.extend([item.strip() for item in column_line.split("|")])
+                    column_lens = [len(item) for item in column_line.split("|")]
+                    if not len(self.columns):
+                        raise ValueError("Wrong file structure. Columns not found in the file")
+                    column_num = len(self.columns)
+                    buffer = list()
+                    #print("columns: %s, length: %s" % (len(self.columns), len(column_line)))
+                    keys = dict()
+                    for i in range(0, len(self.columns)):
+                        keys[i] = column_lens[i]
+                    #print(keys)
+                continue
+            elif 1 <= separator < 2:
+                buffer.append(line)
+                #print(line, len(line))
+                lines_per_raw += 1
+
+            elif separator >= 2:
+                if line.strip() == "":
+                    continue
+                buffer.append(line)
+                #print(len(line))
+
+                if len(buffer) >= lines_per_raw:
+                    new_line = "".join(buffer)
+                    row = [item for item in new_line.split("|")]
+
+                    if len(row) > column_num:
+                        row = list()
+                        pos = 0
+
+                        # "|" inside
+                        for i in range(0, len(self.columns)):
+                            column_len = column_lens[i]
+                            row.append(new_line[pos:pos + column_len].strip())
+
+                            pos += column_len + 1
+
+                        new_item = dict()
+                        for i in range(0, len(self.columns)):
+                            new_item[self.columns[i]] = row[i]
+                        #print(new_item)
+
+                        if len(row) != column_num:
+                            raise ValueError("Wrong file structure. Bad line: %s in the file" % (new_line,))
+
+                    self.data.append(row)
+                    buffer = list()
+
+        f.close()
+
+        if not len(self.columns):
+            raise ValueError("Wrong file structure. Columns not found in the file")
 
 
 class HANA_SAP_Table(SAP_Table_SE16):
@@ -179,8 +263,12 @@ class SAPTable:
         self.err_list = list()
         for class_name in classmap:
             try:
-                created_object = classmap[class_name](table_name, file_name)
-                self.class_name = class_name
+                if class_name == "SAP_Table_SE16" and table_name in LONG_SAP_TABLES:
+                    created_object = SAP_Long_Table_SE16(table_name, file_name)
+                    self.class_name = class_name
+                else:
+                    created_object = classmap[class_name](table_name, file_name)
+                    self.class_name = class_name
             except ValueError as err:
                 self.err_list.append(class_name + ": " + str(err))
             else:

@@ -46,6 +46,14 @@ cwbntcust_dev: "dev_cwbntcust.txt"
 ```sh
 cwbnthead: "cwbnthead.txt"
 ```
+7. sapui5 - sapui5 version
+```sh
+sapui5: "1.84.56"
+```
+8. hana - HANA DB version
+```sh
+hana: "2.00.033.00.1571350"
+```
 
 JAVA specific attributes:
 1. Softs - Installed JAVA software components and their versions file (csv format). More details are available [here](./how_to_prepare_java_softs.md).

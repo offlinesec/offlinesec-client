@@ -59,6 +59,13 @@ class ABAPSystem (SAPSystem):
         self.host_agent_patch = ABAPSystem.check_kernel_patch(args["host_agent_patch"]) \
             if "host_agent_patch" in args.keys() and args["host_agent_patch"] is not None and args["host_agent_patch"] != ""else ""
 
+        self.sapui5 = ABAPSystem.check_sapui5_ver(args["sapui5"]) \
+            if "sapui5" in args.keys() and args["sapui5"] is not None and \
+            args["sapui5"] != "" else ""
+
+        self.hana = ABAPSystem.check_hana_ver(args["hana"]) \
+            if "hana" in args.keys() and args["hana"] is not None and \
+            args["hana"] != "" else ""
 
     @staticmethod
     def check_soft_line(soft, version, pkg_num, package):
@@ -169,6 +176,20 @@ class ABAPSystem (SAPSystem):
                         elif note_id in outdict and outdict[note_id] < vers:
                             outdict[note_id] = vers
         self.cwbnthead = outdict
+
+    @staticmethod
+    def check_sapui5_ver(sapui5_ver):
+        reg_exp = "^\\d+.\\d+.\\d+$"
+        if re.match(reg_exp, sapui5_ver):
+            return True
+        raise ValueError("SAPUI5 version must be in the following format: 1.84.56")
+
+    @staticmethod
+    def check_hana_ver(hana_ver):
+        reg_exp = "^\\d+.\\d+.\\d+.\\d+.\\d+"
+        if re.match(reg_exp, hana_ver):
+            return True
+        raise ValueError("HANA version must be in the following format: 2.00.033.00.1535710")
 
     @staticmethod
     def parse_cwbntcust_data(cwbntcust_table):
