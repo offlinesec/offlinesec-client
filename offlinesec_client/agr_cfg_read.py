@@ -105,8 +105,8 @@ class RolesCfgFile:
         if isinstance(today_date, datetime):
             today_date = today_date.date()
 
-        if from_dat is not None and from_dat.strip() != "" and \
-            to_dat is not None and to_dat.strip() != "":
+        if from_dat is not None and from_dat.strip() != "" and from_dat.strip() != "00.00.0000" and \
+            to_dat is not None and to_dat.strip() != "" and to_dat.strip() != "00.00.0000":
             date_from = datetime.strptime(from_dat, date_format).date()
             date_to = datetime.strptime(to_dat, date_format).date()
 
@@ -115,14 +115,14 @@ class RolesCfgFile:
             else:
                 return False
 
-        elif from_dat is not None and from_dat.strip() != "":
+        elif from_dat is not None and from_dat.strip() != "" and from_dat.strip() != "00.00.0000":
             date_from = datetime.strptime(from_dat, date_format).date()
             if date_from <= today_date:
                 return True
             else:
                 return False
 
-        elif to_dat is not None and to_dat.strip() != "":
+        elif to_dat is not None and to_dat.strip() != "" and to_dat.strip() != "00.00.0000":
             date_to = datetime.strptime(to_dat, date_format).date()
             if today_date <= date_to:
                 return True
