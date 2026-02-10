@@ -4,7 +4,7 @@ import re
 import yaml
 import offlinesec_client.func
 from offlinesec_client.sap_table import SAPTable
-from offlinesec_client.const import FILE, WAIT, DO_NOT_WAIT
+from offlinesec_client.const import FILE, WAIT, DO_NOT_WAIT, SAP_SYSTEMS_KEY
 from offlinesec_client.masking import Masking, SAPSID_MASK
 from offlinesec_client.exclude_params import EXCLUDE_PARAMS
 
@@ -20,18 +20,17 @@ def check_system_name(s):
     raise argparse.ArgumentTypeError("The System Name must have length less than 20")
 
 def check_file_arg(s):
-    if not os.path.isfile(s):
-        raise argparse.ArgumentTypeError("File not found (-f)")
+    res = offlinesec_client.func.check_file_arg(s, ['yaml'], 200000)
+    try:
+        with open(s, 'r') as file:
+            yaml_content = yaml.safe_load(file)
+        if SAP_SYSTEMS_KEY not in yaml_content:
+            raise argparse.ArgumentTypeError(" * [ERROR] Bad YAML file structure (%s). The 'sap_systems' key not found in YAML file" % (s,))
+    except:
+        raise argparse.ArgumentTypeError(
+            " * [ERROR] Bad YAML file structure (%s). Please check the file content" % (s,))
 
-    ext = s.split('.')[-1].lower()
-    if ext not in FILE_ALLOWED_EXTENSIONS:
-        raise argparse.ArgumentTypeError("File type not supported. Only allowed extensions: %s" %
-                                         (", ".join(FILE_ALLOWED_EXTENSIONS)))
-
-    if os.path.getsize(s) > MAX_FILE_SIZE:
-        raise argparse.ArgumentTypeError("File too big (-f)")
-
-    return s
+    return res
 
 def check_json_arg(s):
     if not os.path.isfile(s):
@@ -248,9 +247,8 @@ def process_it(args):
     additional_keys = offlinesec_client.func.populate_additional_keys(args)
     additional_keys["request_type"] = "params"
 
-    wait = args[WAIT] if WAIT in args else ""
-    do_not_wait = args[DO_NOT_WAIT] if DO_NOT_WAIT in args else ""
-
+    wait = True
+    do_not_wait = False
 
     offlinesec_client.func.send_to_server_gen(data=data, url=UPLOAD_URL,
                                               extras=additional_keys,
