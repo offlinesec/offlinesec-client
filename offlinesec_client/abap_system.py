@@ -100,7 +100,6 @@ class ABAPSystem (SAPSystem):
                     package = sheet_obj.cell(row=i, column=4).value
                     if ABAPSystem.check_soft_line(soft, version, pkg_num, package):
                         softs.append((soft, version, pkg_num, package))
-                        print((soft, version, pkg_num, package))
 
         elif softs_file.upper().endswith(".TXT"):
             with open(path, 'r', encoding="utf-8") as f:
