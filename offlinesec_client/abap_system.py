@@ -86,7 +86,7 @@ class ABAPSystem (SAPSystem):
 
         softs = list()
         if softs_file.upper().endswith(".XLSX"):
-            wb_obj = openpyxl.load_workbook(softs_file)
+            wb_obj = openpyxl.load_workbook(path)
             sheet_obj = wb_obj.active
             max_col = sheet_obj.max_column
             max_row = sheet_obj.max_row
