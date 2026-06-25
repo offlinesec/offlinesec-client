@@ -29,7 +29,7 @@ def check_variant(s):
 
 
 def check_file_arg(s):
-    return offlinesec_client.func.check_file_arg(s, ['txt'], 200000)
+    return offlinesec_client.func.check_file_arg(s, ['xlsx', 'txt'], 200000)
 
 
 def check_cwbntcust(s):

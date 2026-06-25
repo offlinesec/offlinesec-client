@@ -1,5 +1,6 @@
 from offlinesec_client.sap_system import SAPSystem
 from offlinesec_client.sap_table import SAPTable
+import openpyxl
 import os
 import re
 
@@ -76,7 +77,6 @@ class ABAPSystem (SAPSystem):
     @staticmethod
     def parse_softs_file(softs_file, root_dir):
         # SAP_BASIS	750	0006	SAPK-75006INSAPBASIS	SAP Basis Component
-
         if root_dir:
             path = os.path.join(root_dir, softs_file)
         else:
@@ -84,26 +84,43 @@ class ABAPSystem (SAPSystem):
         if not os.path.exists(path):
             raise FileNotFoundError("File %s not found" % (path,))
 
-        if not softs_file.upper().endswith(".TXT"):
-            raise ValueError("File {} has wrong extension. Only TXT files supported".format(softs_file))
         softs = list()
-        with open(path, 'r', encoding="utf-8") as f:
-            num = 0
-            for line in f:
-                num += 1
-                line = line.strip('\r\n').strip()
-                line = re.sub(' +', ' ', line).split()
-                if len(line) > 4:
-                    soft = line[0]
-                    soft = soft.encode("utf-8").decode("utf-8-sig")
-                    # print(soft.decode('utf-8'))
-                    version = line[1]
-                    pkg_num = line[2].lstrip("0")
+        if softs_file.upper().endswith(".XLSX"):
+            wb_obj = openpyxl.load_workbook(softs_file)
+            sheet_obj = wb_obj.active
+            max_col = sheet_obj.max_column
+            max_row = sheet_obj.max_row
+            if max_row > 2:
+                for i in range(2, max_row + 1):
+                    soft = sheet_obj.cell(row=i, column=1).value
+                    version = sheet_obj.cell(row=i, column=2).value
+                    pkg_num = sheet_obj.cell(row=i, column=3).value.lstrip("0")
                     if pkg_num == "":
                         pkg_num = "0"
-                    package = line[3]
+                    package = sheet_obj.cell(row=i, column=4).value
                     if ABAPSystem.check_soft_line(soft, version, pkg_num, package):
                         softs.append((soft, version, pkg_num, package))
+                        print((soft, version, pkg_num, package))
+
+        elif softs_file.upper().endswith(".TXT"):
+            with open(path, 'r', encoding="utf-8") as f:
+                num = 0
+                for line in f:
+                    num += 1
+                    line = line.strip('\r\n').strip()
+                    line = re.sub(' +', ' ', line).split()
+                    if len(line) > 4:
+                        soft = line[0]
+                        soft = soft.encode("utf-8").decode("utf-8-sig")
+                        version = line[1]
+                        pkg_num = line[2].lstrip("0")
+                        if pkg_num == "":
+                            pkg_num = "0"
+                        package = line[3]
+                        if ABAPSystem.check_soft_line(soft, version, pkg_num, package):
+                            softs.append((soft, version, pkg_num, package))
+        else:
+            raise ValueError("File {} has wrong extension. Only TXT or XLSX files supported".format(softs_file))
 
         if not len(softs):
             raise ValueError("File {} has wrong format".format(softs_file))
