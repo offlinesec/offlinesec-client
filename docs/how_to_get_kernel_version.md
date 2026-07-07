@@ -17,6 +17,6 @@ This guide explains how to export the list of installed kernel version/patch lev
 
 ![Screenshot](./img/kernel_button.png)
 
-4. In next popup window you can find Kernel Version and Kernel Patch
+4. In the next pop-up window, you can find the kernel version and kernel patch.
 
 ![Screenshot](./img/kernel.png)
