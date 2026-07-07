@@ -11,7 +11,7 @@ Whatever script you are going to use, you need to prepare the input data first.
 ### Required information from ABAP system
 * (required) Installed software component list. [How to get info](./how_to_get_soft_components.md)
 * (required) Installed sap note list: table CWBNBTCUST. [How to get info](./get_table.md)
-* (highly recommended) Kernel version and kernel patch level. [How to get info](./how_to_get_soft_components.md). Allows you to scan kernel binaries for security vulnerabilities.
+* (highly recommended) Kernel version and kernel patch level. [How to get info](./how_to_get_kernel_version.md). Allows you to scan kernel binaries for security vulnerabilities.
 * (recommended) Installed sap note list from DEV environment: table CWBNTCUST from DEV system. [How to get info](./get_table.md). Reduces number of false positives. Shows note implementation progress.
 * (optionally) Installed sap note versions: table CWBNTHEAD. [How to get info](./get_table.md). Adds sap note version checks.
 * (optionally) Host agent version and patch level
