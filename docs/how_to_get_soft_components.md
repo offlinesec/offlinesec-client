@@ -1,28 +1,40 @@
-# ABAP Software Components
-To collect information about installed software components in ABAP system do the following:
-1. Log in SAP System using SAP GUI software
-2. Go to System -> Status (Menu)
-3. Open the Installed Software window<br />
-![Screenshot](./img/softs_button.png)
-4. You can see the window with installed software components and their versions.<br />
-![Screenshot](./img/installed_softs.png)
-5. Now you need to copy all information to text file(utf-8 coding). Please highlight first line then press Ctrl+A (select all) and Ctrl+C (copy to clipboard).
-Create new text file (.txt extension) and insert all data from the buffer. The file should look like this:<br />
-![Screenshot](./img/text_softs.png)
+# How to Collect ABAP Software Component Information
 
-* Important Note: if you encounter the following error message<br />
-![Screenshot](./img/error1.jpg)
+This guide explains how to export the list of installed software components from an ABAP system, so this data can be reviewed for missing SAP Security Notes.
 
-You should do the following:
-* Highlight first line in the table
-* Slowly scroll down the table until the end
-* Press Ctrl+A, Ctrl+C. Now All information from the table will be copied to the buffer.
+## Prerequisites
 
-# ABAP Kernel version and kernel patch
-(If you want to see missed SAP Security Notes related to Kernel)
-1. Log in SAP System using SAP GUI software
-2. Go to System -> Status (Menu)
-3. Open Kernel Information Window<br />
-![Screenshot](./img/kernel_button.png)
-4. Save Kernel Version and Kernel Patch<br />
-![Screenshot](./img/kernel.png)
+- Access to SAP GUI
+- A user account with authorization to view system status
+
+---
+
+## Exporting Installed Software Components
+
+1. Log in to the SAP system using SAP GUI.
+2. From the menu bar, go to **System → Status**.
+3. In the status window, click the **Installed Software** button to open the component list (the button will be close to the Production Version or the Component Version field).
+
+![Installed software button](./img/software_components.png)
+
+4. The window now displays all installed software components and their release/patch versions.
+
+![Installed software components](./img/installed_softs.png)
+
+5. Copy the full table to a file:
+    * Option A
+      - Right click on any line in the table. Choose Spreadsheet and save the content to Excel spreadsheet (`.xlsx`).   
+    * Option B
+      - Click the first line of the table to select it.
+      - Press **Ctrl+A** to select all rows, then **Ctrl+C** to copy.
+      - Open a plain text editor, create a new file, and paste (**Ctrl+V**) the clipboard contents.
+      - Save the file with a `.txt` extension, using **UTF-8** encoding.
+      
+      **Note:** Troubleshooting: large component lists
+      If the table contains more rows than fit on a single screen, selecting with **Ctrl+A** immediately may trigger the following error: Not all data was  added to the clipboard.
+
+        To work around this:
+        1. Click the first line of the table to set the starting point.
+        2. Slowly scroll down through the entire table until you reach the last row, so all rows are rendered.
+        3. Press **Ctrl+A** then **Ctrl+C**. All rows will now be copied to the clipboard.
+        4. Paste into your text file as described in step 5 above.
