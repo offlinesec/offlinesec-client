@@ -13,15 +13,16 @@ So, Offline Security is the perfect tool for SAP penetration test and SAP Securi
 * Our database is regularly updated. Always base checks are available out-of-box
 * Excellent reports in Excel spreadsheet format, easy to use, share and filter 
 
+## Alternative approach without any installations
+Now you can request a report via web-form on our web page. Please read more about this feature [here](https://offlinesec.com/web-request).
+
+
 ## Table of contents
 
 * [Installation](#installation)
 * [Quick Start](#quick-start)
 * [Use Cases](#use-cases)
 * [Important Notes](#important-notes)
-
-## Alternative approach without any installations
-Now you can request a report via web-form on our web page. Please read more about this feature [here](https://offlinesec.com/web-request)
 
 ## Installation
 
