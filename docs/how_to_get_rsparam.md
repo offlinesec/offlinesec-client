@@ -7,7 +7,7 @@ This guide explains how to export the list of profile parameter values from an A
 - Access to SAP GUI
 - A user account with authorization to run RSPARAM report
   - S_TCODE:TCD=SE38 or SA38 (transactions SE38 or SA38)
-  - S_PROGRAM:P_ACTION:SUBMIT,P_GROUP=<space> (to execute RSPARAM report)
+  - S_PROGRAM:P_ACTION:SUBMIT,P_GROUP=space (to execute RSPARAM report)
   - S_GUI:ACTVT=61 (export capabilities)
 
 ---
@@ -27,4 +27,4 @@ This guide explains how to export the list of profile parameter values from an A
     - Choose in the menu Parameters->Export->Spreadsheet
     - Select the Export icon from the toolbar (Spreadsheet ^&#8679;F7)
 7. Enter a file name, for example:
-    RSPARAM_<sid>.xlsx
+    RSPARAM_SAPSID.xlsx
