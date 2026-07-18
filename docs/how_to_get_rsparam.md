@@ -25,6 +25,6 @@ This guide explains how to export the list of profile parameter values from an A
    - Comment
 6. Download RSPARAM Report
     - Choose in the menu Parameters->Export->Spreadsheet
-    - Select the Export icon from the toolbar (Spreadsheet ^&#8679;F7)
+    - Or select the Export icon from the toolbar (Spreadsheet ^&#8679;F7)
 7. Enter a file name, for example:
     RSPARAM_SAPSID.xlsx
