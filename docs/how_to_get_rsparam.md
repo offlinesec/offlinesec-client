@@ -14,11 +14,11 @@ This guide explains how to export the list of profile parameter values from an A
 
 ## Exporting Profile Parameter Values
 
-1. Log in to the SAP system using SAP GUI.
+1. Log in to the SAP system using SAP GUI
 2. Run transaction SA38 or SE38
-3. Enter program name: RSPARAM (Display Profile Parameter). And click **Execute (F8)**.
+3. Enter program name: RSPARAM (Display Profile Parameter). And click **Execute (F8)**
 4. Skip the next screen and click again **Execute (F8)**
-5. The report output contains SAP profile parameters and their values.
+5. The report output contains SAP profile parameters and their values
    - Parameter Name
    - User-Defined Value
    - System Default Value
